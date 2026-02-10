@@ -1,0 +1,7 @@
+{
+  "name": "Health Matters Resource Directory",
+  "description": "A comprehensive, AI-powered resource directory for mental health, housing, and community services in Los Angeles County, designed for accessibility and ease of use in underserved communities.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
