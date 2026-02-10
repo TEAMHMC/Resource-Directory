@@ -3,7 +3,15 @@ import { GoogleGenAI } from "@google/genai";
 import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from '../constants';
 import { Message } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+let _ai: GoogleGenAI | null = null;
+function getAI(): GoogleGenAI {
+  if (!_ai) {
+    const key = process.env.API_KEY;
+    if (!key) throw new Error("Gemini API key not configured");
+    _ai = new GoogleGenAI({ apiKey: key });
+  }
+  return _ai;
+}
 
 const allResources = [...HMC_PROGRAMS, ...FEATURED_PARTNERS, ...ALL_RESOURCES];
 // Slim down the knowledge base to the most relevant fields for the AI to process efficiently.
@@ -103,7 +111,7 @@ export async function getChatResponse(messages: Message[]): Promise<string> {
   }
 
   try {
-    const chat = ai.chats.create({
+    const chat = getAI().chats.create({
       model: 'gemini-3-pro-preview',
       history: history,
       config: {
