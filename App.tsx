@@ -154,9 +154,9 @@ const App: React.FC = () => {
             <p className="text-gray-600 mb-4">Our confidential Resource Compass can help you find the right direction.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="bg-[#233dff] text-white font-bold py-3 px-6 rounded-full text-base hover:bg-[#233dff]/90 transition-all shadow-md hover:shadow-lg"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
             >
-                Start with the Resource Compass
+                <span className="w-2 h-2 rounded-full bg-white"></span>Start with the Resource Compass
             </button>
         </div>
 
@@ -262,9 +262,9 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="bg-[#233dff] text-white font-bold px-5 py-2.5 rounded-full text-xs whitespace-nowrap hover:bg-[#233dff]/90 transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
           >
-            Suggest an Edit
+            <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>
         </div>
 
@@ -306,6 +306,12 @@ const App: React.FC = () => {
           )}
         </section>
       </main>
+
+      <footer className="p-6 bg-white border-t border-gray-200 text-center mt-16">
+        <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em]">
+          &copy; {new Date().getFullYear()} Health Matters Clinic. All Rights Reserved.
+        </p>
+      </footer>
 
       <ResourceModal resource={activeResource} onClose={() => setActiveResource(null)} onShare={handleShare} />
       

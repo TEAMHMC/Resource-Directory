@@ -93,9 +93,9 @@ ${referralData.contactPref}
                 {!showReferralForm ? (
                   <button
                     onClick={() => setShowReferralForm(true)}
-                    className="w-full bg-[#233dff] text-white font-bold py-4 px-6 rounded-2xl text-lg hover:bg-[#233dff]/90 transition-all flex items-center justify-center gap-3"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
                   >
-                    Request a Referral
+                    <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
                   </button>
                 ) : (
                   <form onSubmit={handleReferralSubmit} className="bg-gray-50 p-6 rounded-3xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
@@ -144,8 +144,8 @@ ${referralData.contactPref}
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="bg-[#233dff] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#233dff]/90">Submit via Email</button>
-                      <button type="button" onClick={() => setShowReferralForm(false)} className="bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancel</button>
+                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
+                      <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"><span className="w-2 h-2 rounded-full bg-black"></span>Cancel</button>
                     </div>
                   </form>
                 )}
