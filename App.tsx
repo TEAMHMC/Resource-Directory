@@ -138,7 +138,7 @@ const App: React.FC = () => {
       <header className="container mx-auto max-w-7xl px-4 pt-12 pb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
           <div className="max-w-3xl">
-            <h1 className="font-display text-5xl md:text-7xl font-black text-gray-900 tracking-tighter leading-none mb-4">
+            <h1 className="font-display text-5xl md:text-7xl font-medium text-gray-900 tracking-normal leading-none mb-4">
               Resource <br /><span className="text-[#233dff]">Directory.</span>
             </h1>
             <p className="text-xl text-gray-600 font-medium leading-relaxed">
@@ -161,10 +161,10 @@ const App: React.FC = () => {
         </div>
 
 
-        <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-[40px] p-6 md:p-8 shadow-sm mb-8">
+        <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm mb-8">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 block">Search Keywords</label>
+              <label className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 block">Search Keywords</label>
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <input 
@@ -238,7 +238,7 @@ const App: React.FC = () => {
               </div>
               <button 
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#233dff] hover:text-[#233dff]/80 transition-colors"
+                className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-[#233dff] hover:text-[#233dff]/80 transition-colors"
               >
                 {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 {showAdvanced ? "Fewer Filters" : "More Filters"}
@@ -246,7 +246,7 @@ const App: React.FC = () => {
             </div>
             <button 
               onClick={resetFilters}
-              className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-400 hover:text-[#233dff] transition-colors"
+              className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-400 hover:text-[#233dff] transition-colors"
             >
               <RotateCcw className="w-4 h-4" /> Reset Filters
             </button>
@@ -300,7 +300,7 @@ const App: React.FC = () => {
             </div>
           ) : (
             <div className="text-center py-16 bg-gray-50 rounded-3xl">
-              <h3 className="font-display text-xl font-bold text-gray-800">No resources found</h3>
+              <h3 className="font-display text-xl font-medium text-gray-800">No resources found</h3>
               <p className="text-gray-500 mt-2">Try adjusting your filters or search terms.</p>
             </div>
           )}
@@ -336,7 +336,7 @@ const App: React.FC = () => {
 
 const FilterSelect: React.FC<{label: string, icon: React.ReactNode, value: string, options: string[], onChange: (v: string) => void}> = ({ label, icon, value, options, onChange }) => (
   <div>
-    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-1.5">{icon} {label}</label>
+    <label className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 flex items-center gap-1.5">{icon} {label}</label>
     <div className="relative">
       <select 
         value={value} 
@@ -352,7 +352,7 @@ const FilterSelect: React.FC<{label: string, icon: React.ReactNode, value: strin
 
 const SectionHeader: React.FC<{title: string, count: number}> = ({ title, count }) => (
   <div className="flex items-end justify-between mb-6 border-b-2 border-gray-100 pb-3">
-    <h2 className="font-display text-3xl font-extrabold text-gray-800 tracking-tight">{title}</h2>
+    <h2 className="font-display text-3xl font-medium text-gray-800 tracking-normal">{title}</h2>
     <span className="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{count}</span>
   </div>
 );

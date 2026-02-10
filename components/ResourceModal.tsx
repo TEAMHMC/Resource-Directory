@@ -52,10 +52,10 @@ ${referralData.contactPref}
       >
         <div className="p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
           <div>
-            <span className="inline-block px-3 py-1 mb-3 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-widest">
+            <span className="inline-block px-3 py-1 mb-3 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-wide">
               {resource.category}
             </span>
-            <h2 className="font-display text-3xl md:text-4xl font-black text-gray-900 leading-none">
+            <h2 className="font-display text-3xl md:text-4xl font-medium text-gray-900 leading-none">
               {resource.name}
             </h2>
             <div className="mt-2 text-gray-500 font-medium flex flex-wrap gap-2 text-sm">
@@ -81,7 +81,7 @@ ${referralData.contactPref}
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-6">
               <section>
-                <h4 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-2 flex items-center gap-2">
+                <h4 className="text-sm font-medium uppercase tracking-wide text-gray-400 mb-2 flex items-center gap-2">
                   <Info className="w-4 h-4" /> About
                 </h4>
                 <p className="text-lg text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -99,7 +99,7 @@ ${referralData.contactPref}
                   </button>
                 ) : (
                   <form onSubmit={handleReferralSubmit} className="bg-gray-50 p-6 rounded-3xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
-                    <h3 className="text-xl font-extrabold text-gray-900">Referral Request Form</h3>
+                    <h3 className="text-xl font-medium text-gray-900">Referral Request Form</h3>
                     <p className="text-xs text-gray-500 font-medium">
                       <strong>HIPAA/Privacy Notice:</strong> Please include minimum necessary information only. Do not include direct identifiers (name, DOB, full address, etc.). This information will be sent via your own email client to our secure referrals team.
                     </p>
@@ -153,7 +153,7 @@ ${referralData.contactPref}
 
               {resource.referralNotes && (
                 <section className="bg-[#233dff]/5 p-6 rounded-3xl border border-[#233dff]/20">
-                  <h4 className="text-sm font-black uppercase tracking-widest text-[#233dff] mb-2 flex items-center gap-2">
+                  <h4 className="text-sm font-medium uppercase tracking-wide text-[#233dff] mb-2 flex items-center gap-2">
                     <HelpCircle className="w-4 h-4" /> How to Access / Referrals
                   </h4>
                   <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -164,7 +164,7 @@ ${referralData.contactPref}
 
               {resource.notes && (
                 <section>
-                  <h4 className="text-sm font-black uppercase tracking-widest text-gray-400 mb-2">Additional Notes</h4>
+                  <h4 className="text-sm font-medium uppercase tracking-wide text-gray-400 mb-2">Additional Notes</h4>
                   <div className="bg-gray-50 p-6 rounded-3xl text-gray-600 leading-relaxed whitespace-pre-wrap">
                     {resource.notes}
                   </div>
@@ -184,7 +184,7 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-gray-400 px-8">
+        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-[10px] font-bold uppercase tracking-wide text-gray-400 px-8">
           <span>Source: {resource.source || 'Verified Partner'}</span>
           <span>Last Updated: {resource.lastUpdated || 'Recently'}</span>
         </div>
@@ -197,7 +197,7 @@ const DetailItem: React.FC<{ icon: React.ReactNode, label: string, value?: strin
   if (!value || value === "—") return null;
   return (
     <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-      <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">
+      <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-1">
         {icon} {label}
       </div>
       <div className="text-sm font-bold text-gray-900 break-words">

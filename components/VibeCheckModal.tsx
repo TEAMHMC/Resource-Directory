@@ -44,7 +44,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       return (
         <div className="text-center p-8">
           <Compass className="w-12 h-12 text-[#233dff] bg-blue-100 rounded-full p-2.5 mx-auto mb-4" />
-          <h2 className="font-display text-3xl font-black text-gray-900 mb-2">Resource Compass</h2>
+          <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Resource Compass</h2>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">Answer a few private questions to find the right resources for your current situation.</p>
           <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-4 text-sm text-left font-medium flex items-start gap-3 mb-6">
             <Shield className="w-8 h-8 flex-shrink-0 mt-1" />
@@ -145,7 +145,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       return (
         <div className="text-center p-8">
             <Activity className="w-12 h-12 text-green-500 bg-green-100 rounded-full p-2 mx-auto mb-4" />
-            <h2 className="font-display text-3xl font-black text-gray-900 mb-2">Thanks for checking in.</h2>
+            <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Thanks for checking in.</h2>
             <p className="text-gray-600 mb-6 max-w-md mx-auto">It looks like your basic needs are covered right now, which is great! If you'd like to explore wellness activities or community connections, Sunny can help with that too.</p>
             <button 
                 onClick={() => handleChatHandoff(['general wellness'], ['hmc-live-unstoppable', 'onegeneration-intergen-care'])}
@@ -163,7 +163,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       <div className="p-8">
           <div className="text-center">
               <Compass className="w-12 h-12 text-blue-500 bg-blue-100 rounded-full p-2.5 mx-auto mb-4" />
-              <h2 className="font-display text-3xl font-black text-gray-900 mb-2">Your Resource Compass Results</h2>
+              <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Your Resource Compass Results</h2>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">Thank you for sharing. Based on your answers, here are some areas where we can offer support. The next step is to chat with Sunny, our AI Navigator, who can guide you through these resources.</p>
           </div>
           

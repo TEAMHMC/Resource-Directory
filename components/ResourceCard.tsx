@@ -41,7 +41,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
         </span>
       </div>
 
-      <h3 className="text-xl font-extrabold text-gray-900 leading-tight mb-2 group-hover:text-[#233dff]">
+      <h3 className="text-xl font-medium text-gray-900 leading-tight mb-2 group-hover:text-[#233dff]">
         {resource.name}
       </h3>
 
