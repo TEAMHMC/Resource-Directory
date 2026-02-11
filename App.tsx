@@ -145,8 +145,27 @@ const App: React.FC = () => {
               Consolidated access to health, housing, and mental health support for the community.
             </p>
           </div>
+          <div className="flex items-center gap-3">
+            {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
+            <button
+              onClick={() => setShowCompass(true)}
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] transition-all active:scale-95"
+            >
+              <span className="w-2 h-2 rounded-full bg-white"></span>Get Support
+            </button>
+            */}
+            <a
+              href="https://healthmatters.clinic/donate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"
+            >
+              <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Donate Now
+            </a>
+          </div>
         </div>
         
+        {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
         <div className="bg-white/50 border border-[#233dff]/20 rounded-2xl p-4 text-center mb-4 shadow-sm">
             <div className="font-display flex items-center justify-center gap-2 text-lg font-medium text-gray-700 mb-1">
                 <Compass className="w-5 h-5 text-[#233dff]" /> Need help finding resources?
@@ -159,6 +178,7 @@ const App: React.FC = () => {
                 <span className="w-2 h-2 rounded-full bg-white"></span>Ask Sunny
             </button>
         </div>
+        */}
 
 
         <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 md:p-6 shadow-sm mb-4">
@@ -315,15 +335,17 @@ const App: React.FC = () => {
 
       <ResourceModal resource={activeResource} onClose={() => setActiveResource(null)} onShare={handleShare} />
       
+      {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
       {showCompass && <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} />}
 
-      <ChatWidget 
+      <ChatWidget
         onResourceClick={(r) => setActiveResource(r)}
         initialContext={chatContext}
         onContextHandled={() => setChatContext(null)}
         isOpen={isChatOpen}
         setIsOpen={setIsChatOpen}
       />
+      */}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-bold animate-in fade-in slide-in-from-bottom-2">

@@ -45,9 +45,9 @@ ${referralData.contactPref}
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
-      <div 
-        className="bg-white w-full max-w-4xl max-h-[90vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center overflow-y-auto p-4 pt-12 md:pt-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+      <div
+        className="bg-white w-full max-w-4xl max-h-[85vh] md:max-h-[90vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 my-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">

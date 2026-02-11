@@ -170,7 +170,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-[998] w-[calc(100vw-3rem)] max-w-sm h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed z-[998] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[calc(100vw-3rem)] md:max-w-sm md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
               <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain" />
