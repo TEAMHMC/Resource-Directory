@@ -93,9 +93,9 @@ ${referralData.contactPref}
                 {!showReferralForm ? (
                   <button
                     onClick={() => setShowReferralForm(true)}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"
                   >
-                    <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
+                    <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Request a Referral
                   </button>
                 ) : (
                   <form onSubmit={handleReferralSubmit} className="bg-gray-50 p-6 rounded-3xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
@@ -144,7 +144,7 @@ ${referralData.contactPref}
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
+                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Submit via Email</button>
                       <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel</button>
                     </div>
                   </form>

@@ -132,7 +132,7 @@ const App: React.FC = () => {
       <div className="bg-[#e63946] text-white px-4 py-2.5 flex items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" />
         <span>Crisis? Call or Text 988 (24/7 Suicide & Crisis Lifeline)</span>
-        <a href="tel:988" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Call Now</a>
+        <a href="tel:988" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-white bg-white/10 text-white hover:bg-white/20 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
@@ -145,24 +145,16 @@ const App: React.FC = () => {
               Consolidated access to health, housing, and mental health support for the community.
             </p>
           </div>
+          {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
           <div className="flex items-center gap-3">
-            {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
             <button
               onClick={() => setShowCompass(true)}
-              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] transition-all active:scale-95"
-            >
-              <span className="w-2 h-2 rounded-full bg-white"></span>Get Support
-            </button>
-            */}
-            <a
-              href="https://healthmatters.clinic/donate"
-              target="_blank"
-              rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"
             >
-              <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Donate Now
-            </a>
+              <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Get Support
+            </button>
           </div>
+          */}
         </div>
         
         {/* COMMENTED OUT FOR PRODUCTION - Re-enable when Sunny is ready
@@ -282,9 +274,9 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
           >
-            <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
+            <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Suggest an Edit
           </a>
         </div>
 
