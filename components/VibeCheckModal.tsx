@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare } from 'lucide-react';
+import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare, HeartPulse, Flame, Brain } from 'lucide-react';
 import { ChatContext } from '../types';
 
 interface VibeCheckModalProps {
@@ -9,10 +9,13 @@ interface VibeCheckModalProps {
 }
 
 const questions = [
+  { text: "Have you or your family been affected by a natural disaster (wildfires, flooding, earthquake, etc.)?", key: 'disaster' },
+  { text: "Is it hard for you to see a doctor or get medical care when you need it?", key: 'healthcare' },
+  { text: "Have you been feeling stressed, anxious, or overwhelmed lately?", key: 'mentalhealth' },
   { text: "Do you ever feel unsafe where you live?", key: 'safety' },
-  { text: "In the past year, have you been worried about losing your housing?", key: 'housing' },
-  { text: "In the past year, have you worried that your food would run out before you could get more?", key: 'food' },
-  { text: "In the past year, has a lack of transportation kept you from getting what you need?", key: 'transport' }
+  { text: "Have you been worried about losing your housing or having a stable place to stay?", key: 'housing' },
+  { text: "Have you worried about having enough food for yourself or your family?", key: 'food' },
+  { text: "Has a lack of transportation kept you from getting what you need?", key: 'transport' }
 ];
 
 const options = [
@@ -94,6 +97,9 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
 
   const renderResults = () => {
     const needsMap = {
+      disaster: answers['disaster'] === 1,
+      healthcare: answers['healthcare'] === 1,
+      mentalhealth: answers['mentalhealth'] === 1,
       safety: answers['safety'] === 1,
       housing: answers['housing'] === 1,
       food: answers['food'] === 1,
@@ -103,18 +109,47 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
     const hasNeeds = identifiedNeeds.length > 0;
 
     const recommendations: { [key: string]: { icon: React.ReactNode; title: string; resources: {id: string, name: string, desc: string}[] } } = {
+        disaster: {
+            icon: <Flame className="w-5 h-5 text-orange-600" />,
+            title: "Disaster Recovery Support",
+            resources: [
+                {id: 'hmc-mobile-health', name: 'HMC Mobile Health Outreach', desc: 'On-the-ground care where you are.'},
+                {id: 'cityserve-ca-relief', name: 'CityServe', desc: 'Household goods and disaster relief.'},
+                {id: '988-suicide-crisis-lifeline', name: '988 Crisis Lifeline', desc: '24/7 emotional support after a crisis.'},
+            ]
+        },
+        healthcare: {
+            icon: <HeartPulse className="w-5 h-5 text-[#233dff]" />,
+            title: "Access to Care",
+            resources: [
+                {id: 'hmc-pop-up-clinic', name: 'HMC Pop-Up Clinics', desc: 'Free walk-in care events in your community.'},
+                {id: 'hmc-mobile-health', name: 'HMC Mobile Health Outreach', desc: 'Care that comes to you.'},
+                {id: 'la-care-health-plan', name: 'L.A. Care Health Plan', desc: 'Help enrolling in Medi-Cal.'},
+                {id: 'umma-clinic-wellness', name: 'UMMA Community Clinic', desc: 'Care for underserved and uninsured.'},
+            ]
+        },
+        mentalhealth: {
+            icon: <Brain className="w-5 h-5 text-purple-600" />,
+            title: "Mental Health & Wellness",
+            resources: [
+                {id: 'hmc-live-unstoppable', name: 'Live Unstoppable Wellness', desc: 'Movement-as-medicine community events.'},
+                {id: '988-suicide-crisis-lifeline', name: '988 Crisis Lifeline', desc: '24/7 free emotional support.'},
+                {id: 'pacific-clinics-behavioral', name: 'Pacific Clinics', desc: 'Behavioral health counseling.'},
+                {id: 'exodus-recovery-crisis', name: 'Exodus Recovery', desc: 'Crisis stabilization programs.'},
+            ]
+        },
         safety: {
             icon: <Shield className="w-5 h-5 text-red-600" />,
-            title: "For Your Safety",
+            title: "Safety & Protection",
             resources: [
-                {id: '988-suicide-crisis-lifeline', name: '988 Suicide & Crisis Lifeline', desc: 'Immediate 24/7 crisis support.'},
+                {id: '988-suicide-crisis-lifeline', name: '988 Crisis Lifeline', desc: '24/7 crisis support.'},
                 {id: 'jenesse-center-dv', name: 'Jenesse Center', desc: 'Domestic violence intervention.'},
                 {id: 'elawc-women-survivors', name: 'East LA Women\'s Center', desc: 'Support for survivors of DV/SA.'},
             ]
         },
         housing: {
             icon: <Home className="w-5 h-5 text-blue-600" />,
-            title: "For Housing Support",
+            title: "Housing Support",
             resources: [
                 {id: 'hopics-housing-shelter', name: 'HOPICS', desc: 'Housing services for South LA.'},
                 {id: 'a-new-way-of-life', name: 'A New Way of Life', desc: 'Housing for formerly incarcerated.'},
@@ -123,7 +158,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
         },
         food: {
             icon: <Utensils className="w-5 h-5 text-green-600" />,
-            title: "For Food Assistance",
+            title: "Food Assistance",
             resources: [
                 {id: 'project-angel-food-mtm', name: 'Project Angel Food', desc: 'Medically tailored meal delivery.'},
                 {id: 'everytable-meals', name: 'Everytable', desc: 'Affordable, healthy meals.'},
@@ -132,7 +167,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
         },
         transport: {
             icon: <Car className="w-5 h-5 text-orange-600" />,
-            title: "For Transportation",
+            title: "Getting Around",
             resources: [
                 {id: 'metro-life-fare-lowincome', name: 'Metro LIFE Program', desc: 'Discounted fares for Metro.'},
             ]
