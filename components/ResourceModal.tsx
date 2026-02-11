@@ -65,13 +65,13 @@ ${referralData.contactPref}
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={handlePrint} className="p-3 bg-gray-50 text-gray-600 rounded-full hover:bg-gray-100 transition-colors" title="Print Resource">
+            <button onClick={handlePrint} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Print Resource">
               <Printer className="w-5 h-5" />
             </button>
-            <button onClick={() => onShare(resource)} className="p-3 bg-gray-50 text-gray-600 rounded-full hover:bg-gray-100 transition-colors" title="Share">
+            <button onClick={() => onShare(resource)} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Share">
               <Share2 className="w-5 h-5" />
             </button>
-            <button onClick={onClose} className="p-3 bg-gray-50 text-gray-600 rounded-full hover:bg-gray-100 transition-colors" title="Close">
+            <button onClick={onClose} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Close">
               <X className="w-5 h-5" />
             </button>
           </div>

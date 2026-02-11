@@ -162,7 +162,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     <>
       <button
         onClick={handleToggle}
-        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border border-black/80"
+        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
@@ -220,7 +220,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
                 placeholder="Ask for help..."
                 className="flex-1 bg-gray-100 border border-gray-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/50 transition-all"
               />
-              <button type="submit" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white flex items-center justify-center disabled:opacity-50 transition-all">
+              <button type="submit" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white border border-[#233dff] flex items-center justify-center disabled:opacity-50 transition-all">
                 <Send size={20} />
               </button>
             </form>

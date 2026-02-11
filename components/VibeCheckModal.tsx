@@ -45,18 +45,18 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
         <div className="text-center p-8">
           <Compass className="w-12 h-12 text-[#233dff] bg-blue-100 rounded-full p-2.5 mx-auto mb-4" />
           <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Resource Navigator</h2>
-          <p className="text-gray-600 mb-6 max-w-md mx-auto">Answer a few private questions to find the right resources for your current situation.</p>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">We'll ask a few quick questions about what's going on in your life right now so we can point you to the best resources.</p>
           <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-4 text-sm text-left font-medium flex items-start gap-3 mb-6">
             <Shield className="w-8 h-8 flex-shrink-0 mt-1" />
             <div>
-              <strong>This is a private screening tool.</strong> It is not a medical diagnosis and your answers are not stored or shared.
+              <strong>Your answers stay between us.</strong> Nothing is saved, stored, or shared with anyone. This is just to help connect you with the right support.
             </div>
           </div>
           <button
             onClick={() => setStep(1)}
             className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
           >
-            <span className="w-2 h-2 rounded-full bg-white"></span>Find My Direction
+            <span className="w-2 h-2 rounded-full bg-white"></span>Let's Get Started
           </button>
         </div>
       );
@@ -75,7 +75,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
               <button
                 key={option.value}
                 onClick={() => handleAnswer(question.key, option.value)}
-                className="w-full text-left p-4 bg-gray-50 border border-gray-200 rounded-2xl hover:bg-white hover:border-[#233dff] hover:ring-2 hover:ring-[#233dff]/50 transition-all font-semibold text-gray-700 flex items-center justify-center text-lg"
+                className="w-full text-left p-4 bg-white border-2 border-gray-300 rounded-2xl hover:bg-white hover:border-[#233dff] hover:ring-2 hover:ring-[#233dff]/50 transition-all font-semibold text-gray-700 flex items-center justify-center text-lg"
               >
                 {option.text}
               </button>
@@ -202,7 +202,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
         className="bg-white w-full max-w-xl max-h-[90vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 p-3 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors z-10" title="Close">
+        <button onClick={onClose} className="absolute top-4 right-4 p-3 bg-gray-100 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-200 transition-colors z-10" title="Close">
           <X className="w-5 h-5" />
         </button>
 

@@ -16,11 +16,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
   return (
     <div 
       onClick={() => onOpen(resource)}
-      className={`group relative flex flex-col h-full bg-white rounded-3xl border border-gray-100 p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#233dff]/30 cursor-pointer ${isPinned ? 'ring-2 ring-[#233dff]/10' : ''}`}
+      className={`group relative flex flex-col h-full bg-white rounded-3xl border border-gray-200 p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#233dff]/30 cursor-pointer ${isPinned ? 'ring-2 ring-[#233dff]/10' : ''}`}
     >
       <button 
         onClick={(e) => { e.stopPropagation(); onShare(resource); }}
-        className="absolute top-4 right-4 p-2.5 bg-white border border-gray-200 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:shadow-md"
+        className="absolute top-4 right-4 p-2.5 bg-white border border-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:shadow-md"
       >
         <Share2 className="w-4 h-4 text-gray-600" />
       </button>

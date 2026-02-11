@@ -128,11 +128,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="min-h-screen">
       <div className="bg-[#e63946] text-white px-4 py-2.5 flex items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" />
         <span>Crisis? Call or Text 988 (24/7 Suicide & Crisis Lifeline)</span>
-        <a href="tel:988" className="bg-white text-red-600 px-3 py-1 rounded-full text-xs ml-2 hover:bg-gray-100">Call Now</a>
+        <a href="tel:988" className="bg-white text-red-600 px-3 py-1 rounded-full text-xs ml-2 hover:bg-gray-100 border border-white font-bold">Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
