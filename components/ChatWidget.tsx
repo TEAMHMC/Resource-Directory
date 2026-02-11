@@ -162,15 +162,15 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     <>
       <button
         onClick={handleToggle}
-        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
+        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-[998] w-[calc(100vw-3rem)] max-w-sm h-[600px] bg-white rounded-2xl border-2 border-black shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
-          <header className="p-4 bg-[#233dff] text-white flex items-center gap-3 border-b-2 border-black">
+        <div className="fixed bottom-24 right-6 z-[998] w-[calc(100vw-3rem)] max-w-sm h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
               <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white bg-white object-contain" />
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
@@ -220,7 +220,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
                 placeholder="Ask for help..."
                 className="flex-1 bg-gray-100 border border-gray-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/50 transition-all"
               />
-              <button type="submit" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white flex items-center justify-center disabled:opacity-50 transition-all border-[1.5px] border-black">
+              <button type="submit" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white flex items-center justify-center disabled:opacity-50 transition-all">
                 <Send size={20} />
               </button>
             </form>
