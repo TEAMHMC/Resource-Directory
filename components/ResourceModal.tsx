@@ -45,9 +45,10 @@ ${referralData.contactPref}
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-start md:items-center justify-center overflow-y-auto p-4 pt-12 md:pt-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
+      <div className="min-h-full flex items-start md:items-center justify-center p-3 pt-6 pb-6 md:p-4">
       <div
-        className="bg-white w-full max-w-4xl max-h-[85vh] md:max-h-[90vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 my-auto"
+        className="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
@@ -77,7 +78,7 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="p-6 md:p-8 overflow-y-auto flex-grow print:overflow-visible">
+        <div className="p-6 md:p-8 print:overflow-visible">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-6">
               <section>
@@ -93,9 +94,9 @@ ${referralData.contactPref}
                 {!showReferralForm ? (
                   <button
                     onClick={() => setShowReferralForm(true)}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
                   >
-                    <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Request a Referral
+                    <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
                   </button>
                 ) : (
                   <form onSubmit={handleReferralSubmit} className="bg-gray-50 p-6 rounded-3xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
@@ -144,7 +145,7 @@ ${referralData.contactPref}
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Submit via Email</button>
+                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
                       <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel</button>
                     </div>
                   </form>
@@ -188,6 +189,7 @@ ${referralData.contactPref}
           <span>Source: {resource.source || 'Verified Partner'}</span>
           <span>Last Updated: {resource.lastUpdated || 'Recently'}</span>
         </div>
+      </div>
       </div>
     </div>
   );
