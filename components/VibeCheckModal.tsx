@@ -44,7 +44,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       return (
         <div className="text-center p-8">
           <Compass className="w-12 h-12 text-[#233dff] bg-blue-100 rounded-full p-2.5 mx-auto mb-4" />
-          <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Resource Compass</h2>
+          <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Resource Navigator</h2>
           <p className="text-gray-600 mb-6 max-w-md mx-auto">Answer a few private questions to find the right resources for your current situation.</p>
           <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-4 text-sm text-left font-medium flex items-start gap-3 mb-6">
             <Shield className="w-8 h-8 flex-shrink-0 mt-1" />
@@ -54,7 +54,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
           </div>
           <button
             onClick={() => setStep(1)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Find My Direction
           </button>
@@ -149,7 +149,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
             <p className="text-gray-600 mb-6 max-w-md mx-auto">It looks like your basic needs are covered right now, which is great! If you'd like to explore wellness activities or community connections, Sunny can help with that too.</p>
             <button 
                 onClick={() => handleChatHandoff(['general wellness'], ['hmc-live-unstoppable', 'onegeneration-intergen-care'])}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>
                 Chat with Sunny about wellness
@@ -163,7 +163,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       <div className="p-8">
           <div className="text-center">
               <Compass className="w-12 h-12 text-blue-500 bg-blue-100 rounded-full p-2.5 mx-auto mb-4" />
-              <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Your Resource Compass Results</h2>
+              <h2 className="font-display text-3xl font-medium text-gray-900 mb-2">Your Resource Navigator Results</h2>
               <p className="text-gray-600 mb-6 max-w-md mx-auto">Thank you for sharing. Based on your answers, here are some areas where we can offer support. The next step is to chat with Sunny, our AI Navigator, who can guide you through these resources.</p>
           </div>
           
@@ -186,7 +186,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
 
           <button 
             onClick={() => handleChatHandoff(identifiedNeeds, recommendedResourceIds)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>
             Chat with Sunny about these results

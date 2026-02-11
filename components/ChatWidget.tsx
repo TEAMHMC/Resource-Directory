@@ -33,7 +33,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       setIsLoading(true);
       setMessages([]); // Clear previous messages for the new context
       
-      const contextMessageContent = `INTERNAL_CONTEXT: The user has completed the Resource Compass. Identified needs: ${initialContext.needs.join(', ')}. Recommended resource IDs: ${initialContext.recommendations.join(', ')}. Please provide a warm, empathetic welcome acknowledging these needs and present the recommended resources, then ask how you can help them explore these options.`;
+      const contextMessageContent = `INTERNAL_CONTEXT: The user has completed the Resource Navigator. Identified needs: ${initialContext.needs.join(', ')}. Recommended resource IDs: ${initialContext.recommendations.join(', ')}. Please provide a warm, empathetic welcome acknowledging these needs and present the recommended resources, then ask how you can help them explore these options.`;
       
       const contextMessage: Message = { id: 'context', sender: 'user', content: contextMessageContent };
       
@@ -162,7 +162,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     <>
       <button
         onClick={handleToggle}
-        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110"
+        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border border-black/80"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
@@ -172,7 +172,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
         <div className="fixed bottom-24 right-6 z-[998] w-[calc(100vw-3rem)] max-w-sm h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
-              <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white bg-white object-contain" />
+              <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain" />
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
             </div>
             <div>
@@ -184,7 +184,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
           <main className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map(msg => (
               <div key={msg.id} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white bg-white object-contain flex-shrink-0" />}
+                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain flex-shrink-0" />}
                 <div
                   className={`max-w-[85%] px-4 py-3 rounded-2xl prose prose-sm ${
                     msg.sender === 'user'
@@ -198,7 +198,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
             ))}
             {isLoading && (
               <div className="flex items-end gap-2 justify-start">
-                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white bg-white object-contain flex-shrink-0" />
+                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain flex-shrink-0" />
                 <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
                   <div className="flex items-center gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>

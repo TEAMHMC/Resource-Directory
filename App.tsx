@@ -149,14 +149,14 @@ const App: React.FC = () => {
         
         <div className="bg-white/50 border border-[#233dff]/20 rounded-2xl p-4 text-center mb-4 shadow-sm">
             <div className="font-display flex items-center justify-center gap-2 text-lg font-medium text-gray-700 mb-1">
-                <Compass className="w-5 h-5 text-[#233dff]" /> Not sure where to start?
+                <Compass className="w-5 h-5 text-[#233dff]" /> Need help finding resources?
             </div>
-            <p className="text-gray-600 text-sm mb-3">Our confidential Resource Compass can help you find the right direction.</p>
+            <p className="text-gray-600 text-sm mb-3">Sunny can help you navigate to the right support.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
             >
-                <span className="w-2 h-2 rounded-full bg-white"></span>Start with the Resource Compass
+                <span className="w-2 h-2 rounded-full bg-white"></span>Ask Sunny
             </button>
         </div>
 
@@ -262,7 +262,7 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>
