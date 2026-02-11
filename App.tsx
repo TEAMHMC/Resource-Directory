@@ -135,33 +135,33 @@ const App: React.FC = () => {
         <a href="tel:988" className="bg-white text-red-600 px-3 py-1 rounded-full text-xs ml-2 hover:bg-gray-100">Call Now</a>
       </div>
 
-      <header className="container mx-auto max-w-7xl px-4 pt-12 pb-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+      <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-4">
           <div className="max-w-3xl">
-            <h1 className="font-display text-5xl md:text-7xl font-medium text-gray-900 tracking-normal leading-none mb-4">
+            <h1 className="font-display text-4xl md:text-5xl font-medium text-gray-900 tracking-normal leading-none mb-2">
               Resource <br /><span className="text-[#233dff]">Directory.</span>
             </h1>
-            <p className="text-xl text-gray-600 font-medium leading-relaxed">
+            <p className="text-base text-gray-600 font-medium leading-relaxed">
               Consolidated access to health, housing, and mental health support for the community.
             </p>
           </div>
         </div>
         
-        <div className="bg-white/50 border border-[#233dff]/20 rounded-3xl p-6 text-center mb-8 shadow-sm">
-            <div className="font-display flex items-center justify-center gap-2 text-xl font-bold text-gray-700 mb-2">
+        <div className="bg-white/50 border border-[#233dff]/20 rounded-2xl p-4 text-center mb-4 shadow-sm">
+            <div className="font-display flex items-center justify-center gap-2 text-lg font-medium text-gray-700 mb-1">
                 <Compass className="w-5 h-5 text-[#233dff]" /> Not sure where to start?
             </div>
-            <p className="text-gray-600 mb-4">Our confidential Resource Compass can help you find the right direction.</p>
+            <p className="text-gray-600 text-sm mb-3">Our confidential Resource Compass can help you find the right direction.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>Start with the Resource Compass
             </button>
         </div>
 
 
-        <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-3xl p-6 md:p-8 shadow-sm mb-8">
+        <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 md:p-6 shadow-sm mb-4">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-2">
               <label className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 block">Search Keywords</label>
@@ -255,21 +255,21 @@ const App: React.FC = () => {
       </header>
 
       <main className="container mx-auto max-w-7xl px-4">
-        <div className="bg-blue-50/50 border border-blue-200/50 text-gray-700 rounded-3xl p-4 flex flex-col sm:flex-row items-center gap-4 text-sm mb-12">
+        <div className="bg-blue-50/50 border border-blue-200/50 text-gray-700 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-3 text-sm mb-6">
           <Info className="w-8 h-8 text-[#233dff] flex-shrink-0" />
           <p className="flex-grow text-center sm:text-left font-medium">
             This directory is a living resource and is frequently updated. If you represent an organization and notice any inaccuracies, please help us keep it current.
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-black active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-transparent active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>
         </div>
 
         {(filters.category === 'All' && filters.q === '' && filters.service === 'All' && filters.population === 'All' && filters.community === 'All' && filters.geo === 'All' && filters.spa === 'All') && (
-          <div className="space-y-12 mb-16">
+          <div className="space-y-8 mb-8">
             <section>
               <SectionHeader title="HMC Programs" count={HMC_PROGRAMS.length} />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
