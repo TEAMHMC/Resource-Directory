@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { MessageSquare, X, Send } from 'lucide-react';
 import { Message, Resource, ChatContext } from '../types';
 import { getChatResponse } from '../services/chatService';
@@ -158,7 +159,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     });
   };
 
-  return (
+  return ReactDOM.createPortal(
     <>
       <button
         onClick={handleToggle}
@@ -227,7 +228,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
           </footer>
         </div>
       )}
-    </>
+    </>,
+    document.body
   );
 };
 
