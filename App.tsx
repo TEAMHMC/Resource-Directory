@@ -132,7 +132,7 @@ const App: React.FC = () => {
       <div className="bg-[#e63946] text-white px-4 py-2.5 flex items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" />
         <span>Crisis? Call or Text 988 (24/7 Suicide & Crisis Lifeline)</span>
-        <a href="tel:988" className="bg-white text-red-600 px-3 py-1 rounded-full text-xs ml-2 hover:bg-gray-100 border border-white font-bold">Call Now</a>
+        <a href="tel:988" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
@@ -154,7 +154,7 @@ const App: React.FC = () => {
             <p className="text-gray-600 text-sm mb-3">Sunny can help you navigate to the right support.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>Ask Sunny
             </button>
@@ -262,7 +262,7 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)] whitespace-nowrap flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>

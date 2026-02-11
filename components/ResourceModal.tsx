@@ -93,7 +93,7 @@ ${referralData.contactPref}
                 {!showReferralForm ? (
                   <button
                     onClick={() => setShowReferralForm(true)}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
                   >
                     <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
                   </button>
@@ -144,8 +144,8 @@ ${referralData.contactPref}
                     </div>
 
                     <div className="flex gap-2 pt-2">
-                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
-                      <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#e8e6e3] active:scale-95 tracking-wide bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)]"><span className="w-2 h-2 rounded-full bg-[#1a1a1a]"></span>Cancel</button>
+                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
+                      <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel</button>
                     </div>
                   </form>
                 )}

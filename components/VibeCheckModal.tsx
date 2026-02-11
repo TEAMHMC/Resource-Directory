@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare, HeartPulse, Flame, Brain } from 'lucide-react';
+import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare, HeartPulse, Flame, Brain, Briefcase } from 'lucide-react';
 import { ChatContext } from '../types';
 
 interface VibeCheckModalProps {
@@ -15,6 +15,7 @@ const questions = [
   { text: "Do you ever feel unsafe where you live?", key: 'safety' },
   { text: "Have you been worried about losing your housing or having a stable place to stay?", key: 'housing' },
   { text: "Have you worried about having enough food for yourself or your family?", key: 'food' },
+  { text: "Are you looking for work or struggling to find stable employment?", key: 'employment' },
   { text: "Has a lack of transportation kept you from getting what you need?", key: 'transport' }
 ];
 
@@ -57,7 +58,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
           </div>
           <button
             onClick={() => setStep(1)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Let's Get Started
           </button>
@@ -78,9 +79,9 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
               <button
                 key={option.value}
                 onClick={() => handleAnswer(question.key, option.value)}
-                className="w-full text-left p-4 bg-white border-2 border-gray-300 rounded-2xl hover:bg-white hover:border-[#233dff] hover:ring-2 hover:ring-[#233dff]/50 transition-all font-semibold text-gray-700 flex items-center justify-center text-lg"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"
               >
-                {option.text}
+                <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>{option.text}
               </button>
             ))}
           </div>
@@ -103,6 +104,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
       safety: answers['safety'] === 1,
       housing: answers['housing'] === 1,
       food: answers['food'] === 1,
+      employment: answers['employment'] === 1,
       transport: answers['transport'] === 1,
     };
     const identifiedNeeds = Object.entries(needsMap).filter(([, value]) => value).map(([key]) => key);
@@ -165,6 +167,16 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
                 {id: 'seeds-of-hope-nutrition', name: 'Seeds of Hope', desc: 'Food justice and nutrition education.'},
             ]
         },
+        employment: {
+            icon: <Briefcase className="w-5 h-5 text-teal-600" />,
+            title: "Jobs & Career Support",
+            resources: [
+                {id: 'good-seed-cdc-outreach', name: 'Good Seed CDC', desc: 'Job readiness and community outreach.'},
+                {id: 'hillsides-youth-moving-on', name: 'Hillsides Youth Moving On', desc: 'Employment support for transition-age youth.'},
+                {id: 'el-sol-neighborhood-health', name: 'El Sol Neighborhood Center', desc: 'Education and workforce development.'},
+                {id: 'skid-row-clean-up-unhoused', name: 'Skid Row Community Clean Up', desc: 'Employment pathways for unhoused individuals.'},
+            ]
+        },
         transport: {
             icon: <Car className="w-5 h-5 text-orange-600" />,
             title: "Getting Around",
@@ -184,7 +196,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
             <p className="text-gray-600 mb-6 max-w-md mx-auto">It looks like your basic needs are covered right now, which is great! If you'd like to explore wellness activities or community connections, Sunny can help with that too.</p>
             <button 
                 onClick={() => handleChatHandoff(['general wellness'], ['hmc-live-unstoppable', 'onegeneration-intergen-care'])}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>
                 Chat with Sunny about wellness
@@ -221,7 +233,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
 
           <button 
             onClick={() => handleChatHandoff(identifiedNeeds, recommendedResourceIds)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-200 border border-[#1a2baa] active:scale-95 tracking-wide bg-[#233dff] text-white hover:bg-[#1a2b99] hover:shadow-[0_4px_16px_rgba(35,61,255,0.35)]"
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>
             Chat with Sunny about these results
