@@ -320,6 +320,9 @@ const App: React.FC = () => {
       </main>
 
       <footer className="p-6 bg-white border-t border-gray-200 text-center mt-16">
+        <a href="https://www.healthmatters.clinic" className="inline-flex items-center gap-2 text-[#233dff] hover:text-[#1a2b99] transition-colors text-sm font-medium mb-3 group">
+          <span className="group-hover:-translate-x-1 transition-transform">←</span> Back to healthmatters.clinic
+        </a>
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-[0.2em]">
           &copy; {new Date().getFullYear()} Health Matters Clinic. All Rights Reserved.
         </p>
