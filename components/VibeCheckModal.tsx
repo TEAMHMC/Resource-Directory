@@ -172,7 +172,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
             title: "Jobs & Career Support",
             resources: [
                 {id: 'good-seed-cdc-outreach', name: 'Good Seed CDC', desc: 'Job readiness and community outreach.'},
-                {id: 'hillsides-youth-moving-on', name: 'Hillsides Youth Moving On', desc: 'Employment support for transition-age youth.'},
+                {id: 'hillsides-youth-moving-on-housing', name: 'Hillsides Youth Moving On', desc: 'Employment support for transition-age youth.'},
                 {id: 'el-sol-neighborhood-health', name: 'El Sol Neighborhood Center', desc: 'Education and workforce development.'},
                 {id: 'skid-row-clean-up-unhoused', name: 'Skid Row Community Clean Up', desc: 'Employment pathways for unhoused individuals.'},
             ]

@@ -73,8 +73,20 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Website</span>
           <div className="flex items-center gap-1.5 text-xs font-bold text-[#233dff] overflow-hidden">
-            <ExternalLink className="w-3 h-3" />
-            <span className="truncate">{resource.website?.replace(/^https?:\/\//, '') || '—'}</span>
+            <ExternalLink className="w-3 h-3 flex-shrink-0" />
+            {resource.website ? (
+              <a
+                href={resource.website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="truncate hover:underline"
+                onClick={e => e.stopPropagation()}
+              >
+                {resource.website.replace(/^https?:\/\//, '')}
+              </a>
+            ) : (
+              <span className="truncate text-gray-400">—</span>
+            )}
           </div>
         </div>
       </div>
