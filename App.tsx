@@ -1,12 +1,12 @@
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layers, Info, Users, CheckCircle2, ChevronDown, ChevronUp, Compass } from 'lucide-react';
 import { Resource, FilterState, CATEGORIES, ChatContext } from './types';
 import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from './constants';
 import ResourceCard from './components/ResourceCard';
-import ResourceModal from './components/ResourceModal';
-import ChatWidget from './components/ChatWidget';
-import VibeCheckModal from './components/VibeCheckModal';
+const ResourceModal = lazy(() => import('./components/ResourceModal'));
+const ChatWidget = lazy(() => import('./components/ChatWidget'));
+const VibeCheckModal = lazy(() => import('./components/VibeCheckModal'));
 
 const normalizeValue = (value: string): string => {
   const v = value.toLowerCase().trim();
@@ -129,10 +129,10 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-[#e63946] text-white px-4 py-2.5 flex items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
-        <ShieldAlert className="w-5 h-5 animate-pulse" />
-        <span>Crisis? Call or Text 988 (24/7 Suicide & Crisis Lifeline)</span>
-        <a href="tel:988" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Call Now</a>
+      <div role="banner" className="bg-[#e63946] text-white px-4 py-2.5 flex flex-wrap items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
+        <ShieldAlert className="w-5 h-5 animate-pulse" aria-hidden="true" />
+        <span>Crisis? Call or Text 988 (24/7 Suicide &amp; Crisis Lifeline)</span>
+        <a href="tel:988" aria-label="Call 988 Suicide and Crisis Lifeline" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 min-h-[44px]"><span className="w-2 h-2 rounded-full bg-white" aria-hidden="true"></span>Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
@@ -172,15 +172,17 @@ const App: React.FC = () => {
         <div className="bg-white/70 backdrop-blur-xl border border-gray-200 rounded-2xl p-4 md:p-6 shadow-sm mb-4">
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-2">
-              <label className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 block">Search Keywords</label>
+              <label htmlFor="resource-search" className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 block">Search Keywords</label>
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input 
-                  type="text" 
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" aria-hidden="true" />
+                <input
+                  id="resource-search"
+                  type="text"
                   value={filters.q}
                   onChange={(e) => setFilters({...filters, q: e.target.value})}
                   placeholder="Name, clinic, service..."
-                  className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] outline-none transition-all font-medium"
+                  aria-label="Search resources by name, clinic, or service type"
+                  className="w-full pl-11 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] focus:outline-none transition-all font-medium text-base"
                 />
               </div>
             </div>
@@ -324,17 +326,25 @@ const App: React.FC = () => {
         </p>
       </footer>
 
-      <ResourceModal resource={activeResource} onClose={() => setActiveResource(null)} onShare={handleShare} />
-      
-      {showCompass && <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} />}
+      <Suspense fallback={null}>
+        <ResourceModal resource={activeResource} onClose={() => setActiveResource(null)} onShare={handleShare} />
+      </Suspense>
 
-      <ChatWidget
-        onResourceClick={(r) => setActiveResource(r)}
-        initialContext={chatContext}
-        onContextHandled={() => setChatContext(null)}
-        isOpen={isChatOpen}
-        setIsOpen={setIsChatOpen}
-      />
+      {showCompass && (
+        <Suspense fallback={null}>
+          <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} />
+        </Suspense>
+      )}
+
+      <Suspense fallback={null}>
+        <ChatWidget
+          onResourceClick={(r) => setActiveResource(r)}
+          initialContext={chatContext}
+          onContextHandled={() => setChatContext(null)}
+          isOpen={isChatOpen}
+          setIsOpen={setIsChatOpen}
+        />
+      </Suspense>
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-bold animate-in fade-in slide-in-from-bottom-2">
@@ -345,21 +355,25 @@ const App: React.FC = () => {
   );
 };
 
-const FilterSelect: React.FC<{label: string, icon: React.ReactNode, value: string, options: string[], onChange: (v: string) => void}> = ({ label, icon, value, options, onChange }) => (
-  <div>
-    <label className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 flex items-center gap-1.5">{icon} {label}</label>
-    <div className="relative">
-      <select 
-        value={value} 
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full appearance-none pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] outline-none transition-all font-medium"
-      >
-        {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-      </select>
-      <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+const FilterSelect: React.FC<{label: string, icon: React.ReactNode, value: string, options: string[], onChange: (v: string) => void}> = ({ label, icon, value, options, onChange }) => {
+  const id = `filter-${label.toLowerCase().replace(/\s+/g, '-')}`;
+  return (
+    <div>
+      <label htmlFor={id} className="text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-2 flex items-center gap-1.5">{icon} {label}</label>
+      <div className="relative">
+        <select
+          id={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full appearance-none pl-4 pr-10 py-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] focus:outline-none transition-all font-medium text-base"
+        >
+          {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+        </select>
+        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" aria-hidden="true" />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const SectionHeader: React.FC<{title: string, count: number}> = ({ title, count }) => (
   <div className="flex items-end justify-between mb-6 border-b-2 border-gray-100 pb-3">
