@@ -46,9 +46,9 @@ ${referralData.contactPref}
 
   return (
     <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
-      <div className="min-h-full flex items-start md:items-center justify-center p-3 pt-6 pb-6 md:p-4">
+      <div className="min-h-full flex items-center justify-center p-3 py-6 md:p-6">
       <div
-        className="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200"
+        className="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
@@ -78,7 +78,7 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="p-6 md:p-8 print:overflow-visible">
+        <div className="p-6 md:p-8 print:overflow-visible overflow-y-auto flex-1">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-6">
               <section>
