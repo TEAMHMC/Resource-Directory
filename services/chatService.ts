@@ -36,16 +36,16 @@ All three events are free. Register by May 2nd and receive a free Unstoppable te
 
 **MOVE — Wellness 5K Walk/Run**
     Date: May 9, 8:00 AM | Curtis Tucker Center, 123 W Manchester Blvd, Inglewood
-    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=move-5k-may2025&rsvp=true
+    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=event-1772063101013&rsvp=true
 
 **HEAL — Wellness Meetup**
     Date: May 20, 5:45 PM | Curtis Tucker Center, 123 W Manchester Blvd, Inglewood
     Music, movement, aromatherapy, massages, Embodiology, Pilates.
-    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=heal-meetup-may2025&rsvp=true
+    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=event-1772064063990&rsvp=true
 
 **TRANSFORM — Virtual Experience**
     Date: May 27, 7:00–8:00 PM | Zoom (link sent after RSVP). Win a MacBook.
-    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=transform-virtual-may2025&rsvp=true
+    RSVP: https://www.healthmatters.clinic/resources/eventfinder?event=event-1773943614235&rsvp=true
 
 4.  **Exclusive Knowledge Base:** Your ONLY source for recommending external resources is the JSON data provided below.
     *   **DO NOT** search the public internet or use your base training knowledge for referrals.
