@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Resource } from '../types';
-import { X, Share2, Printer, MapPin, Globe, Clock, Info, Phone, Mail, CheckCircle, HelpCircle } from 'lucide-react';
+import { X, Share2, Printer, MapPin, Globe, Clock, Info, Phone, Mail, CheckCircle, HelpCircle, Copy } from 'lucide-react';
 
 interface ResourceModalProps {
   resource: Resource | null;
@@ -16,6 +16,30 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
     urgency: '',
     contactPref: '',
   });
+  const [shareToast, setShareToast] = useState<string | null>(null);
+
+  const handleShare = async () => {
+    if (!resource) return;
+    const shareUrl = window.location.href;
+    const shareText = `${resource.name} — ${resource.description?.slice(0, 100) || ''}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: resource.name, text: shareText, url: shareUrl });
+        return;
+      } catch {
+        // user cancelled or not supported — fall through
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      setShareToast('Link copied to clipboard!');
+    } catch {
+      setShareToast(`Copy this link: ${shareUrl}`);
+    }
+    setTimeout(() => setShareToast(null), 3000);
+  };
 
   if (!resource) return null;
 
@@ -45,13 +69,21 @@ ${referralData.contactPref}
   };
 
   return (
-    <div className="fixed inset-0 z-[100] overflow-y-auto bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose}>
-      <div className="min-h-full flex items-center justify-center p-3 py-6 md:p-6">
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center md:p-6" onClick={onClose}>
       <div
-        className="bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 max-h-[90vh]"
+        className="bg-white w-full max-w-4xl rounded-t-[28px] md:rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 md:zoom-in-95 duration-300 max-h-[88svh] md:max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
+        {/* Drag handle — mobile only */}
+        <div className="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+          <div className="w-10 h-1 bg-gray-300 rounded-full" />
+        </div>
+        {shareToast && (
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] bg-gray-900 text-white text-sm font-medium px-5 py-3 rounded-full shadow-xl flex items-center gap-2 animate-in fade-in duration-200">
+            <Copy className="w-4 h-4" /> {shareToast}
+          </div>
+        )}
+        <div className="sticky top-0 z-10 bg-white rounded-t-[32px] p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
           <div>
             <span className="inline-block px-3 py-1 mb-3 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-wide">
               {resource.category}
@@ -69,7 +101,7 @@ ${referralData.contactPref}
             <button onClick={handlePrint} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Print Resource">
               <Printer className="w-5 h-5" />
             </button>
-            <button onClick={() => onShare(resource)} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Share">
+            <button onClick={handleShare} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Share">
               <Share2 className="w-5 h-5" />
             </button>
             <button onClick={onClose} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Close">

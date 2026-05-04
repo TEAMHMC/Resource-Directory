@@ -129,10 +129,29 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <div role="banner" className="bg-[#e63946] text-white px-4 py-2.5 flex flex-wrap items-center justify-center gap-3 text-sm font-bold sticky top-0 z-[60] shadow-md">
+      {/* Top nav bar with HMC logo */}
+      <nav className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sticky top-0 z-[70] flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+        <a
+          href="https://www.healthmatters.clinic"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105"
+          title="Health Matters Clinic"
+        >
+          <img
+            src="https://cdn.prod.website-files.com/67359e6040140078962e8a54/6912e29e5710650a4f45f53f_Untitled%20(256%20x%20256%20px).png"
+            alt="Health Matters Clinic"
+            className="h-9 w-9 object-contain transition-all duration-300 group-hover:drop-shadow-[0_4px_8px_rgba(35,61,255,0.3)]"
+          />
+          <span className="font-medium text-[#1a1a1a] text-sm sm:text-base leading-none">Health Matters Clinic</span>
+        </a>
+        <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Resource Directory</span>
+      </nav>
+
+      <div role="banner" className="bg-[#e63946] text-white px-4 py-2.5 flex flex-wrap items-center justify-center gap-3 text-sm font-bold z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" aria-hidden="true" />
         <span>Crisis? Call or Text 988 (24/7 Suicide &amp; Crisis Lifeline)</span>
-        <a href="tel:988" aria-label="Call 988 Suicide and Crisis Lifeline" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 min-h-[44px]"><span className="w-2 h-2 rounded-full bg-white" aria-hidden="true"></span>Call Now</a>
+        <a href="tel:988" aria-label="Call 988 Suicide and Crisis Lifeline" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 min-h-[44px]"><span className="w-2 h-2 rounded-full bg-white" aria-hidden="true"></span>Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
@@ -162,7 +181,7 @@ const App: React.FC = () => {
             <p className="text-gray-600 text-sm mb-3">Sunny can help you navigate to the right support.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>Ask Sunny
             </button>
@@ -272,7 +291,7 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
+            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>
