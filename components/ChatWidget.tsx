@@ -21,6 +21,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
+  const contextFiredRef = useRef<string | null>(null); // prevent duplicate fires in StrictMode
   const hmcLogoUrl = "https://cdn.prod.website-files.com/67359e6040140078962e8a54/6912e29e5710650a4f45f53f_Untitled%20(256%20x%20256%20px).png";
 
   const scrollToBottom = () => {
@@ -30,25 +31,27 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
   useEffect(scrollToBottom, [messages, isLoading]);
 
   useEffect(() => {
-    if (initialContext) {
-      setIsLoading(true);
-      setMessages([]); // Clear previous messages for the new context
-      
-      const contextMessageContent = `INTERNAL_CONTEXT: The user has completed the Resource Navigator. Identified needs: ${initialContext.needs.join(', ')}. Recommended resource IDs: ${initialContext.recommendations.join(', ')}. Please provide a warm, empathetic welcome acknowledging these needs and present the recommended resources, then ask how you can help them explore these options.`;
-      
-      const contextMessage: Message = { id: 'context', sender: 'user', content: contextMessageContent };
-      
-      getChatResponse([contextMessage]).then(botResponseContent => {
-        const botMessage: Message = { id: `bot-context-${Date.now()}`, sender: 'bot', content: botResponseContent };
-        setMessages([botMessage]);
-      }).catch(error => {
-        const errorMessage: Message = { id: `err-${Date.now()}`, sender: 'bot', content: "Sorry, I'm having trouble connecting. Please try again." };
-        setMessages([errorMessage]);
-      }).finally(() => {
-        setIsLoading(false);
-        onContextHandled(); // Clear the context in the parent component
-      });
-    }
+    if (!initialContext) return;
+    // Deduplicate: if this exact context was already fired, skip
+    const contextKey = initialContext.needs.join(',') + '|' + initialContext.recommendations.join(',');
+    if (contextFiredRef.current === contextKey) return;
+    contextFiredRef.current = contextKey;
+
+    setIsLoading(true);
+    setMessages([]);
+
+    const contextMessageContent = `INTERNAL_CONTEXT: The user has completed the Resource Navigator. Identified needs: ${initialContext.needs.join(', ')}. Recommended resource IDs: ${initialContext.recommendations.join(', ')}.`;
+    const contextMessage: Message = { id: 'context', sender: 'user', content: contextMessageContent };
+
+    getChatResponse([contextMessage]).then(botResponseContent => {
+      const botMessage: Message = { id: `bot-context-${Date.now()}`, sender: 'bot', content: botResponseContent };
+      setMessages([botMessage]);
+    }).catch(() => {
+      setMessages([{ id: `err-${Date.now()}`, sender: 'bot', content: "Sorry, I'm having trouble connecting. Please try again." }]);
+    }).finally(() => {
+      setIsLoading(false);
+      onContextHandled();
+    });
   }, [initialContext]);
 
   const handleToggle = () => {
@@ -116,7 +119,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
                 );
             } else if (match[4]) { // HTTP link
                 const url = match[4];
-                parts.push(<a href={url} key={key} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline break-all">{url}</a>);
+                parts.push(<a href={url} key={key} target="_blank" rel="noopener noreferrer" className="underline font-semibold break-all">{url}</a>);
             } else if (match[5]) { // Bold text
                 const boldText = match[7];
                 parts.push(<strong key={key}>{boldText}</strong>);
@@ -170,10 +173,10 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       </button>
 
       {isOpen && (
-        <div className="fixed z-[998] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[calc(100vw-3rem)] md:max-w-sm md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed z-[998] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
-              <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain" />
+              <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain" />
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
             </div>
             <div>
@@ -185,12 +188,12 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
           <main className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map(msg => (
               <div key={msg.id} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain flex-shrink-0" />}
+                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain flex-shrink-0" />}
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-2xl prose prose-sm ${
+                  className={`max-w-[85%] px-4 py-3 rounded-2xl ${
                     msg.sender === 'user'
                       ? 'bg-[#233dff] text-white rounded-br-none'
-                      : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm'
+                      : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm prose prose-sm'
                   }`}
                 >
                   {renderMessageContent(msg.content)}
@@ -199,7 +202,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
             ))}
             {isLoading && (
               <div className="flex items-end gap-2 justify-start">
-                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-1 ring-black bg-white object-contain flex-shrink-0" />
+                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain flex-shrink-0" />
                 <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
                   <div className="flex items-center gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
