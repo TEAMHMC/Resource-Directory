@@ -222,7 +222,6 @@ ${referralData.contactPref}
           <span>Last Updated: {resource.lastUpdated || 'Recently'}</span>
         </div>
       </div>
-      </div>
     </div>
   );
 };
