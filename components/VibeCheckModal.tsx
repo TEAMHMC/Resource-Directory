@@ -53,7 +53,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
           <div className="bg-blue-50 border border-blue-200 text-blue-800 rounded-2xl p-4 text-sm text-left font-medium flex items-start gap-3 mb-6">
             <Shield className="w-8 h-8 flex-shrink-0 mt-1" />
             <div>
-              <strong>Your answers stay between us.</strong> Nothing is saved, stored, or shared with anyone. This is just to help connect you with the right support.
+              <strong>Your privacy matters.</strong> Your responses are used only to personalize your results. When you start a chat, your needs are shared with our AI assistant to help find the right resources.
             </div>
           </div>
           <button
