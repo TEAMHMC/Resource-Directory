@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
-import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layers, Info, Users, CheckCircle2, ChevronDown, ChevronUp, Compass } from 'lucide-react';
+import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layers, Info, Users, CheckCircle2, ChevronDown, ChevronUp, Compass, Plus, X, Loader2, CheckCircle } from 'lucide-react';
 import { Resource, FilterState, CATEGORIES, ChatContext } from './types';
 import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from './constants';
 import ResourceCard from './components/ResourceCard';
@@ -21,6 +21,164 @@ const normalizeValue = (value: string): string => {
   return value;
 };
 
+const PORTAL_URL = 'https://volunteer.healthmatters.clinic';
+
+const SUGGEST_CATEGORIES = [
+  "Basic Needs", "Mental & Behavioral Health", "HIV / Sexual Health",
+  "Housing & Shelter", "Health Care", "Food Assistance",
+  "Community Support", "Legal Aid", "Transportation", "Research Study", "Other"
+];
+
+const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [form, setForm] = useState({
+    resourceName: '', description: '', category: '', submitterName: '',
+    submitterEmail: '', contactName: '', contactEmail: '', contactPhone: '',
+    websiteUrl: '', address: '', hours: '', eligibility: '',
+    languages: '', targetPopulation: '', geographicArea: '', intakeNotes: '',
+    website_url: '', // honeypot
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+
+  const set = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    setError('');
+    try {
+      const res = await fetch(`${PORTAL_URL}/api/public/suggest-resource`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Submission failed');
+      }
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const fieldClass = "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] focus:outline-none transition-all";
+  const labelClass = "block text-[10px] font-semibold uppercase tracking-widest text-gray-500 mb-1.5";
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Suggest a resource">
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
+      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl max-h-[92vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
+          <h2 className="font-display text-xl font-medium text-gray-900">Suggest a Resource</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close"><X className="w-5 h-5 text-gray-500" /></button>
+        </div>
+
+        {submitted ? (
+          <div className="flex flex-col items-center justify-center py-16 px-6 text-center gap-4">
+            <CheckCircle className="w-14 h-14 text-emerald-500" />
+            <h3 className="font-display text-2xl font-medium text-gray-900">Thank you!</h3>
+            <p className="text-gray-600 text-sm leading-relaxed max-w-sm">Your submission has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.</p>
+            <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6">
+            {/* Honeypot */}
+            <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
+
+            <p className="text-sm text-gray-600 leading-relaxed">Know a program, clinic, or organization that should be in this directory? Submit it below. Our team reviews all submissions before they are added.</p>
+
+            <div className="space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-[#233dff]">Resource Information</h3>
+              <div>
+                <label className={labelClass}>Organization / Resource Name <span className="text-rose-500">*</span></label>
+                <input type="text" required value={form.resourceName} onChange={e => set('resourceName', e.target.value)} className={fieldClass} placeholder="e.g., Filipino Family Health Initiative" />
+              </div>
+              <div>
+                <label className={labelClass}>Category <span className="text-rose-500">*</span></label>
+                <select required value={form.category} onChange={e => set('category', e.target.value)} className={fieldClass}>
+                  <option value="">Select a category</option>
+                  {SUGGEST_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className={labelClass}>Description <span className="text-rose-500">*</span></label>
+                <textarea required value={form.description} onChange={e => set('description', e.target.value)} rows={3} className={`${fieldClass} resize-none`} placeholder="What services or programs do you offer? Who do you serve?" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Website</label>
+                  <input type="url" value={form.websiteUrl} onChange={e => set('websiteUrl', e.target.value)} className={fieldClass} placeholder="https://example.org" />
+                </div>
+                <div>
+                  <label className={labelClass}>Phone</label>
+                  <input type="tel" value={form.contactPhone} onChange={e => set('contactPhone', e.target.value)} className={fieldClass} placeholder="(xxx) xxx-xxxx" />
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Contact Email</label>
+                  <input type="email" value={form.contactEmail} onChange={e => set('contactEmail', e.target.value)} className={fieldClass} placeholder="info@organization.org" />
+                </div>
+                <div>
+                  <label className={labelClass}>Geographic Area Served</label>
+                  <input type="text" value={form.geographicArea} onChange={e => set('geographicArea', e.target.value)} className={fieldClass} placeholder="e.g., Los Angeles County, California" />
+                </div>
+              </div>
+              <div>
+                <label className={labelClass}>Who is eligible / Who do you serve?</label>
+                <input type="text" value={form.eligibility} onChange={e => set('eligibility', e.target.value)} className={fieldClass} placeholder="e.g., Filipino children ages 8-12 in California" />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Languages Available</label>
+                  <input type="text" value={form.languages} onChange={e => set('languages', e.target.value)} className={fieldClass} placeholder="e.g., English, Tagalog" />
+                </div>
+                <div>
+                  <label className={labelClass}>Hours of Operation</label>
+                  <input type="text" value={form.hours} onChange={e => set('hours', e.target.value)} className={fieldClass} placeholder="e.g., Mon-Fri 9am-5pm" />
+                </div>
+              </div>
+              <div>
+                <label className={labelClass}>How to Access / How to Refer</label>
+                <input type="text" value={form.intakeNotes} onChange={e => set('intakeNotes', e.target.value)} className={fieldClass} placeholder="e.g., Email study team, visit website to enroll" />
+              </div>
+            </div>
+
+            <div className="space-y-4 border-t border-gray-100 pt-6">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-[#233dff]">Your Information</h3>
+              <p className="text-xs text-gray-500">We will contact you when your submission is reviewed.</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className={labelClass}>Your Name <span className="text-rose-500">*</span></label>
+                  <input type="text" required value={form.submitterName} onChange={e => set('submitterName', e.target.value)} className={fieldClass} placeholder="First and last name" />
+                </div>
+                <div>
+                  <label className={labelClass}>Your Email <span className="text-rose-500">*</span></label>
+                  <input type="email" required value={form.submitterEmail} onChange={e => set('submitterEmail', e.target.value)} className={fieldClass} placeholder="you@organization.org" />
+                </div>
+              </div>
+            </div>
+
+            {error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
+
+            <div className="flex justify-end gap-3 pt-2 border-t border-gray-100">
+              <button type="button" onClick={onClose} className="px-5 py-3 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancel</button>
+              <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] disabled:opacity-50 transition-colors">
+                {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                {submitting ? 'Submitting...' : 'Submit for Review'}
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const App: React.FC = () => {
   const [filters, setFilters] = useState<FilterState>({
     q: "",
@@ -37,6 +195,7 @@ const App: React.FC = () => {
   const [showCompass, setShowCompass] = useState(false);
   const [chatContext, setChatContext] = useState<ChatContext | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showSuggestModal, setShowSuggestModal] = useState(false);
 
   const pinnedIds = useMemo(() => new Set([...HMC_PROGRAMS.map(r => r.id), ...FEATURED_PARTNERS.map(r => r.id)]), []);
 
@@ -165,6 +324,12 @@ const App: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowSuggestModal(true)}
+              className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-white text-[#233dff] hover:bg-blue-50 hover:shadow-[0_4px_12px_rgba(35,61,255,0.1)] transition-all active:scale-95"
+            >
+              <Plus className="w-4 h-4" />Suggest a Resource
+            </button>
             <button
               onClick={() => setShowCompass(true)}
               className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all active:scale-95"
@@ -364,6 +529,8 @@ const App: React.FC = () => {
           setIsOpen={setIsChatOpen}
         />
       </Suspense>
+
+      {showSuggestModal && <SuggestResourceModal onClose={() => setShowSuggestModal(false)} />}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-bold animate-in fade-in slide-in-from-bottom-2">
