@@ -71,8 +71,8 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
   return (
     <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Suggest a resource">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl max-h-[92vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl z-10">
+      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92vh]">
+        <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
           <h2 className="font-display text-xl font-medium text-gray-900">Suggest a Resource</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close"><X className="w-5 h-5 text-gray-500" /></button>
         </div>
@@ -85,7 +85,7 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
             <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6">
+          <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6 overflow-y-auto flex-1">
             {/* Honeypot */}
             <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 
