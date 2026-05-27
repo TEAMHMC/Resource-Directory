@@ -164,13 +164,15 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
 
   return ReactDOM.createPortal(
     <>
-      <button
-        onClick={handleToggle}
-        className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
-        aria-label={isOpen ? "Close chat" : "Open chat"}
-      >
-        {isOpen ? <X size={28} /> : <MessageSquare size={28} />}
-      </button>
+      {!isOpen && (
+        <button
+          onClick={handleToggle}
+          className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
+          aria-label="Open chat"
+        >
+          <MessageSquare size={28} />
+        </button>
+      )}
 
       {isOpen && (
         <div className="fixed z-[998] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -179,10 +181,13 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
               <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain" />
               <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></span>
             </div>
-            <div>
+            <div className="flex-1">
               <h3 className="font-bold text-lg">Sunny Harper</h3>
               <p className="text-xs text-white/80">AI Resource Navigator</p>
             </div>
+            <button onClick={handleToggle} className="p-2 hover:bg-white/20 rounded-full transition-colors" aria-label="Close chat">
+              <X size={20} />
+            </button>
           </header>
 
           <main className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
