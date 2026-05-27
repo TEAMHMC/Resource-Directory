@@ -333,6 +333,7 @@ const App: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showSuggestModal, setShowSuggestModal] = useState(false);
   const [suggestEditResource, setSuggestEditResource] = useState<Resource | null>(null);
+  const [officialPartnerNames, setOfficialPartnerNames] = useState<Set<string>>(new Set());
 
   const pinnedIds = useMemo(() => new Set([...HMC_PROGRAMS.map(r => r.id), ...FEATURED_PARTNERS.map(r => r.id)]), []);
 
@@ -389,6 +390,25 @@ const App: React.FC = () => {
       if (found) setActiveResource(found);
     }
   }, []);
+
+  useEffect(() => {
+    fetch('https://volunteer.healthmatters.clinic/api/public/official-partners')
+      .then(r => r.json())
+      .then(data => {
+        if (data.success) {
+          const names = new Set<string>(
+            data.partners.map((p: any) => p.name.toLowerCase().trim())
+          );
+          setOfficialPartnerNames(names);
+        }
+      })
+      .catch(() => {}); // fail silently — badge is enhancement only
+  }, []);
+
+  const isOfficialPartner = (resource: Resource): boolean => {
+    const normalizedName = resource.name.toLowerCase().trim();
+    return officialPartnerNames.has(normalizedName);
+  };
 
   const handleShare = async (resource: Resource) => {
     const shareUrl = `${window.location.origin}${window.location.pathname}?r=${resource.id}`;
@@ -614,7 +634,7 @@ const App: React.FC = () => {
               <SectionHeader title="Featured Partners" count={FEATURED_PARTNERS.length} />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {FEATURED_PARTNERS.map(r => (
-                  <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} />
+                  <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} isPartner={isOfficialPartner(r)} />
                 ))}
               </div>
             </section>
@@ -626,7 +646,7 @@ const App: React.FC = () => {
           {filteredResources.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredResources.map(r => (
-                <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} />
+                <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} isPartner={isOfficialPartner(r)} />
               ))}
             </div>
           ) : (
@@ -652,6 +672,7 @@ const App: React.FC = () => {
           resource={activeResource}
           onClose={() => setActiveResource(null)}
           onShare={handleShare}
+          isPartner={activeResource ? isOfficialPartner(activeResource) : false}
           onSuggestEdit={(resource) => {
             setActiveResource(null);
             setSuggestEditResource(resource);

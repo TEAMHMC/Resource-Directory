@@ -8,9 +8,10 @@ interface ResourceModalProps {
   onClose: () => void;
   onShare: (resource: Resource) => void;
   onSuggestEdit?: (resource: Resource) => void;
+  isPartner?: boolean;
 }
 
-const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShare, onSuggestEdit }) => {
+const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShare, onSuggestEdit, isPartner }) => {
   const [showReferralForm, setShowReferralForm] = useState(false);
   const [referralData, setReferralData] = useState({
     need: '',
@@ -86,9 +87,16 @@ ${referralData.contactPref}
         )}
         <div className="sticky top-0 z-10 bg-white rounded-t-[32px] p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
           <div>
-            <span className="inline-block px-3 py-1 mb-3 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-wide">
-              {resource.category}
-            </span>
+            <div className="flex flex-wrap items-center gap-2 mb-3">
+              <span className="inline-block px-3 py-1 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-wide">
+                {resource.category}
+              </span>
+              {isPartner && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                  HMC Partner
+                </span>
+              )}
+            </div>
             <h2 className="font-display text-3xl md:text-4xl font-medium text-gray-900 leading-none">
               {resource.name}
             </h2>

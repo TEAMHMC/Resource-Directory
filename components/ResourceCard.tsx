@@ -8,9 +8,10 @@ interface ResourceCardProps {
   onOpen: (resource: Resource) => void;
   onShare: (resource: Resource) => void;
   isPinned?: boolean;
+  isPartner?: boolean;
 }
 
-const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, isPinned }) => {
+const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, isPinned, isPartner }) => {
   const isEmergency = resource.phone === '988' || resource.phone === '911';
 
   return (
@@ -29,6 +30,11 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
         {isPinned && (
           <span className="px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase rounded-full bg-[#233dff]/10 text-[#233dff]">
             HMC Program
+          </span>
+        )}
+        {isPartner && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+            HMC Partner
           </span>
         )}
         {isEmergency && (
