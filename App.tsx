@@ -86,7 +86,7 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-          <div className="px-6 py-6 space-y-6 overflow-y-auto flex-1">
+          <div className="px-6 py-6 space-y-6 overflow-y-auto flex-1 overscroll-contain">
             {/* Honeypot */}
             <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 
