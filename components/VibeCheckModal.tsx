@@ -188,6 +188,18 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
     
     const recommendedResourceIds = identifiedNeeds.flatMap(need => recommendations[need]?.resources.map(r => r.id) || []);
 
+    // Pick top 3 resources total across all matched needs (first resource from each need, in order)
+    const topResources: { id: string; name: string; desc: string; icon: React.ReactNode }[] = [];
+    for (const need of identifiedNeeds) {
+      for (const r of recommendations[need]?.resources || []) {
+        if (!topResources.some(x => x.id === r.id)) {
+          topResources.push({ ...r, icon: recommendations[need].icon });
+        }
+        if (topResources.length >= 3) break;
+      }
+      if (topResources.length >= 3) break;
+    }
+
     if (!hasNeeds) {
       return (
         <div className="text-center p-8">
@@ -214,21 +226,16 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
               <p className="text-gray-600 mb-6 max-w-md mx-auto">Thank you for sharing. Based on your answers, here are some areas where we can offer support. The next step is to chat with Sunny, our AI Navigator, who can guide you through these resources.</p>
           </div>
           
-          <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-6">
-            <h4 className="font-bold text-gray-800 mb-3 text-center">Recommended Support Areas:</h4>
-            <div className="space-y-3 max-h-[25vh] overflow-y-auto pr-2">
-                {identifiedNeeds.map(need => (
-                    <div key={need} className="flex items-start gap-3">
-                       <div className="flex-shrink-0 mt-1">{recommendations[need].icon}</div>
-                       <div>
-                           <p className="font-bold text-gray-800">{recommendations[need].title}</p>
-                           <ul className="list-disc pl-5 text-sm text-gray-600">
-                             {recommendations[need].resources.map(r => <li key={r.id}>{r.name}</li>)}
-                           </ul>
-                       </div>
-                    </div>
-                ))}
-            </div>
+          <div className="space-y-3 mb-6">
+            {topResources.map((r, i) => (
+              <div key={r.id} className="flex items-start gap-3 bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                <span className="flex-shrink-0 w-7 h-7 rounded-full bg-blue-100 text-[#233dff] text-sm font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+                <div>
+                  <p className="font-bold text-gray-800 text-sm">{r.name}</p>
+                  <p className="text-sm text-gray-600 mt-0.5">{r.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
 
           <button 
