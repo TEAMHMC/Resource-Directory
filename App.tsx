@@ -29,29 +29,96 @@ const SUGGEST_CATEGORIES = [
   "Community Support", "Legal Aid", "Transportation", "Research Study", "Other"
 ];
 
-const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+// --- Duplicate detection helpers ---
+const normalizeForMatch = (s: string): string =>
+  s.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+
+const wordOverlapScore = (a: string, b: string): number => {
+  const wordsA = new Set(normalizeForMatch(a).split(' ').filter(w => w.length > 2));
+  const wordsB = new Set(normalizeForMatch(b).split(' ').filter(w => w.length > 2));
+  if (wordsA.size === 0 || wordsB.size === 0) return 0;
+  let shared = 0;
+  wordsA.forEach(w => { if (wordsB.has(w)) shared++; });
+  return shared / Math.max(wordsA.size, wordsB.size);
+};
+
+const findDuplicateResource = (name: string): Resource | null => {
+  if (!name || name.trim().length < 3) return null;
+  const normInput = normalizeForMatch(name);
+  const allForCheck = [...ALL_RESOURCES, ...HMC_PROGRAMS, ...FEATURED_PARTNERS];
+  for (const r of allForCheck) {
+    const normExisting = normalizeForMatch(r.name);
+    if (
+      normInput.includes(normExisting) ||
+      normExisting.includes(normInput) ||
+      wordOverlapScore(normInput, normExisting) >= 0.7
+    ) {
+      return r;
+    }
+  }
+  return null;
+};
+
+const SuggestResourceModal: React.FC<{
+  onClose: () => void;
+  editResource?: Resource | null;
+  onSwitchToEdit?: (resource: Resource) => void;
+}> = ({ onClose, editResource = null, onSwitchToEdit }) => {
+  const isEditMode = editResource !== null;
+
   const [form, setForm] = useState({
-    resourceName: '', description: '', category: '', submitterName: '',
-    submitterEmail: '', contactName: '', contactEmail: '', contactPhone: '',
-    websiteUrl: '', address: '', hours: '', eligibility: '',
-    languages: '', targetPopulation: '', geographicArea: '', intakeNotes: '',
+    resourceName: editResource?.name || '',
+    description: editResource?.description || '',
+    category: editResource?.category || '',
+    submitterName: '',
+    submitterEmail: '',
+    contactName: '',
+    contactEmail: editResource?.email || '',
+    contactPhone: editResource?.phone || '',
+    websiteUrl: editResource?.website || '',
+    address: editResource?.address || '',
+    hours: editResource?.hours || '',
+    eligibility: editResource?.eligibility || '',
+    languages: editResource?.languages || '',
+    targetPopulation: editResource?.targetPopulation || '',
+    geographicArea: editResource?.geographicArea || '',
+    intakeNotes: editResource?.referralNotes || '',
     website_url: '', // honeypot
   });
+  const [correctionNote, setCorrectionNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [duplicateMatch, setDuplicateMatch] = useState<Resource | null>(null);
+  const [dismissedDuplicate, setDismissedDuplicate] = useState(false);
 
   const set = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
+
+  const handleNameBlur = () => {
+    if (isEditMode) return;
+    const match = findDuplicateResource(form.resourceName);
+    setDuplicateMatch(match);
+    setDismissedDuplicate(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setError('');
     try {
+      const payload = isEditMode
+        ? {
+            ...form,
+            isEditSuggestion: true,
+            existingResourceId: editResource!.id,
+            existingResourceName: editResource!.name,
+            correctionNote,
+          }
+        : form;
       const res = await fetch(`${PORTAL_URL}/api/public/suggest-resource`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -68,12 +135,14 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
   const fieldClass = "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm focus:ring-2 focus:ring-[#233dff]/20 focus:border-[#233dff] focus:outline-none transition-all";
   const labelClass = "block text-[10px] font-semibold uppercase tracking-widest text-gray-500 mb-1.5";
 
+  const showDuplicateWarning = !isEditMode && duplicateMatch && !dismissedDuplicate;
+
   return (
-    <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label="Suggest a resource">
+    <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditMode ? "Suggest an edit" : "Suggest a resource"}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92vh]">
         <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
-          <h2 className="font-display text-xl font-medium text-gray-900">Suggest a Resource</h2>
+          <h2 className="font-display text-xl font-medium text-gray-900">{isEditMode ? 'Suggest an Edit' : 'Suggest a Resource'}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close"><X className="w-5 h-5 text-gray-500" /></button>
         </div>
 
@@ -81,7 +150,11 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
           <div className="flex flex-col items-center justify-center py-16 px-6 text-center gap-4">
             <CheckCircle className="w-14 h-14 text-emerald-500" />
             <h3 className="font-display text-2xl font-medium text-gray-900">Thank you!</h3>
-            <p className="text-gray-600 text-sm leading-relaxed max-w-sm">Your submission has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.</p>
+            <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
+              {isEditMode
+                ? 'Your edit suggestion has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.'
+                : 'Your submission has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.'}
+            </p>
             <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
           </div>
         ) : (
@@ -90,13 +163,75 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
             {/* Honeypot */}
             <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 
-            <p className="text-sm text-gray-600 leading-relaxed">Know a program, clinic, or organization that should be in this directory? Submit it below. Our team reviews all submissions before they are added.</p>
+            {isEditMode ? (
+              <>
+                <div className="flex items-start gap-3 bg-blue-50 border border-blue-200 rounded-2xl px-4 py-3">
+                  <Info className="w-4 h-4 text-[#233dff] flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    <span className="font-semibold">Editing:</span> {editResource!.name}
+                    <br />
+                    <span className="text-gray-500 text-xs">Update any fields below and describe what needs to be corrected.</span>
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-[#233dff]">What Needs to Be Corrected?</h3>
+                  <div>
+                    <label className={labelClass}>Description of the correction <span className="text-rose-500">*</span></label>
+                    <textarea
+                      required
+                      value={correctionNote}
+                      onChange={e => setCorrectionNote(e.target.value)}
+                      rows={3}
+                      className={`${fieldClass} resize-none`}
+                      placeholder="e.g., The phone number has changed, the hours are outdated, the address is incorrect..."
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p className="text-sm text-gray-600 leading-relaxed">Know a program, clinic, or organization that should be in this directory? Submit it below. Our team reviews all submissions before they are added.</p>
+            )}
 
             <div className="space-y-4">
               <h3 className="text-xs font-bold uppercase tracking-widest text-[#233dff]">Resource Information</h3>
               <div>
                 <label className={labelClass}>Organization / Resource Name <span className="text-rose-500">*</span></label>
-                <input type="text" required value={form.resourceName} onChange={e => set('resourceName', e.target.value)} className={fieldClass} placeholder="e.g., Filipino Family Health Initiative" />
+                <input
+                  type="text"
+                  required
+                  value={form.resourceName}
+                  onChange={e => { set('resourceName', e.target.value); if (duplicateMatch) { setDuplicateMatch(null); } }}
+                  onBlur={handleNameBlur}
+                  className={fieldClass}
+                  placeholder="e.g., Filipino Family Health Initiative"
+                  readOnly={isEditMode}
+                />
+                {showDuplicateWarning && (
+                  <div className="mt-2 bg-amber-50 border border-amber-300 rounded-2xl p-4 space-y-2">
+                    <p className="text-sm text-amber-800 font-medium">
+                      This resource may already be in our directory: <span className="font-bold">{duplicateMatch!.name}</span>
+                    </p>
+                    <p className="text-xs text-amber-700">If you are updating their info, use "Suggest an Edit" instead.</p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {onSwitchToEdit && (
+                        <button
+                          type="button"
+                          onClick={() => onSwitchToEdit(duplicateMatch!)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#233dff] text-white rounded-full text-xs font-medium hover:bg-[#1a2b99] transition-colors"
+                        >
+                          Suggest an Edit for {duplicateMatch!.name} →
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setDismissedDuplicate(true)}
+                        className="px-4 py-2 rounded-full text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors border border-gray-200"
+                      >
+                        It is different, continue
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
                 <label className={labelClass}>Category <span className="text-rose-500">*</span></label>
@@ -170,7 +305,7 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
               <button type="button" onClick={onClose} className="px-5 py-3 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancel</button>
               <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] disabled:opacity-50 transition-colors">
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                {submitting ? 'Submitting...' : 'Submit for Review'}
+                {submitting ? 'Submitting...' : (isEditMode ? 'Submit Edit for Review' : 'Submit for Review')}
               </button>
             </div>
           </form>
@@ -197,6 +332,7 @@ const App: React.FC = () => {
   const [chatContext, setChatContext] = useState<ChatContext | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showSuggestModal, setShowSuggestModal] = useState(false);
+  const [suggestEditResource, setSuggestEditResource] = useState<Resource | null>(null);
 
   const pinnedIds = useMemo(() => new Set([...HMC_PROGRAMS.map(r => r.id), ...FEATURED_PARTNERS.map(r => r.id)]), []);
 
@@ -512,7 +648,15 @@ const App: React.FC = () => {
       </footer>
 
       <Suspense fallback={null}>
-        <ResourceModal resource={activeResource} onClose={() => setActiveResource(null)} onShare={handleShare} />
+        <ResourceModal
+          resource={activeResource}
+          onClose={() => setActiveResource(null)}
+          onShare={handleShare}
+          onSuggestEdit={(resource) => {
+            setActiveResource(null);
+            setSuggestEditResource(resource);
+          }}
+        />
       </Suspense>
 
       {showCompass && (
@@ -531,7 +675,16 @@ const App: React.FC = () => {
         />
       </Suspense>
 
-      {showSuggestModal && <SuggestResourceModal onClose={() => setShowSuggestModal(false)} />}
+      {(showSuggestModal || suggestEditResource) && (
+        <SuggestResourceModal
+          editResource={suggestEditResource}
+          onClose={() => { setShowSuggestModal(false); setSuggestEditResource(null); }}
+          onSwitchToEdit={(resource) => {
+            setShowSuggestModal(false);
+            setSuggestEditResource(resource);
+          }}
+        />
+      )}
 
       {toast && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full shadow-lg text-sm font-bold animate-in fade-in slide-in-from-bottom-2">

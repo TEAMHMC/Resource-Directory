@@ -7,9 +7,10 @@ interface ResourceModalProps {
   resource: Resource | null;
   onClose: () => void;
   onShare: (resource: Resource) => void;
+  onSuggestEdit?: (resource: Resource) => void;
 }
 
-const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShare }) => {
+const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShare, onSuggestEdit }) => {
   const [showReferralForm, setShowReferralForm] = useState(false);
   const [referralData, setReferralData] = useState({
     need: '',
@@ -217,9 +218,19 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-[10px] font-bold uppercase tracking-wide text-gray-400 px-8">
-          <span>Source: {resource.source || 'Verified Partner'}</span>
-          <span>Last Updated: {resource.lastUpdated || 'Recently'}</span>
+        <div className="px-8 py-3 border-t border-gray-100 flex justify-between items-center">
+          <div className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
+            <span>Source: {resource.source || 'Verified Partner'}</span>
+            <span className="ml-4">Last Updated: {resource.lastUpdated || 'Recently'}</span>
+          </div>
+          {onSuggestEdit && (
+            <button
+              onClick={() => { onSuggestEdit(resource); onClose(); }}
+              className="text-xs text-gray-400 hover:text-[#233dff] transition-colors underline underline-offset-2"
+            >
+              See incorrect info? Suggest an edit →
+            </button>
+          )}
         </div>
       </div>
     </div>
