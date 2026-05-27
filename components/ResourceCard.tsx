@@ -33,7 +33,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
           </span>
         )}
         {isPartner && (
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full" style={{ color: '#cc3d18', background: 'rgba(255,110,64,0.1)', border: '1px solid rgba(255,110,64,0.3)' }}>
             HMC Partner
           </span>
         )}
