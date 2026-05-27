@@ -114,7 +114,7 @@ const SuggestResourceModal: React.FC<{
             existingResourceName: editResource!.name,
             correctionNote,
           }
-        : form;
+        : { ...form, wantPartnerInfo: true };
       const res = await fetch(`${PORTAL_URL}/api/public/suggest-resource`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -147,7 +147,7 @@ const SuggestResourceModal: React.FC<{
         </div>
 
         {submitted ? (
-          <div className="flex flex-col items-center justify-center py-16 px-6 text-center gap-4">
+          <div className="flex flex-col items-center py-12 px-6 text-center gap-4 overflow-y-auto">
             <CheckCircle className="w-14 h-14 text-emerald-500" />
             <h3 className="font-display text-2xl font-medium text-gray-900">Thank you!</h3>
             <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
@@ -156,6 +156,36 @@ const SuggestResourceModal: React.FC<{
                 : 'Your submission has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.'}
             </p>
             <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
+
+            {!isEditMode && (
+              <>
+                <div className="w-full border-t border-gray-200 mt-4" />
+                <p className="text-sm font-semibold text-gray-700 mt-2">Want to do more with HMC?</p>
+                <div className="w-full max-w-md text-left border-l-4 border-amber-400 bg-amber-50 rounded-2xl px-5 py-4">
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    Your organization can join the HMC Partner Network — post events to the Event Finder, manage referrals from HMC clients, collaborate with other LA community organizations, and sign partnership agreements directly online.
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-1">
+                  <a
+                    href="https://volunteer.healthmatters.clinic?page=partner"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-amber-500 text-white rounded-full text-sm font-medium hover:bg-amber-600 transition-colors"
+                  >
+                    Create a Partner Account &rarr;
+                  </a>
+                  <a
+                    href="https://volunteer.healthmatters.clinic?page=partner"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-gray-500 hover:text-gray-700 underline underline-offset-2 transition-colors"
+                  >
+                    Learn More
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
