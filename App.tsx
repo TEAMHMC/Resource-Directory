@@ -85,7 +85,8 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
             <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="px-6 py-6 space-y-6 overflow-y-auto flex-1">
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
+          <div className="px-6 py-6 space-y-6 overflow-y-auto flex-1">
             {/* Honeypot */}
             <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 
@@ -163,9 +164,9 @@ const SuggestResourceModal: React.FC<{ onClose: () => void }> = ({ onClose }) =>
               </div>
             </div>
 
-            {error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-xl px-4 py-3">{error}</p>}
-
-            <div className="flex justify-end gap-3 pt-2 border-t border-gray-100">
+          </div>
+          {error && <p className="text-sm text-rose-600 bg-rose-50 border border-rose-200 rounded-xl mx-6 mb-2 px-4 py-3">{error}</p>}
+          <div className="flex-shrink-0 flex justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
               <button type="button" onClick={onClose} className="px-5 py-3 rounded-full text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Cancel</button>
               <button type="submit" disabled={submitting} className="inline-flex items-center gap-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] disabled:opacity-50 transition-colors">
                 {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
