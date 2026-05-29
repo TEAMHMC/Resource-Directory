@@ -261,12 +261,12 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex-grow overflow-y-auto">
+        <div className="flex-grow min-h-0 overflow-y-auto overscroll-contain">
             {renderContent()}
         </div>
-        
+
         {step > 0 && step <= questions.length && (
-            <div className="p-4 bg-gray-50 border-t border-gray-100">
+            <div className="flex-shrink-0 p-4 bg-gray-50 border-t border-gray-100">
                 <div className="w-full bg-gray-200 rounded-full h-2">
                     <div className="bg-[#233dff] h-2 rounded-full" style={{ width: `${(step / questions.length) * 100}%`, transition: 'width 0.3s ease-in-out' }}></div>
                 </div>

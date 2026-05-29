@@ -140,14 +140,14 @@ const SuggestResourceModal: React.FC<{
   return (
     <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditMode ? "Suggest an edit" : "Suggest a resource"}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92vh]">
+      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]">
         <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
           <h2 className="font-display text-xl font-medium text-gray-900">{isEditMode ? 'Suggest an Edit' : 'Suggest a Resource'}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close"><X className="w-5 h-5 text-gray-500" /></button>
         </div>
 
         {submitted ? (
-          <div className="flex flex-col items-center py-12 px-6 text-center gap-4 overflow-y-auto">
+          <div className="flex flex-col items-center py-12 px-6 text-center gap-4 overflow-y-auto flex-1 min-h-0 overscroll-contain">
             <CheckCircle className="w-14 h-14 text-emerald-500" />
             <h3 className="font-display text-2xl font-medium text-gray-900">Thank you!</h3>
             <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
@@ -189,7 +189,7 @@ const SuggestResourceModal: React.FC<{
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0">
-          <div className="px-6 py-6 space-y-6 overflow-y-auto flex-1 overscroll-contain">
+          <div className="px-6 py-6 space-y-6 overflow-y-auto flex-1 min-h-0 overscroll-contain">
             {/* Honeypot */}
             <input type="text" name="website_url" value={form.website_url} onChange={e => set('website_url', e.target.value)} style={{ display: 'none' }} tabIndex={-1} aria-hidden="true" />
 

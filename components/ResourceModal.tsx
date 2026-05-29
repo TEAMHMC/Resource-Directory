@@ -85,7 +85,7 @@ ${referralData.contactPref}
             <Copy className="w-4 h-4" /> {shareToast}
           </div>
         )}
-        <div className="sticky top-0 z-10 bg-white rounded-t-[32px] p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
+        <div className="flex-shrink-0 sticky top-0 z-10 bg-white rounded-t-[32px] p-6 md:p-8 border-b border-gray-100 flex items-start justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-3">
               <span className="inline-block px-3 py-1 text-xs font-bold bg-[#233dff]/10 text-[#233dff] rounded-full uppercase tracking-wide">
@@ -119,7 +119,7 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="p-6 md:p-8 print:overflow-visible overflow-y-auto flex-1">
+        <div className="p-6 md:p-8 print:overflow-visible overflow-y-auto flex-1 min-h-0 overscroll-contain">
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-6">
               <section>
@@ -226,19 +226,29 @@ ${referralData.contactPref}
           </div>
         </div>
 
-        <div className="px-8 py-3 border-t border-gray-100 flex justify-between items-center">
+        <div className="flex-shrink-0 px-8 py-3 border-t border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <div className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
             <span>Source: {resource.source || 'Verified Partner'}</span>
             <span className="ml-4">Last Updated: {resource.lastUpdated || 'Recently'}</span>
           </div>
-          {onSuggestEdit && (
-            <button
-              onClick={() => { onSuggestEdit(resource); onClose(); }}
-              className="text-xs text-gray-400 hover:text-[#233dff] transition-colors underline underline-offset-2"
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+            {onSuggestEdit && (
+              <button
+                onClick={() => { onSuggestEdit(resource); onClose(); }}
+                className="text-xs text-gray-400 hover:text-[#233dff] transition-colors underline underline-offset-2"
+              >
+                See incorrect info? Suggest an edit →
+              </button>
+            )}
+            <a
+              href="https://partner.healthmatters.clinic"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-semibold text-[#233dff] hover:text-[#1a2b99] transition-colors underline underline-offset-2"
             >
-              See incorrect info? Suggest an edit →
-            </button>
-          )}
+              Is this your organization? Claim this listing →
+            </a>
+          </div>
         </div>
       </div>
     </div>
