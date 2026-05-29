@@ -132,65 +132,12 @@ ${referralData.contactPref}
               </section>
 
               <div className="md:col-span-2">
-                {!showReferralForm ? (
-                  <button
-                    onClick={() => setShowReferralForm(true)}
-                    className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
-                  </button>
-                ) : (
-                  <form onSubmit={handleReferralSubmit} className="bg-gray-50 p-6 rounded-3xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
-                    <h3 className="text-xl font-medium text-gray-900">Referral Request Form</h3>
-                    <p className="text-xs text-gray-500 font-medium">
-                      <strong>HIPAA/Privacy Notice:</strong> Please include minimum necessary information only. Do not include direct identifiers (name, DOB, full address, etc.). This information will be sent via your own email client to our secure referrals team.
-                    </p>
-                    
-                    <div>
-                      <label htmlFor="ref-need" className="text-sm font-bold text-gray-700 block mb-1">Primary Need</label>
-                      <textarea
-                        id="ref-need"
-                        value={referralData.need}
-                        onChange={(e) => setReferralData({ ...referralData, need: e.target.value })}
-                        placeholder="e.g., Emergency shelter, mental health service..."
-                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                        rows={3}
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="ref-urgency" className="text-sm font-bold text-gray-700 block mb-1">Deadline / Urgency</label>
-                      <input
-                        id="ref-urgency"
-                        type="text"
-                        value={referralData.urgency}
-                        onChange={(e) => setReferralData({ ...referralData, urgency: e.target.value })}
-                        placeholder="e.g., Tonight, within 3 days, within 2 weeks"
-                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="ref-contact" className="text-sm font-bold text-gray-700 block mb-1">Preferred Contact Method</label>
-                      <input
-                        id="ref-contact"
-                        type="text"
-                        value={referralData.contactPref}
-                        onChange={(e) => setReferralData({ ...referralData, contactPref: e.target.value })}
-                        placeholder="Enter a safe phone or email for our team to use"
-                        className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                        required
-                      />
-                    </div>
-
-                    <div className="flex gap-2 pt-2">
-                      <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email</button>
-                      <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"><span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel</button>
-                    </div>
-                  </form>
-                )}
+                <button
+                  onClick={() => setShowReferralForm(true)}
+                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                >
+                  <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
+                </button>
               </div>
 
               {resource.referralNotes && (
@@ -251,6 +198,82 @@ ${referralData.contactPref}
           </div>
         </div>
       </div>
+
+      {showReferralForm && (
+        <div
+          className="fixed inset-0 z-[210] flex items-end sm:items-center justify-center p-0 sm:p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Referral Request Form"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowReferralForm(false)} />
+          <div className="relative bg-white w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]">
+            <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
+              <h3 className="font-display text-xl font-medium text-gray-900">Referral Request Form</h3>
+              <button onClick={() => setShowReferralForm(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close referral form">
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <form onSubmit={handleReferralSubmit} className="flex flex-col flex-1 min-h-0">
+              <div className="px-6 py-6 space-y-5 overflow-y-auto flex-1 min-h-0 overscroll-contain">
+                <p className="text-xs text-gray-500 font-medium">
+                  <strong>HIPAA / Privacy Notice:</strong> Please include minimum necessary information only. Do not include direct identifiers (name, DOB, full address, etc.). This information will be sent via your own email client to our secure referrals team.
+                </p>
+
+                <div>
+                  <label htmlFor="ref-need" className="text-sm font-bold text-gray-700 block mb-1">Primary Need</label>
+                  <textarea
+                    id="ref-need"
+                    value={referralData.need}
+                    onChange={(e) => setReferralData({ ...referralData, need: e.target.value })}
+                    placeholder="e.g., Emergency shelter, mental health service..."
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    rows={3}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="ref-urgency" className="text-sm font-bold text-gray-700 block mb-1">Deadline / Urgency</label>
+                  <input
+                    id="ref-urgency"
+                    type="text"
+                    value={referralData.urgency}
+                    onChange={(e) => setReferralData({ ...referralData, urgency: e.target.value })}
+                    placeholder="e.g., Tonight, within 3 days, within 2 weeks"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="ref-contact" className="text-sm font-bold text-gray-700 block mb-1">Preferred Contact Method</label>
+                  <input
+                    id="ref-contact"
+                    type="text"
+                    value={referralData.contactPref}
+                    onChange={(e) => setReferralData({ ...referralData, contactPref: e.target.value })}
+                    placeholder="Enter a safe phone or email for our team to use"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex-shrink-0 flex justify-end gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
+                <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95">
+                  <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
+                </button>
+                <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
+                  <span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
