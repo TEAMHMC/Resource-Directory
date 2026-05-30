@@ -17,6 +17,13 @@ interface ChatWidgetProps {
   anyModalOpen?: boolean;
 }
 
+// When embedded in an iframe (e.g. inside the Webflow site), the parent page
+// already loads the global Sunny Harper widget, so rendering our in-app chat
+// would duplicate it. Hide ourselves and let the parent handle chat.
+// Computed once at module load — stable across renders so it's safe to use
+// in the post-hooks early return below.
+const isEmbedded = typeof window !== 'undefined' && window.parent !== window;
+
 const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext, onContextHandled, isOpen, setIsOpen, anyModalOpen = false }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -163,10 +170,12 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     });
   };
 
-  // Hide the entire widget (bubble + open panel) while any other modal is open.
-  // The chat is pinned bottom-right at a high z-index, so without this it covers
-  // modal Close/Submit buttons and looks like a second chatbot beside the modal.
-  if (anyModalOpen) {
+  // Hide the entire widget when:
+  // 1. We're embedded in an iframe — the parent page (Webflow) already loads
+  //    its own global Sunny Harper widget, so rendering ours would duplicate it.
+  // 2. Any other modal is open — the chat is pinned bottom-right at a high
+  //    z-index and would cover modal Close/Submit buttons.
+  if (isEmbedded || anyModalOpen) {
     return null;
   }
 
