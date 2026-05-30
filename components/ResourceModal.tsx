@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Resource } from '../types';
 import { X, Share2, Printer, MapPin, Globe, Clock, Info, Phone, Mail, CheckCircle, HelpCircle, Copy } from 'lucide-react';
+import { useEmbedViewport } from '../hooks/useEmbedViewport';
 
 interface ResourceModalProps {
   resource: Resource | null;
@@ -31,6 +32,8 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
   });
   const [submitState, setSubmitState] = useState<ReferralSubmitState>({ kind: 'idle' });
   const [shareToast, setShareToast] = useState<string | null>(null);
+  const { overlayStyle: mainOverlayStyle, cardMaxHeight: mainCardMaxHeight } = useEmbedViewport(!!resource);
+  const { overlayStyle: referralOverlayStyle, cardMaxHeight: referralCardMaxHeight } = useEmbedViewport(showReferralForm);
 
   const handleShare = async () => {
     if (!resource) return;
@@ -113,10 +116,11 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center md:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center md:p-6" onClick={onClose} style={mainOverlayStyle}>
       <div
         className="bg-white w-full max-w-4xl rounded-t-[28px] md:rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 md:zoom-in-95 duration-300 max-h-[88svh] md:max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
+        style={mainCardMaxHeight ? { maxHeight: mainCardMaxHeight } : undefined}
       >
         {/* Drag handle — mobile only */}
         <div className="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
@@ -248,9 +252,10 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
           aria-modal="true"
           aria-label="Referral Request Form"
           onClick={(e) => e.stopPropagation()}
+          style={referralOverlayStyle}
         >
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeReferralForm} />
-          <div className="relative bg-white w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]">
+          <div className="relative bg-white w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]" style={referralCardMaxHeight ? { maxHeight: referralCardMaxHeight } : undefined}>
             <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
               <h3 className="font-display text-xl font-medium text-gray-900">Referral Request Form</h3>
               <button onClick={closeReferralForm} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close referral form">

@@ -4,6 +4,7 @@ import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layer
 import { Resource, FilterState, CATEGORIES, ChatContext } from './types';
 import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from './constants';
 import ResourceCard from './components/ResourceCard';
+import { useEmbedViewport } from './hooks/useEmbedViewport';
 const ResourceModal = lazy(() => import('./components/ResourceModal'));
 const ChatWidget = lazy(() => import('./components/ChatWidget'));
 const VibeCheckModal = lazy(() => import('./components/VibeCheckModal'));
@@ -91,6 +92,7 @@ const SuggestResourceModal: React.FC<{
   const [error, setError] = useState('');
   const [duplicateMatch, setDuplicateMatch] = useState<Resource | null>(null);
   const [dismissedDuplicate, setDismissedDuplicate] = useState(false);
+  const { overlayStyle, cardMaxHeight } = useEmbedViewport(true);
 
   const set = (field: string, value: string) => setForm(prev => ({ ...prev, [field]: value }));
 
@@ -138,9 +140,9 @@ const SuggestResourceModal: React.FC<{
   const showDuplicateWarning = !isEditMode && duplicateMatch && !dismissedDuplicate;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditMode ? "Suggest an edit" : "Suggest a resource"}>
+    <div className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-label={isEditMode ? "Suggest an edit" : "Suggest a resource"} style={overlayStyle}>
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]">
+      <div className="relative bg-white w-full sm:max-w-2xl sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]" style={cardMaxHeight ? { maxHeight: cardMaxHeight } : undefined}>
         <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
           <h2 className="font-display text-xl font-medium text-gray-900">{isEditMode ? 'Suggest an Edit' : 'Suggest a Resource'}</h2>
           <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close"><X className="w-5 h-5 text-gray-500" /></button>
