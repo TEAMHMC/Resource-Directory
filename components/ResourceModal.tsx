@@ -11,13 +11,25 @@ interface ResourceModalProps {
   isPartner?: boolean;
 }
 
+const PORTAL_REFERRAL_ENDPOINT = 'https://volunteer.healthmatters.clinic/api/public/referrals';
+
+type ReferralSubmitState =
+  | { kind: 'idle' }
+  | { kind: 'submitting' }
+  | { kind: 'success'; referralId: string }
+  | { kind: 'error'; message: string };
+
 const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShare, onSuggestEdit, isPartner }) => {
   const [showReferralForm, setShowReferralForm] = useState(false);
   const [referralData, setReferralData] = useState({
+    memberName: '',
+    memberEmail: '',
+    memberPhone: '',
     need: '',
-    urgency: '',
-    contactPref: '',
+    urgency: 'routine' as 'routine' | 'urgent',
+    contactPref: 'email',
   });
+  const [submitState, setSubmitState] = useState<ReferralSubmitState>({ kind: 'idle' });
   const [shareToast, setShareToast] = useState<string | null>(null);
 
   const handleShare = async () => {
@@ -47,27 +59,57 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
 
   const handlePrint = () => window.print();
 
+  const resetReferralForm = () => {
+    setReferralData({
+      memberName: '',
+      memberEmail: '',
+      memberPhone: '',
+      need: '',
+      urgency: 'routine',
+      contactPref: 'email',
+    });
+    setSubmitState({ kind: 'idle' });
+  };
+
+  const closeReferralForm = () => {
+    setShowReferralForm(false);
+    resetReferralForm();
+  };
+
+  const submitReferral = async () => {
+    if (!resource) return;
+    setSubmitState({ kind: 'submitting' });
+    try {
+      const response = await fetch(PORTAL_REFERRAL_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resourceId: resource.id,
+          resourceName: resource.name,
+          memberName: referralData.memberName.trim(),
+          memberEmail: referralData.memberEmail.trim(),
+          memberPhone: referralData.memberPhone.trim() || undefined,
+          reasonForReferral: referralData.need.trim(),
+          urgencyLevel: referralData.urgency,
+          preferredContactMethod: referralData.contactPref.trim() || 'email',
+        }),
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data?.ok) {
+        const message = (data && typeof data.error === 'string') ? data.error : 'We could not submit your referral right now.';
+        setSubmitState({ kind: 'error', message });
+        return;
+      }
+      setSubmitState({ kind: 'success', referralId: data.referralId || '' });
+    } catch (err) {
+      setSubmitState({ kind: 'error', message: 'Network error. Please try again.' });
+    }
+  };
+
   const handleReferralSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Referral Request: ${resource.name}`;
-    const body = `
-Resource Requested: ${resource.name} (ID: ${resource.id})
----
-IMPORTANT: Please do not add any personal identifying information (name, address, DOB, etc.) to this email. A member of our team will contact you via your preferred method below within 72 hours to securely continue the process.
----
-
-Primary Need:
-${referralData.need}
-
-Deadline / Urgency:
-${referralData.urgency}
-
-Preferred Contact Method (a safe phone number or email):
-${referralData.contactPref}
-  `;
-    window.location.href = `mailto:referrals@healthmatters.clinic?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setShowReferralForm(false);
-    setReferralData({ need: '', urgency: '', contactPref: '' });
+    if (submitState.kind === 'submitting') return;
+    submitReferral();
   };
 
   return (
@@ -207,70 +249,172 @@ ${referralData.contactPref}
           aria-label="Referral Request Form"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowReferralForm(false)} />
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={closeReferralForm} />
           <div className="relative bg-white w-full sm:max-w-lg sm:rounded-3xl rounded-t-3xl shadow-2xl flex flex-col max-h-[92dvh]">
             <div className="flex-shrink-0 bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between rounded-t-3xl">
               <h3 className="font-display text-xl font-medium text-gray-900">Referral Request Form</h3>
-              <button onClick={() => setShowReferralForm(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close referral form">
+              <button onClick={closeReferralForm} className="p-2 hover:bg-gray-100 rounded-full transition-colors" aria-label="Close referral form">
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
 
-            <form onSubmit={handleReferralSubmit} className="flex flex-col flex-1 min-h-0">
-              <div className="px-6 py-6 space-y-5 overflow-y-auto flex-1 min-h-0 overscroll-contain">
-                <p className="text-xs text-gray-500 font-medium">
-                  <strong>HIPAA / Privacy Notice:</strong> Please include minimum necessary information only. Do not include direct identifiers (name, DOB, full address, etc.). This information will be sent via your own email client to our secure referrals team.
-                </p>
-
-                <div>
-                  <label htmlFor="ref-need" className="text-sm font-bold text-gray-700 block mb-1">Primary Need</label>
-                  <textarea
-                    id="ref-need"
-                    value={referralData.need}
-                    onChange={(e) => setReferralData({ ...referralData, need: e.target.value })}
-                    placeholder="e.g., Emergency shelter, mental health service..."
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                    rows={3}
-                    required
-                  />
+            {submitState.kind === 'success' ? (
+              <div className="flex flex-col flex-1 min-h-0">
+                <div className="px-6 py-8 space-y-4 overflow-y-auto flex-1 min-h-0 overscroll-contain">
+                  <div className="rounded-2xl border border-green-200 bg-green-50 p-5 text-green-800">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle className="w-6 h-6 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-bold text-base mb-1">Thank you.</p>
+                        <p className="text-sm leading-relaxed">We received your referral request and will follow up within 1-2 business days.</p>
+                        {submitState.referralId && (
+                          <p className="text-xs text-green-700 mt-2">Reference: {submitState.referralId}</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-
-                <div>
-                  <label htmlFor="ref-urgency" className="text-sm font-bold text-gray-700 block mb-1">Deadline / Urgency</label>
-                  <input
-                    id="ref-urgency"
-                    type="text"
-                    value={referralData.urgency}
-                    onChange={(e) => setReferralData({ ...referralData, urgency: e.target.value })}
-                    placeholder="e.g., Tonight, within 3 days, within 2 weeks"
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="ref-contact" className="text-sm font-bold text-gray-700 block mb-1">Preferred Contact Method</label>
-                  <input
-                    id="ref-contact"
-                    type="text"
-                    value={referralData.contactPref}
-                    onChange={(e) => setReferralData({ ...referralData, contactPref: e.target.value })}
-                    placeholder="Enter a safe phone or email for our team to use"
-                    className="w-full p-2 border border-gray-300 rounded-lg text-sm"
-                    required
-                  />
+                <div className="flex-shrink-0 flex flex-col gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
+                  <button type="button" onClick={closeReferralForm} className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
+                    <span className="w-2 h-2 rounded-full bg-white"></span>Close
+                  </button>
+                  <a href="https://volunteer.healthmatters.clinic" target="_blank" rel="noopener noreferrer" className="text-[10px] text-center text-gray-400 hover:text-[#233dff] transition-colors">
+                    Powered by HMC
+                  </a>
                 </div>
               </div>
-
-              <div className="flex-shrink-0 flex justify-end gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
-                <button type="button" onClick={() => setShowReferralForm(false)} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95">
-                  <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
-                </button>
-                <button type="submit" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
-                  <span className="w-2 h-2 rounded-full bg-white"></span>Submit via Email
-                </button>
+            ) : submitState.kind === 'error' ? (
+              <div className="flex flex-col flex-1 min-h-0">
+                <div className="px-6 py-8 space-y-4 overflow-y-auto flex-1 min-h-0 overscroll-contain">
+                  <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-800">
+                    <p className="font-bold text-base mb-2">Submission did not go through.</p>
+                    <p className="text-sm leading-relaxed">We couldn't submit your referral right now. Please try again or email <a href="mailto:referrals@healthmatters.clinic" className="underline">referrals@healthmatters.clinic</a>.</p>
+                    {submitState.message && (
+                      <p className="text-xs text-red-700 mt-2">Details: {submitState.message}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex-shrink-0 flex flex-col gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
+                  <div className="flex justify-end gap-2">
+                    <button type="button" onClick={closeReferralForm} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95">
+                      <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
+                    </button>
+                    <button type="button" onClick={() => { setSubmitState({ kind: 'idle' }); }} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
+                      <span className="w-2 h-2 rounded-full bg-white"></span>Try again
+                    </button>
+                  </div>
+                  <a href="https://volunteer.healthmatters.clinic" target="_blank" rel="noopener noreferrer" className="text-[10px] text-center text-gray-400 hover:text-[#233dff] transition-colors">
+                    Powered by HMC
+                  </a>
+                </div>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleReferralSubmit} className="flex flex-col flex-1 min-h-0">
+                <div className="px-6 py-6 space-y-5 overflow-y-auto flex-1 min-h-0 overscroll-contain">
+                  <p className="text-xs text-gray-500 font-medium">
+                    <strong>HIPAA / Privacy Notice:</strong> Share only the minimum necessary information. Your request is routed securely through Health Matters Clinic and our team will follow up within 1 to 2 business days.
+                  </p>
+
+                  <div>
+                    <label htmlFor="ref-name" className="text-sm font-bold text-gray-700 block mb-1">Your Name</label>
+                    <input
+                      id="ref-name"
+                      type="text"
+                      value={referralData.memberName}
+                      onChange={(e) => setReferralData({ ...referralData, memberName: e.target.value })}
+                      placeholder="First and last name"
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      autoComplete="name"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="ref-email" className="text-sm font-bold text-gray-700 block mb-1">Your Email</label>
+                    <input
+                      id="ref-email"
+                      type="email"
+                      value={referralData.memberEmail}
+                      onChange={(e) => setReferralData({ ...referralData, memberEmail: e.target.value })}
+                      placeholder="you@example.com"
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      autoComplete="email"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="ref-phone" className="text-sm font-bold text-gray-700 block mb-1">Phone <span className="font-normal text-gray-400">(optional)</span></label>
+                    <input
+                      id="ref-phone"
+                      type="tel"
+                      value={referralData.memberPhone}
+                      onChange={(e) => setReferralData({ ...referralData, memberPhone: e.target.value })}
+                      placeholder="(555) 555-5555"
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      autoComplete="tel"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="ref-need" className="text-sm font-bold text-gray-700 block mb-1">Reason for Referral</label>
+                    <textarea
+                      id="ref-need"
+                      value={referralData.need}
+                      onChange={(e) => setReferralData({ ...referralData, need: e.target.value })}
+                      placeholder="What kind of help do you need? E.g., emergency shelter, mental health support, food access."
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm"
+                      rows={3}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="ref-urgency" className="text-sm font-bold text-gray-700 block mb-1">Urgency</label>
+                    <select
+                      id="ref-urgency"
+                      value={referralData.urgency}
+                      onChange={(e) => setReferralData({ ...referralData, urgency: e.target.value as 'routine' | 'urgent' })}
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+                      required
+                    >
+                      <option value="routine">Routine (follow up within 1-2 business days)</option>
+                      <option value="urgent">Urgent (please prioritize)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label htmlFor="ref-contact" className="text-sm font-bold text-gray-700 block mb-1">Preferred Contact Method</label>
+                    <select
+                      id="ref-contact"
+                      value={referralData.contactPref}
+                      onChange={(e) => setReferralData({ ...referralData, contactPref: e.target.value })}
+                      className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+                      required
+                    >
+                      <option value="email">Email</option>
+                      <option value="phone">Phone call</option>
+                      <option value="text">Text message</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0 flex flex-col gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
+                  <div className="flex justify-end gap-2">
+                    <button type="button" onClick={closeReferralForm} disabled={submitState.kind === 'submitting'} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95 disabled:opacity-50">
+                      <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
+                    </button>
+                    <button type="submit" disabled={submitState.kind === 'submitting'} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-60">
+                      <span className="w-2 h-2 rounded-full bg-white"></span>
+                      {submitState.kind === 'submitting' ? 'Submitting...' : 'Submit Referral'}
+                    </button>
+                  </div>
+                  <a href="https://volunteer.healthmatters.clinic" target="_blank" rel="noopener noreferrer" className="text-[10px] text-center text-gray-400 hover:text-[#233dff] transition-colors">
+                    Powered by HMC
+                  </a>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
