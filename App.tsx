@@ -435,6 +435,36 @@ const App: React.FC = () => {
       .catch(() => {}); // fail silently — badge is enhancement only
   }, []);
 
+  // When embedded in an iframe (e.g. inside the Webflow page), post our document
+  // height to the parent so it can resize the iframe to fit content. Otherwise
+  // the iframe gets a fixed height and we end up with two scrollbars (one inside
+  // the iframe, one on the Webflow page). Reuses the 'efHeight' protocol that
+  // the Webflow custom code already listens for.
+  useEffect(() => {
+    if (typeof window === 'undefined' || window.parent === window) return;
+    let lastSent = 0;
+    const postHeight = () => {
+      const h = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      if (h && h !== lastSent) {
+        lastSent = h;
+        window.parent.postMessage({ type: 'efHeight', height: h }, '*');
+      }
+    };
+    postHeight();
+    const ro = new ResizeObserver(() => postHeight());
+    ro.observe(document.body);
+    window.addEventListener('resize', postHeight);
+    const interval = window.setInterval(postHeight, 1500); // catch async content
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', postHeight);
+      window.clearInterval(interval);
+    };
+  }, []);
+
   const isOfficialPartner = (resource: Resource): boolean => {
     const normalizedName = resource.name.toLowerCase().trim();
     return officialPartnerNames.has(normalizedName);
@@ -723,6 +753,7 @@ const App: React.FC = () => {
           onContextHandled={() => setChatContext(null)}
           isOpen={isChatOpen}
           setIsOpen={setIsChatOpen}
+          anyModalOpen={!!activeResource || showCompass || showSuggestModal || !!suggestEditResource}
         />
       </Suspense>
 

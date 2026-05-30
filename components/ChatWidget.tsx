@@ -14,9 +14,10 @@ interface ChatWidgetProps {
   onContextHandled: () => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  anyModalOpen?: boolean;
 }
 
-const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext, onContextHandled, isOpen, setIsOpen }) => {
+const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext, onContextHandled, isOpen, setIsOpen, anyModalOpen = false }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -162,12 +163,19 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
     });
   };
 
+  // Hide the entire widget (bubble + open panel) while any other modal is open.
+  // The chat is pinned bottom-right at a high z-index, so without this it covers
+  // modal Close/Submit buttons and looks like a second chatbot beside the modal.
+  if (anyModalOpen) {
+    return null;
+  }
+
   return ReactDOM.createPortal(
     <>
       {!isOpen && (
         <button
           onClick={handleToggle}
-          className="fixed bottom-6 right-6 z-[999] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
+          className="fixed bottom-6 right-6 z-[80] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
           aria-label="Open chat"
         >
           <MessageSquare size={28} />
@@ -175,7 +183,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       )}
 
       {isOpen && (
-        <div className="fixed z-[998] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed z-[80] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
               <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain" />
