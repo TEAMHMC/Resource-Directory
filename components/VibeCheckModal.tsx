@@ -28,7 +28,7 @@ const options = [
 const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) => {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
-  const { overlayStyle, cardMaxHeight } = useEmbedViewport(true);
+  const { overlayStyle, cardMaxHeight, attachCardRef } = useEmbedViewport(true);
 
   const handleAnswer = (questionKey: string, value: number) => {
     const newAnswers = { ...answers, [questionKey]: value };
@@ -255,6 +255,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose} style={overlayStyle}>
       <div
+        ref={attachCardRef}
         className="bg-white w-full max-w-xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 relative"
         style={{ maxHeight: cardMaxHeight ? `min(${cardMaxHeight}, 700px)` : 'min(90vh, 700px)' }}
         onClick={(e) => e.stopPropagation()}
