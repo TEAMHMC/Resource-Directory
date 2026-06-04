@@ -307,7 +307,8 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     // Sub-step 5: Situation + address + pickup + GoFundMe
     if (disasterSubStep === 5) {
       const addressFilled = !!(disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim());
-      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null && addressFilled;
+      const priorAddressFilled = disasterData.isDisplaced !== true || !!(disasterData.priorStreet.trim() && disasterData.priorCity.trim() && disasterData.priorZip.trim());
+      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null && addressFilled && priorAddressFilled;
       const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30";
       const toggleBtn = (label: string, active: boolean, onClick: () => void) => (
         <button
@@ -339,7 +340,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
             {/* Prior address — only if displaced */}
             {disasterData.isDisplaced === true && (
               <div>
-                <p className="text-sm font-semibold text-gray-700 mb-2">Address before the disaster</p>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Address before the disaster <span className="text-rose-500">*</span></p>
                 <div className="space-y-2">
                   <input type="text" placeholder="Prior street address" value={disasterData.priorStreet} onChange={e => setDisasterData(d => ({ ...d, priorStreet: e.target.value }))} className={inputClass} />
                   <div className="grid grid-cols-2 gap-2">
