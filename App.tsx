@@ -429,6 +429,17 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (e.data && e.data.type === 'openRelief') {
+        setAutoStartDisaster(true);
+        setShowCompass(true);
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, []);
+
+  useEffect(() => {
     fetch('https://volunteer.healthmatters.clinic/api/public/official-partners')
       .then(r => r.json())
       .then(data => {
