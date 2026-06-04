@@ -89,6 +89,8 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
   });
   const [disasterSubmitting, setDisasterSubmitting] = useState(false);
   const [disasterSubmitted, setDisasterSubmitted] = useState(false);
+  const [addressValidating, setAddressValidating] = useState(false);
+  const [addressValidated, setAddressValidated] = useState<null | { valid: boolean; formatted: string | null }>(null);
   const { overlayStyle, cardMaxHeight, attachCardRef } = useEmbedViewport(true);
 
   const handleAnswer = (questionKey: string, value: number) => {
@@ -109,6 +111,8 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     setDisasterData({ isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '' });
     setDisasterSubmitting(false);
     setDisasterSubmitted(false);
+    setAddressValidating(false);
+    setAddressValidated(null);
   };
 
   const handleChatHandoff = (needs: string[], recommendations: string[]) => {
@@ -117,6 +121,27 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
 
   const toggleMultiSelect = (list: string[], item: string): string[] =>
     list.includes(item) ? list.filter(x => x !== item) : [...list, item];
+
+  const validateAddress = async () => {
+    const { deliveryStreet, deliveryCity, deliveryZip } = disasterData;
+    if (!deliveryStreet.trim() || !deliveryCity.trim() || !deliveryZip.trim()) return;
+    setAddressValidating(true);
+    setAddressValidated(null);
+    try {
+      const params = new URLSearchParams({ street: deliveryStreet.trim(), city: deliveryCity.trim(), zip: deliveryZip.trim() });
+      const res = await fetch(`https://volunteer.healthmatters.clinic/api/public/validate-address?${params}`);
+      const data = await res.json();
+      setAddressValidated({ valid: data.valid, formatted: data.formatted || null });
+      if (data.formatted && data.valid) {
+        const parts = data.formatted.split(',').map((s: string) => s.trim());
+        if (parts[0]) setDisasterData(d => ({ ...d, deliveryStreet: parts[0] }));
+      }
+    } catch {
+      setAddressValidated({ valid: false, formatted: null });
+    } finally {
+      setAddressValidating(false);
+    }
+  };
 
   const submitDisasterRequest = async () => {
     setDisasterSubmitting(true);
@@ -281,8 +306,9 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
 
     // Sub-step 5: Situation + address + pickup + GoFundMe
     if (disasterSubStep === 5) {
+      const addressFilled = !!(disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim());
       const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null &&
-        disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim();
+        addressFilled && (addressValidated?.valid === true);
       const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30";
       const toggleBtn = (label: string, active: boolean, onClick: () => void) => (
         <button
@@ -341,12 +367,33 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
               </p>
               <div className="space-y-2">
                 <input type="text" placeholder="Your name (optional)" value={disasterData.deliveryName} onChange={e => setDisasterData(d => ({ ...d, deliveryName: e.target.value }))} className={inputClass} />
-                <input type="text" placeholder="Street address *" value={disasterData.deliveryStreet} onChange={e => setDisasterData(d => ({ ...d, deliveryStreet: e.target.value }))} className={inputClass} />
+                <input type="text" placeholder="Street address *" value={disasterData.deliveryStreet} onChange={e => { setDisasterData(d => ({ ...d, deliveryStreet: e.target.value })); setAddressValidated(null); }} className={inputClass} />
                 <div className="grid grid-cols-2 gap-2">
-                  <input type="text" placeholder="City *" value={disasterData.deliveryCity} onChange={e => setDisasterData(d => ({ ...d, deliveryCity: e.target.value }))} className={inputClass} />
-                  <input type="text" placeholder="ZIP code *" value={disasterData.deliveryZip} onChange={e => setDisasterData(d => ({ ...d, deliveryZip: e.target.value }))} className={inputClass} />
+                  <input type="text" placeholder="City *" value={disasterData.deliveryCity} onChange={e => { setDisasterData(d => ({ ...d, deliveryCity: e.target.value })); setAddressValidated(null); }} className={inputClass} />
+                  <input
+                    type="text"
+                    placeholder="ZIP code *"
+                    value={disasterData.deliveryZip}
+                    onChange={e => { setDisasterData(d => ({ ...d, deliveryZip: e.target.value })); setAddressValidated(null); }}
+                    onBlur={validateAddress}
+                    className={inputClass}
+                  />
                 </div>
               </div>
+              {addressValidating && (
+                <p className="text-xs text-gray-500 mt-1">Verifying address...</p>
+              )}
+              {addressValidated && addressValidated.valid && addressValidated.formatted && (
+                <div className="mt-2 flex items-start gap-2 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+                  <span className="text-green-600 text-sm font-bold mt-0.5">Address confirmed:</span>
+                  <span className="text-sm text-green-700">{addressValidated.formatted}</span>
+                </div>
+              )}
+              {addressValidated && !addressValidated.valid && (
+                <div className="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                  <p className="text-xs text-amber-700 font-medium">Address could not be verified. Please check the street, city, and ZIP and try again.</p>
+                </div>
+              )}
             </div>
 
             {/* GoFundMe */}
