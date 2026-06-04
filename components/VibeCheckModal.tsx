@@ -64,6 +64,7 @@ interface DisasterData {
   deliveryCity: string;
   deliveryZip: string;
   gofundmeUrl: string;
+  consentToShare: boolean;
 }
 
 const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, autoStartDisaster = false }) => {
@@ -86,7 +87,9 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     deliveryCity: '',
     deliveryZip: '',
     gofundmeUrl: '',
+    consentToShare: false,
   });
+  const emptyDisasterData = { isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '', consentToShare: false };
   const [disasterSubmitting, setDisasterSubmitting] = useState(false);
   const [disasterSubmitted, setDisasterSubmitted] = useState(false);
   const [addressValidating, setAddressValidating] = useState(false);
@@ -108,7 +111,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     setStep(0);
     setAnswers({});
     setDisasterSubStep(0);
-    setDisasterData({ isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '' });
+    setDisasterData(emptyDisasterData);
     setDisasterSubmitting(false);
     setDisasterSubmitted(false);
     setAddressValidating(false);
@@ -162,6 +165,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
         deliveryCity: disasterData.deliveryCity,
         deliveryZip: disasterData.deliveryZip,
         gofundmeUrl: disasterData.gofundmeUrl,
+        consentToShare: disasterData.consentToShare,
         timestamp: new Date().toISOString(),
       };
       await fetch(RELIEF_ENDPOINT, {
@@ -177,6 +181,29 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
   };
 
   const renderDisasterSubFlow = () => {
+    // Always check submitted first — disasterSubStep stays at 5 after submit
+    if (disasterSubmitted) {
+      return (
+        <div className="text-center p-8">
+          <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
+            <Activity className="w-7 h-7 text-green-600" />
+          </div>
+          <h2 className="font-display text-2xl font-medium text-gray-900 mb-2">Request Received</h2>
+          <p className="text-gray-600 mb-3 max-w-md mx-auto">Your relief request has been submitted. Our team will review your needs and follow up within 1 to 2 business days regarding delivery or pickup arrangements.</p>
+          <p className="text-gray-600 mb-3 max-w-md mx-auto">We will also share your request with our Community Partner Collaborative network to match you with the best available resources.</p>
+          <p className="text-sm text-gray-500 mb-6">For urgent support, contact our dedicated team at <strong>lawr@healthmatters.clinic</strong> or call 988 anytime.</p>
+          <button
+            onClick={() => handleChatHandoff(['disaster', 'mentalhealth'], ['hmc-mobile-health', 'cityserve-ca-relief', '988-suicide-crisis-lifeline'])}
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 mb-3"
+          >
+            <span className="w-2 h-2 rounded-full bg-white"></span>
+            Find more resources with Sunny
+          </button>
+          <button onClick={reset} className="text-sm font-bold text-gray-500 hover:text-gray-800">Start Over</button>
+        </div>
+      );
+    }
+
     // Sub-step 1: LA Wildfires specifically?
     if (disasterSubStep === 1) {
       return (
@@ -308,7 +335,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     if (disasterSubStep === 5) {
       const addressFilled = !!(disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim());
       const priorAddressFilled = disasterData.isDisplaced !== true || !!(disasterData.priorStreet.trim() && disasterData.priorCity.trim() && disasterData.priorZip.trim());
-      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null && addressFilled && priorAddressFilled;
+      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null && addressFilled && priorAddressFilled && disasterData.consentToShare;
       const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30";
       const toggleBtn = (label: string, active: boolean, onClick: () => void) => (
         <button
@@ -404,6 +431,16 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
 
           </div>
 
+            {/* Consent */}
+            <button
+              type="button"
+              onClick={() => setDisasterData(d => ({ ...d, consentToShare: !d.consentToShare }))}
+              className={`w-full flex items-start gap-3 px-4 py-3 rounded-2xl border text-left transition-all ${disasterData.consentToShare ? 'border-[#233dff] bg-[#233dff]/5' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+            >
+              {disasterData.consentToShare ? <CheckSquare className="w-5 h-5 flex-shrink-0 text-[#233dff] mt-0.5" /> : <Square className="w-5 h-5 flex-shrink-0 text-gray-400 mt-0.5" />}
+              <span className="text-xs text-gray-700 font-medium leading-relaxed">I consent to sharing my information with Health Matters Clinic and the Community Partner Collaborative network to help fulfill this relief request. <span className="text-rose-500">*</span></span>
+            </button>
+
           <button
             onClick={submitDisasterRequest}
             disabled={!canSubmit || disasterSubmitting}
@@ -412,28 +449,6 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
             <span className="w-2 h-2 rounded-full bg-white"></span>
             {disasterSubmitting ? 'Submitting...' : 'Submit Relief Request'}
           </button>
-        </div>
-      );
-    }
-
-    // Submitted confirmation
-    if (disasterSubmitted) {
-      return (
-        <div className="text-center p-8">
-          <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-4">
-            <Activity className="w-7 h-7 text-green-600" />
-          </div>
-          <h2 className="font-display text-2xl font-medium text-gray-900 mb-2">Request Received</h2>
-          <p className="text-gray-600 mb-2 max-w-md mx-auto">Your relief request has been submitted to our team. We will share your needs with our community partner network and follow up regarding delivery or pickup.</p>
-          <p className="text-sm text-gray-500 mb-6">For urgent support you can also reach our dedicated team at <strong>lawr@healthmatters.clinic</strong>.</p>
-          <button
-            onClick={() => handleChatHandoff(['disaster', 'mentalhealth'], ['hmc-mobile-health', 'cityserve-ca-relief', '988-suicide-crisis-lifeline'])}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 mb-3"
-          >
-            <span className="w-2 h-2 rounded-full bg-white"></span>
-            Chat with Sunny about more resources
-          </button>
-          <button onClick={reset} className="text-sm font-bold text-gray-500 hover:text-gray-800">Start Over</button>
         </div>
       );
     }
