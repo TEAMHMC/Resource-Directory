@@ -307,8 +307,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     // Sub-step 5: Situation + address + pickup + GoFundMe
     if (disasterSubStep === 5) {
       const addressFilled = !!(disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim());
-      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null &&
-        addressFilled && (addressValidated?.valid === true);
+      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null && addressFilled;
       const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30";
       const toggleBtn = (label: string, active: boolean, onClick: () => void) => (
         <button
