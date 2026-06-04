@@ -6,6 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Community Resource Directory | Health Matters Clinic</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            safelist: [
+                'grid','grid-cols-2','grid-cols-3','gap-2','gap-3',
+                'flex','flex-1','flex-col','flex-row','flex-wrap',
+                'space-y-2','space-y-3','space-y-4','space-y-5','space-y-6',
+                'rounded-xl','rounded-2xl','rounded-full','rounded-[32px]',
+                'border','border-gray-200','border-[#233dff]',
+                'bg-[#233dff]/5','bg-orange-100','bg-blue-100','bg-green-100',
+                'text-[#233dff]','text-orange-500','text-blue-500','text-green-600',
+                'w-full','h-full','min-h-0','flex-grow','flex-shrink-0',
+                'px-3','px-4','px-6','py-2','py-2.5','py-3','p-6','p-8',
+                'text-xs','text-sm','text-xl','text-2xl','font-semibold','font-bold','font-medium',
+                'overflow-y-auto','overscroll-contain',
+                'animate-in','fade-in','zoom-in-95','duration-200',
+                'backdrop-blur-sm','shadow-2xl',
+                'transition-all','active:scale-95','hover:bg-gray-50','hover:border-gray-300',
+                'disabled:opacity-40','pointer-events-none',
+                'w-10','h-10','w-7','h-7','w-5','h-5','w-4','h-4','w-2','h-2',
+                'mt-2','mt-3','mt-4','mt-5','mb-2','mb-3','mb-4','mb-5','mb-6',
+                'inset-0','fixed','absolute','z-[100]','z-10',
+                'bg-black/50','bg-white','bg-gray-50',
+                'text-gray-400','text-gray-500','text-gray-600','text-gray-700','text-gray-800',
+                'border-rose-500','text-rose-500',
+                'items-center','items-start','justify-center','justify-start',
+                'gap-2.5','gap-2','gap-3',
+            ]
+        }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Questrial&family=Inter:wght@300;400;500;600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
@@ -25,36 +54,10 @@
             min-height: 100vh;
             background-color: #f5f3ef;
         }
-        @keyframes _rd-spin { to { transform: rotate(360deg); } }
-        #root-loader {
-            position: fixed; inset: 0; background: #f5f3ef;
-            display: flex; align-items: center; justify-content: center;
-            z-index: 9999; transition: opacity 0.2s;
-        }
-        #root-loader.hide { opacity: 0; pointer-events: none; }
-        #root-loader-ring {
-            width: 36px; height: 36px;
-            border: 3px solid #233dff;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: _rd-spin 0.75s linear infinite;
-        }
     </style>
 </head>
 <body>
-    <div id="root-loader"><div id="root-loader-ring"></div></div>
     <div id="root"></div>
-    <script>
-        var _rdObs = new MutationObserver(function() {
-            var root = document.getElementById('root');
-            if (root && root.children.length > 0) {
-                var loader = document.getElementById('root-loader');
-                if (loader) { loader.classList.add('hide'); setTimeout(function(){ loader.remove(); }, 250); }
-                _rdObs.disconnect();
-            }
-        });
-        _rdObs.observe(document.getElementById('root'), { childList: true });
-    </script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>

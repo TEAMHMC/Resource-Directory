@@ -429,7 +429,9 @@ const App: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const ALLOWED_ORIGINS = ['https://www.healthmatters.clinic', 'https://healthmatters.clinic'];
     const handler = (e: MessageEvent) => {
+      if (!ALLOWED_ORIGINS.includes(e.origin)) return;
       if (e.data && e.data.type === 'openRelief') {
         setAutoStartDisaster(true);
         setShowCompass(true);
