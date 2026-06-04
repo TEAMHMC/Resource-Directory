@@ -9,6 +9,7 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAGaUHatSNN73LJt3Flewo
 interface VibeCheckModalProps {
   onClose: () => void;
   onComplete: (context: ChatContext) => void;
+  autoStartDisaster?: boolean;
 }
 
 const questions = [
@@ -59,10 +60,10 @@ interface DisasterData {
   deliveryZip: string;
 }
 
-const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete }) => {
-  const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, number>>({});
-  const [disasterSubStep, setDisasterSubStep] = useState(0);
+const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, autoStartDisaster = false }) => {
+  const [step, setStep] = useState(autoStartDisaster ? 1 : 0);
+  const [answers, setAnswers] = useState<Record<string, number>>(autoStartDisaster ? { disaster: 1 } : {});
+  const [disasterSubStep, setDisasterSubStep] = useState(autoStartDisaster ? 1 : 0);
   const [disasterData, setDisasterData] = useState<DisasterData>({
     isLAWildfires: null,
     householdSize: '',

@@ -361,6 +361,7 @@ const App: React.FC = () => {
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
   const [toast, setToast] = useState<string | null>(null);
   const [showCompass, setShowCompass] = useState(false);
+  const [autoStartDisaster, setAutoStartDisaster] = useState(false);
   const [chatContext, setChatContext] = useState<ChatContext | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [showSuggestModal, setShowSuggestModal] = useState(false);
@@ -420,6 +421,10 @@ const App: React.FC = () => {
       const all = [...ALL_RESOURCES, ...HMC_PROGRAMS, ...FEATURED_PARTNERS];
       const found = all.find(r => r.id === resourceId);
       if (found) setActiveResource(found);
+    }
+    if (params.get('relief') === 'true') {
+      setAutoStartDisaster(true);
+      setShowCompass(true);
     }
   }, []);
 
@@ -744,7 +749,7 @@ const App: React.FC = () => {
 
       {showCompass && (
         <Suspense fallback={null}>
-          <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} />
+          <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} autoStartDisaster={autoStartDisaster} />
         </Suspense>
       )}
 
