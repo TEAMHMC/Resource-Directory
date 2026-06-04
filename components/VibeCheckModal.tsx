@@ -54,10 +54,16 @@ interface DisasterData {
   householdDetails: string[];
   urgentNeeds: string[];
   otherNeeds: string;
+  isDisplaced: boolean | null;
+  priorStreet: string;
+  priorCity: string;
+  priorZip: string;
+  canPickUp: boolean | null;
   deliveryName: string;
   deliveryStreet: string;
   deliveryCity: string;
   deliveryZip: string;
+  gofundmeUrl: string;
 }
 
 const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, autoStartDisaster = false }) => {
@@ -70,10 +76,16 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     householdDetails: [],
     urgentNeeds: [],
     otherNeeds: '',
+    isDisplaced: null,
+    priorStreet: '',
+    priorCity: '',
+    priorZip: '',
+    canPickUp: null,
     deliveryName: '',
     deliveryStreet: '',
     deliveryCity: '',
     deliveryZip: '',
+    gofundmeUrl: '',
   });
   const [disasterSubmitting, setDisasterSubmitting] = useState(false);
   const [disasterSubmitted, setDisasterSubmitted] = useState(false);
@@ -94,7 +106,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     setStep(0);
     setAnswers({});
     setDisasterSubStep(0);
-    setDisasterData({ isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '' });
+    setDisasterData({ isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '' });
     setDisasterSubmitting(false);
     setDisasterSubmitted(false);
   };
@@ -116,10 +128,16 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
         householdDetails: disasterData.householdDetails.join(', '),
         urgentNeeds: disasterData.urgentNeeds.join(', '),
         otherNeeds: disasterData.otherNeeds,
+        isDisplaced: disasterData.isDisplaced,
+        priorStreet: disasterData.priorStreet,
+        priorCity: disasterData.priorCity,
+        priorZip: disasterData.priorZip,
+        canPickUp: disasterData.canPickUp,
         deliveryName: disasterData.deliveryName,
         deliveryStreet: disasterData.deliveryStreet,
         deliveryCity: disasterData.deliveryCity,
         deliveryZip: disasterData.deliveryZip,
+        gofundmeUrl: disasterData.gofundmeUrl,
         timestamp: new Date().toISOString(),
       };
       fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
@@ -258,49 +276,84 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
       );
     }
 
-    // Sub-step 5: Delivery address
+    // Sub-step 5: Situation + address + pickup + GoFundMe
     if (disasterSubStep === 5) {
-      const canSubmit = disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim();
+      const canSubmit = disasterData.isDisplaced !== null && disasterData.canPickUp !== null &&
+        disasterData.deliveryStreet.trim() && disasterData.deliveryCity.trim() && disasterData.deliveryZip.trim();
+      const inputClass = "w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30";
+      const toggleBtn = (label: string, active: boolean, onClick: () => void) => (
+        <button
+          type="button"
+          onClick={onClick}
+          className={`flex-1 py-2.5 rounded-xl border text-sm font-medium transition-all ${active ? 'border-[#233dff] bg-[#233dff]/5 text-[#233dff]' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'}`}
+        >{label}</button>
+      );
+
       return (
-        <div className="p-8">
-          <div className="text-center mb-6">
+        <div className="p-6">
+          <div className="text-center mb-5">
             <Home className="w-10 h-10 text-blue-500 bg-blue-100 rounded-full p-2 mx-auto mb-3" />
-            <span className="text-sm font-bold text-gray-400">Delivery</span>
-            <p className="text-xl md:text-2xl font-bold text-gray-800 mt-2">Where should we deliver supplies?</p>
-            <p className="text-sm text-gray-500 mt-1">This helps us connect you with the right community partners.</p>
+            <span className="text-sm font-bold text-gray-400">Situation and Delivery</span>
+            <p className="text-xl font-bold text-gray-800 mt-2">A few more details</p>
           </div>
-          <div className="space-y-3 mb-6">
-            <input
-              type="text"
-              placeholder="Your name (optional)"
-              value={disasterData.deliveryName}
-              onChange={e => setDisasterData(d => ({ ...d, deliveryName: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30"
-            />
-            <input
-              type="text"
-              placeholder="Street address *"
-              value={disasterData.deliveryStreet}
-              onChange={e => setDisasterData(d => ({ ...d, deliveryStreet: e.target.value }))}
-              className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30"
-            />
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="text"
-                placeholder="City *"
-                value={disasterData.deliveryCity}
-                onChange={e => setDisasterData(d => ({ ...d, deliveryCity: e.target.value }))}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30"
-              />
-              <input
-                type="text"
-                placeholder="ZIP code *"
-                value={disasterData.deliveryZip}
-                onChange={e => setDisasterData(d => ({ ...d, deliveryZip: e.target.value }))}
-                className="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/30"
-              />
+
+          <div className="space-y-4 mb-5">
+
+            {/* Displaced */}
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Are you displaced from your home? <span className="text-rose-500">*</span></p>
+              <div className="flex gap-2">
+                {toggleBtn('Yes, I am displaced', disasterData.isDisplaced === true, () => setDisasterData(d => ({ ...d, isDisplaced: true })))}
+                {toggleBtn('No, still at home', disasterData.isDisplaced === false, () => setDisasterData(d => ({ ...d, isDisplaced: false })))}
+              </div>
             </div>
+
+            {/* Prior address — only if displaced */}
+            {disasterData.isDisplaced === true && (
+              <div>
+                <p className="text-sm font-semibold text-gray-700 mb-2">Address before the disaster</p>
+                <div className="space-y-2">
+                  <input type="text" placeholder="Prior street address" value={disasterData.priorStreet} onChange={e => setDisasterData(d => ({ ...d, priorStreet: e.target.value }))} className={inputClass} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <input type="text" placeholder="City" value={disasterData.priorCity} onChange={e => setDisasterData(d => ({ ...d, priorCity: e.target.value }))} className={inputClass} />
+                    <input type="text" placeholder="ZIP" value={disasterData.priorZip} onChange={e => setDisasterData(d => ({ ...d, priorZip: e.target.value }))} className={inputClass} />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Pickup availability */}
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Are you able to pick up supplies? <span className="text-rose-500">*</span></p>
+              <div className="flex gap-2">
+                {toggleBtn('Yes, I can pick up', disasterData.canPickUp === true, () => setDisasterData(d => ({ ...d, canPickUp: true })))}
+                {toggleBtn('No, I need delivery', disasterData.canPickUp === false, () => setDisasterData(d => ({ ...d, canPickUp: false })))}
+              </div>
+            </div>
+
+            {/* Delivery / current address */}
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">
+                {disasterData.canPickUp ? 'Where are you currently located?' : 'Delivery address'} <span className="text-rose-500">*</span>
+              </p>
+              <div className="space-y-2">
+                <input type="text" placeholder="Your name (optional)" value={disasterData.deliveryName} onChange={e => setDisasterData(d => ({ ...d, deliveryName: e.target.value }))} className={inputClass} />
+                <input type="text" placeholder="Street address *" value={disasterData.deliveryStreet} onChange={e => setDisasterData(d => ({ ...d, deliveryStreet: e.target.value }))} className={inputClass} />
+                <div className="grid grid-cols-2 gap-2">
+                  <input type="text" placeholder="City *" value={disasterData.deliveryCity} onChange={e => setDisasterData(d => ({ ...d, deliveryCity: e.target.value }))} className={inputClass} />
+                  <input type="text" placeholder="ZIP code *" value={disasterData.deliveryZip} onChange={e => setDisasterData(d => ({ ...d, deliveryZip: e.target.value }))} className={inputClass} />
+                </div>
+              </div>
+            </div>
+
+            {/* GoFundMe */}
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Do you have a GoFundMe or fundraising link? <span className="text-gray-400 font-normal">(optional)</span></p>
+              <input type="url" placeholder="https://gofundme.com/..." value={disasterData.gofundmeUrl} onChange={e => setDisasterData(d => ({ ...d, gofundmeUrl: e.target.value }))} className={inputClass} />
+            </div>
+
           </div>
+
           <button
             onClick={submitDisasterRequest}
             disabled={!canSubmit || disasterSubmitting}
