@@ -4,7 +4,7 @@ import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Com
 import { ChatContext } from '../types';
 import { useEmbedViewport } from '../hooks/useEmbedViewport';
 
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbwAGaUHatSNN73LJt3FlewowCDDZWHJKWWTsx3nbBY6jY-lNkDmMeid6yuJ0V9h3-ttuQ/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5vZVE7f124Wowhtg6f7b1XBy1YV-uu6qPZeSMipBBUoM1MwxhXfT0wIJZeXlSVyfuMg/exec';
 
 interface VibeCheckModalProps {
   onClose: () => void;
