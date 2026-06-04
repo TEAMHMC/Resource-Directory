@@ -4,7 +4,7 @@ import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Com
 import { ChatContext } from '../types';
 import { useEmbedViewport } from '../hooks/useEmbedViewport';
 
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbz5vZVE7f124Wowhtg6f7b1XBy1YV-uu6qPZeSMipBBUoM1MwxhXfT0wIJZeXlSVyfuMg/exec';
+const RELIEF_ENDPOINT = 'https://volunteer.healthmatters.clinic/api/public/wildfire-relief';
 
 interface VibeCheckModalProps {
   onClose: () => void;
@@ -122,7 +122,6 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     setDisasterSubmitting(true);
     try {
       const payload = {
-        action: 'wildfire_relief_request',
         isLAWildfires: disasterData.isLAWildfires,
         householdSize: disasterData.householdSize,
         householdDetails: disasterData.householdDetails.join(', '),
@@ -140,7 +139,11 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
         gofundmeUrl: disasterData.gofundmeUrl,
         timestamp: new Date().toISOString(),
       };
-      fetch(GAS_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+      await fetch(RELIEF_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
     } catch (_) {
       // fire and forget
     }
