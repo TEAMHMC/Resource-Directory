@@ -21,10 +21,40 @@
         .font-accent {
             font-family: 'Lato', 'Inter', sans-serif;
         }
+        #root:empty {
+            min-height: 100vh;
+            background-color: #f5f3ef;
+        }
+        @keyframes _rd-spin { to { transform: rotate(360deg); } }
+        #root-loader {
+            position: fixed; inset: 0; background: #f5f3ef;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 9999; transition: opacity 0.2s;
+        }
+        #root-loader.hide { opacity: 0; pointer-events: none; }
+        #root-loader-ring {
+            width: 36px; height: 36px;
+            border: 3px solid #233dff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: _rd-spin 0.75s linear infinite;
+        }
     </style>
 </head>
 <body>
+    <div id="root-loader"><div id="root-loader-ring"></div></div>
     <div id="root"></div>
+    <script>
+        var _rdObs = new MutationObserver(function() {
+            var root = document.getElementById('root');
+            if (root && root.children.length > 0) {
+                var loader = document.getElementById('root-loader');
+                if (loader) { loader.classList.add('hide'); setTimeout(function(){ loader.remove(); }, 250); }
+                _rdObs.disconnect();
+            }
+        });
+        _rdObs.observe(document.getElementById('root'), { childList: true });
+    </script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
