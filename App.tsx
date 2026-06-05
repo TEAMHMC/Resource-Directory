@@ -754,7 +754,11 @@ const App: React.FC = () => {
 
       {showCompass && (
         <Suspense fallback={null}>
-          <VibeCheckModal onClose={() => setShowCompass(false)} onComplete={handleCompassComplete} autoStartDisaster={autoStartDisaster} />
+          <VibeCheckModal
+            onClose={() => { setShowCompass(false); setAutoStartDisaster(false); }}
+            onComplete={(ctx) => { setAutoStartDisaster(false); handleCompassComplete(ctx); }}
+            autoStartDisaster={autoStartDisaster}
+          />
         </Suspense>
       )}
 

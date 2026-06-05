@@ -162,12 +162,17 @@ export function useEmbedViewport(active: boolean): EmbedViewportResult {
     requestViewport();
     const interval = window.setInterval(requestViewport, 250);
 
-    const onResize = () => requestViewport();
+    let resizeTimer: ReturnType<typeof setTimeout>;
+    const onResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(requestViewport, 150);
+    };
     window.addEventListener('resize', onResize);
 
     return () => {
       window.removeEventListener('message', onMessage);
       window.removeEventListener('resize', onResize);
+      clearTimeout(resizeTimer);
       window.clearInterval(interval);
       window.clearTimeout(timeoutHandle);
     };
