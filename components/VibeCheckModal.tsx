@@ -50,7 +50,8 @@ const HOUSEHOLD_SIZE_OPTIONS = ['1', '2', '3', '4', '5', '6+'];
 
 interface DisasterData {
   isLAWildfires: boolean | null;
-  householdSize: string;
+  householdAdults: string;
+  householdChildren: string;
   householdDetails: string[];
   urgentNeeds: string[];
   otherNeeds: string;
@@ -73,7 +74,8 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
   const [disasterSubStep, setDisasterSubStep] = useState(autoStartDisaster ? 1 : 0);
   const [disasterData, setDisasterData] = useState<DisasterData>({
     isLAWildfires: null,
-    householdSize: '',
+    householdAdults: '',
+    householdChildren: '',
     householdDetails: [],
     urgentNeeds: [],
     otherNeeds: '',
@@ -89,7 +91,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     gofundmeUrl: '',
     consentToShare: false,
   });
-  const emptyDisasterData = { isLAWildfires: null, householdSize: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '', consentToShare: false };
+  const emptyDisasterData = { isLAWildfires: null, householdAdults: '', householdChildren: '', householdDetails: [], urgentNeeds: [], otherNeeds: '', isDisplaced: null, priorStreet: '', priorCity: '', priorZip: '', canPickUp: null, deliveryName: '', deliveryStreet: '', deliveryCity: '', deliveryZip: '', gofundmeUrl: '', consentToShare: false };
   const [disasterSubmitting, setDisasterSubmitting] = useState(false);
   const [disasterSubmitted, setDisasterSubmitted] = useState(false);
   const [addressValidating, setAddressValidating] = useState(false);
@@ -151,7 +153,8 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     try {
       const payload = {
         isLAWildfires: disasterData.isLAWildfires,
-        householdSize: disasterData.householdSize,
+        householdAdults: disasterData.householdAdults,
+        householdChildren: disasterData.householdChildren,
         householdDetails: disasterData.householdDetails.join(', '),
         urgentNeeds: disasterData.urgentNeeds.join(', '),
         otherNeeds: disasterData.otherNeeds,
@@ -229,26 +232,45 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
       );
     }
 
-    // Sub-step 2: Household size
+    // Sub-step 2: Adults and children
     if (disasterSubStep === 2) {
+      const counts = ['0','1','2','3','4','5','6+'];
+      const canContinue = disasterData.householdAdults !== '' && disasterData.householdChildren !== '';
       return (
         <div className="p-8">
-          <div className="text-center mb-8">
+          <div className="text-center mb-6">
             <Users className="w-10 h-10 text-blue-500 bg-blue-100 rounded-full p-2 mx-auto mb-3" />
             <span className="text-sm font-bold text-gray-400">Household</span>
-            <p className="text-xl md:text-2xl font-bold text-gray-800 mt-2">How many people are in your household?</p>
+            <p className="text-xl md:text-2xl font-bold text-gray-800 mt-2">Who is in your household?</p>
           </div>
-          <div className="grid grid-cols-3 gap-3">
-            {HOUSEHOLD_SIZE_OPTIONS.map(size => (
-              <button
-                key={size}
-                onClick={() => { setDisasterData(d => ({ ...d, householdSize: size })); setDisasterSubStep(3); }}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95"
-              >
-                <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>{size}
-              </button>
-            ))}
+          <div className="space-y-5 mb-6">
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Number of adults <span className="text-rose-500">*</span></p>
+              <div className="grid grid-cols-4 gap-2">
+                {counts.map(n => (
+                  <button key={n} onClick={() => setDisasterData(d => ({ ...d, householdAdults: n }))}
+                    className={`py-2.5 rounded-xl border text-sm font-medium transition-all ${disasterData.householdAdults === n ? 'border-[#233dff] bg-[#233dff]/5 text-[#233dff]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}>
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-700 mb-2">Number of children under 18 <span className="text-rose-500">*</span></p>
+              <div className="grid grid-cols-4 gap-2">
+                {counts.map(n => (
+                  <button key={n} onClick={() => setDisasterData(d => ({ ...d, householdChildren: n }))}
+                    className={`py-2.5 rounded-xl border text-sm font-medium transition-all ${disasterData.householdChildren === n ? 'border-[#233dff] bg-[#233dff]/5 text-[#233dff]' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-300'}`}>
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
+          <button onClick={() => setDisasterSubStep(3)} disabled={!canContinue}
+            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-40">
+            <span className="w-2 h-2 rounded-full bg-white"></span>Continue
+          </button>
         </div>
       );
     }

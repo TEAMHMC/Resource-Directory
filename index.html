@@ -43,10 +43,7 @@
             font-family: 'Inter', sans-serif;
             background-color: #f5f3ef;
             overflow-x: hidden;
-            opacity: 0;
-            transition: opacity 0.15s ease;
         }
-        body.ready { opacity: 1; }
         .font-display {
             font-family: 'Questrial', 'Inter', sans-serif;
         }
@@ -61,15 +58,6 @@
 </head>
 <body>
     <div id="root"></div>
-<script>
-    // Show page only after Tailwind CDN has processed styles to prevent flash of unstyled content
-    if (typeof tailwind !== 'undefined' && tailwind.config) {
-        document.body.classList.add('ready');
-    } else {
-        window.addEventListener('load', function() { document.body.classList.add('ready'); });
-        setTimeout(function() { document.body.classList.add('ready'); }, 300);
-    }
-</script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
