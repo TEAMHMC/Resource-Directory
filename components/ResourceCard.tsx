@@ -15,9 +15,18 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
   const isEmergency = resource.phone === '988' || resource.phone === '911';
 
   return (
-    <div 
+    <div
       onClick={() => onOpen(resource)}
-      className={`group relative flex flex-col h-full bg-white rounded-3xl border border-gray-200 p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#233dff]/30 cursor-pointer ${isPinned ? 'ring-2 ring-[#233dff]/10' : ''}`}
+      role="button"
+      tabIndex={0}
+      aria-label={`Open details for ${resource.name}`}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onOpen(resource);
+        }
+      }}
+      className={`group relative flex flex-col h-full bg-white rounded-3xl border border-gray-200 p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#233dff]/30 cursor-pointer focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2 ${isPinned ? 'ring-2 ring-[#233dff]/10' : ''}`}
     >
       <button 
         onClick={(e) => { e.stopPropagation(); onShare(resource); }}
