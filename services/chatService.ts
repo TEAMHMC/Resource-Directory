@@ -1,17 +1,8 @@
 
-import { GoogleGenAI } from "@google/genai";
 import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from '../constants';
 import { Message } from '../types';
 
-let _ai: GoogleGenAI | null = null;
-function getAI(): GoogleGenAI {
-  if (!_ai) {
-    const key = process.env.API_KEY;
-    if (!key) throw new Error("Gemini API key not configured");
-    _ai = new GoogleGenAI({ apiKey: key });
-  }
-  return _ai;
-}
+const PROXY_URL = 'https://volunteer.healthmatters.clinic/api/sunny/chat';
 
 const allResources = [...HMC_PROGRAMS, ...FEATURED_PARTNERS, ...ALL_RESOURCES];
 // Slim down the knowledge base to the most relevant fields for the AI to process efficiently.
@@ -113,28 +104,43 @@ Now, based on all these rules and the user's conversation history, provide the b
 
 
 export async function getChatResponse(messages: Message[]): Promise<string> {
-  const history = messages.map(m => ({
-    role: m.sender === 'user' ? 'user' : 'model',
-    parts: [{ text: m.content }]
-  })).filter(m => !m.parts[0].text.startsWith('INTERNAL_CONTEXT:')); // Filter out internal context for the API
+  const history = messages.slice(0, -1).map(m => ({
+    type: m.sender === 'user' ? 'user' : 'assistant',
+    content: m.content,
+  })).filter(h => !h.content.startsWith('INTERNAL_CONTEXT:'));
 
-  // The last message is the current user query
   const latestUserMessage = messages[messages.length - 1];
   if (!latestUserMessage) {
     return "Hi there! I'm Sunny, and I'm here to help you find the support and healing you need.";
   }
 
   try {
-    const chat = getAI().chats.create({
-      model: 'gemini-2.5-flash',
-      history: history,
-      config: {
-        systemInstruction: systemInstruction,
-      }
-    });
-    const result = await chat.sendMessage({ message: latestUserMessage.content });
-    
-    const text = result.text;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 30000);
+
+    let res: Response;
+    try {
+      res = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: latestUserMessage.content,
+          history,
+          context: systemInstruction,
+        }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+
+    if (!res.ok) {
+      console.error('Chat proxy error:', res.status);
+      return "I'm sorry, an error occurred while connecting to the AI service. Please try again later.";
+    }
+
+    const data = await res.json();
+    const text = data.reply || data.response || data.text || '';
     if (!text) {
       return "I'm sorry, I'm having a little trouble thinking right now. Could you please rephrase that?";
     }
