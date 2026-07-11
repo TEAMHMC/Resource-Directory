@@ -28,11 +28,12 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
       }}
       className={`group relative flex flex-col h-full bg-white rounded-3xl border border-gray-200 p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl hover:border-[#233dff]/30 cursor-pointer focus-visible:outline-2 focus-visible:outline-blue-600 focus-visible:outline-offset-2 ${isPinned ? 'ring-2 ring-[#233dff]/10' : ''}`}
     >
-      <button 
+      <button
         onClick={(e) => { e.stopPropagation(); onShare(resource); }}
+        aria-label={`Share ${resource.name}`}
         className="absolute top-4 right-4 p-2.5 bg-white border border-black/60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:shadow-md"
       >
-        <Share2 className="w-4 h-4 text-gray-600" />
+        <Share2 className="w-4 h-4 text-gray-600" aria-hidden="true" />
       </button>
 
       <div className="flex flex-wrap gap-2 mb-3">

@@ -239,15 +239,17 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
 
           <footer className="p-3 bg-white border-t border-gray-200">
             <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+              <label htmlFor="sunny-chat-input" className="sr-only">Message Sunny</label>
               <input
+                id="sunny-chat-input"
                 type="text"
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 placeholder="Ask for help..."
                 className="flex-1 bg-gray-100 border border-gray-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/50 transition-all"
               />
-              <button type="submit" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white border border-[#233dff] flex items-center justify-center disabled:opacity-50 transition-all">
-                <Send size={20} />
+              <button type="submit" aria-label="Send message" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white border border-[#233dff] flex items-center justify-center disabled:opacity-50 transition-all">
+                <Send size={20} aria-hidden="true" />
               </button>
             </form>
           </footer>

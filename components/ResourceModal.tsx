@@ -127,6 +127,9 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
     <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm animate-in fade-in duration-200 flex items-end md:items-center justify-center md:p-6" onClick={onClose} style={mainOverlayStyle}>
       <div
         ref={attachMainCardRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={resource.name}
         className="bg-white w-full max-w-4xl rounded-t-[28px] md:rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in slide-in-from-bottom-4 md:zoom-in-95 duration-300 max-h-[88svh] md:max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
         style={mainCardMaxHeight ? { maxHeight: mainCardMaxHeight } : undefined}
@@ -162,14 +165,14 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
             </div>
           </div>
           <div className="flex gap-2">
-            <button onClick={handlePrint} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Print Resource">
-              <Printer className="w-5 h-5" />
+            <button onClick={handlePrint} aria-label="Print resource" className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
+              <Printer className="w-5 h-5" aria-hidden="true" />
             </button>
-            <button onClick={handleShare} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Share">
-              <Share2 className="w-5 h-5" />
+            <button onClick={handleShare} aria-label="Share" className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
+              <Share2 className="w-5 h-5" aria-hidden="true" />
             </button>
-            <button onClick={onClose} className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors" title="Close">
-              <X className="w-5 h-5" />
+            <button onClick={onClose} aria-label="Close" className="p-3 bg-gray-50 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
+              <X className="w-5 h-5" aria-hidden="true" />
             </button>
           </div>
         </div>

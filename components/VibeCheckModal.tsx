@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare, HeartPulse, Flame, Brain, Briefcase, CheckSquare, Square } from 'lucide-react';
+import { X, ArrowRight, Activity, Users, Shield, Phone, Home, Utensils, Car, Compass, MessageSquare, HeartPulse, Flame, Brain, Briefcase, CheckSquare, Square, Pill, Baby, Scale } from 'lucide-react';
 import { ChatContext } from '../types';
 import { useEmbedViewport } from '../hooks/useEmbedViewport';
 
@@ -16,11 +16,14 @@ const questions = [
   { text: "Have you or your family been affected by a natural disaster (wildfires, flooding, earthquake, etc.)?", key: 'disaster' },
   { text: "Is it hard for you to see a doctor or get medical care when you need it?", key: 'healthcare' },
   { text: "Have you been feeling stressed, anxious, or overwhelmed lately?", key: 'mentalhealth' },
+  { text: "Are you or someone you care about looking for support with alcohol or drug use?", key: 'substanceuse' },
   { text: "Do you ever feel unsafe where you live?", key: 'safety' },
   { text: "Have you been worried about losing your housing or having a stable place to stay?", key: 'housing' },
   { text: "Have you worried about having enough food for yourself or your family?", key: 'food' },
   { text: "Are you looking for work or struggling to find stable employment?", key: 'employment' },
-  { text: "Has a lack of transportation kept you from getting what you need?", key: 'transport' }
+  { text: "Do you need help with childcare or child services for your family?", key: 'childcare' },
+  { text: "Has a lack of transportation kept you from getting what you need?", key: 'transport' },
+  { text: "Do you need legal help or assistance with housing rights, immigration, or public benefits?", key: 'legal' },
 ];
 
 const options = [
@@ -541,11 +544,14 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
       disaster: answers['disaster'] === 1,
       healthcare: answers['healthcare'] === 1,
       mentalhealth: answers['mentalhealth'] === 1,
+      substanceuse: answers['substanceuse'] === 1,
       safety: answers['safety'] === 1,
       housing: answers['housing'] === 1,
       food: answers['food'] === 1,
       employment: answers['employment'] === 1,
+      childcare: answers['childcare'] === 1,
       transport: answers['transport'] === 1,
+      legal: answers['legal'] === 1,
     };
     const identifiedNeeds = Object.entries(needsMap).filter(([, value]) => value).map(([key]) => key);
     const hasNeeds = identifiedNeeds.length > 0;
@@ -624,6 +630,34 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
                 {id: 'metro-life-fare-lowincome', name: 'Metro LIFE Program', desc: 'Discounted fares for Metro.'},
             ]
         },
+        substanceuse: {
+            icon: <Pill className="w-5 h-5 text-indigo-600" />,
+            title: "Substance Use Support",
+            resources: [
+                {id: 'lacdmh-helpline', name: 'LACDMH Help Line', desc: '24/7 mental health and substance use support.'},
+                {id: 'exodus-recovery-crisis', name: 'Exodus Recovery', desc: 'Crisis stabilization and substance use programs.'},
+                {id: 'bold-recovery', name: 'Bold Recovery', desc: 'Outpatient SUD counseling and case management.'},
+                {id: 'substance-use-disorder-integrated-services-sudis', name: 'SUDIS', desc: 'Integrated substance use and mental health services.'},
+            ]
+        },
+        childcare: {
+            icon: <Baby className="w-5 h-5 text-pink-600" />,
+            title: "Childcare & Child Services",
+            resources: [
+                {id: 'pathways-la-childcare', name: 'Pathways LA', desc: 'Child care resources and financial assistance for families.'},
+                {id: 'childrens-institute-youth', name: "Children's Institute", desc: 'Trauma-informed care and early childhood support.'},
+                {id: 'child-family-guidance-clinic', name: 'Child and Family Guidance Center', desc: 'Outpatient psychiatric services for children and families.'},
+            ]
+        },
+        legal: {
+            icon: <Scale className="w-5 h-5 text-slate-600" />,
+            title: "Legal Aid & Rights",
+            resources: [
+                {id: 'lafla-legal-aid', name: 'Legal Aid Foundation of LA', desc: 'Free civil legal services including housing and public benefits.'},
+                {id: 'partners-justice-advocacy', name: 'Partners for Justice', desc: 'Legal advocacy and support services.'},
+                {id: 'homeboy-industries-reentry', name: 'Homeboy Industries', desc: 'Reentry support, legal services, and job training.'},
+            ]
+        },
     };
 
     const recommendedResourceIds = identifiedNeeds.flatMap(need => recommendations[need]?.resources.map(r => r.id) || []);
@@ -699,12 +733,15 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose} style={overlayStyle}>
       <div
         ref={attachCardRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Resource Navigator"
         className="bg-white w-full max-w-xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-200 relative"
         style={{ maxHeight: cardMaxHeight ? `min(${cardMaxHeight}, 700px)` : 'min(90vh, 700px)' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 p-3 bg-gray-100 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-200 transition-colors z-10" title="Close">
-          <X className="w-5 h-5" />
+        <button onClick={onClose} aria-label="Close" className="absolute top-4 right-4 p-3 bg-gray-100 text-gray-600 rounded-full border border-gray-200 hover:bg-gray-200 transition-colors z-10">
+          <X className="w-5 h-5" aria-hidden="true" />
         </button>
 
         <div className="flex-grow min-h-0 overflow-y-auto overscroll-contain">
