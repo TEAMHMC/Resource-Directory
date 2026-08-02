@@ -4697,4 +4697,22 @@ export const ALL_RESOURCES: Resource[] = [
     lastUpdated: "2024-12",
   },
 
+  {
+    id: "988-lifeline",
+    name: "988 Suicide and Crisis Lifeline",
+    category: "Mental & Behavioral Health",
+    serviceCategories: ["Crisis", "Mental Health"],
+    resourceType: "Community Resource",
+    communityFocus: "General",
+    geographicArea: "Los Angeles County",
+    spa: "All SPAs",
+    phone: "988",
+    website: "https://988lifeline.org/",
+    hours: "24 hours a day, 7 days a week",
+    languages: "English, Spanish (Linea de Prevencion del Suicidio y Crisis); tele-interpreter services for 150+ languages",
+    description: "Free and confidential emotional support for people in suicidal crisis or emotional distress, available 24/7. Call or text 988. For TTY, use your preferred relay service or dial 711 then 988.",
+    source: "LA County SAPC Resource Guide (Substance Use Treatment Services), updated 12/16/2024",
+    lastUpdated: "2024-12"
+  },
+
 ];
