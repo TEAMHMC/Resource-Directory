@@ -65,10 +65,11 @@
 <body>
     <div id="root"></div>
     <!-- Shared HMC button system: one definition of a button across every HMC
-         surface. The script builds the label copies the roll-up hover needs and
-         watches for buttons React renders later. -->
-    <link rel="stylesheet" href="https://unstoppable.healthmatters.clinic/assets/site/hmc-buttons-1.0.0.css">
-    <script defer src="https://unstoppable.healthmatters.clinic/assets/site/hmc-buttons-1.0.0.js"></script>
+     surface. The script writes each label to a data attribute that the
+     stylesheet renders as the hover roll-up. Attribute-only, so it never
+     mutates DOM that React owns. -->
+<link rel="stylesheet" href="https://unstoppable.healthmatters.clinic/assets/site/hmc-buttons-1.0.1.css">
+    <script defer src="https://unstoppable.healthmatters.clinic/assets/site/hmc-buttons-1.0.1.js"></script>
 <script type="module" src="/index.tsx"></script>
 </body>
 </html>
