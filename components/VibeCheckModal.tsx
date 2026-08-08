@@ -200,7 +200,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
           <p className="text-sm text-gray-500 mb-6">For urgent support, contact our dedicated team at <strong>lawr@healthmatters.clinic</strong> or call 988 anytime.</p>
           <button
             onClick={() => handleChatHandoff(['disaster', 'mentalhealth'], ['hmc-mobile-health', 'cityserve-ca-relief', '988-suicide-crisis-lifeline'])}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 mb-3"
+            className="w-full hmc-btn hmc-btn-primary justify-center mb-3"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>
             Find more resources with Sunny
@@ -271,7 +271,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
             </div>
           </div>
           <button onClick={() => setDisasterSubStep(3)} disabled={!canContinue}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-40">
+            className="w-full hmc-btn hmc-btn-primary justify-center disabled:opacity-40">
             <span className="w-2 h-2 rounded-full bg-white"></span>Continue
           </button>
         </div>
@@ -305,7 +305,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
           </div>
           <button
             onClick={() => setDisasterSubStep(4)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+            className="w-full hmc-btn hmc-btn-primary justify-center"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Continue
           </button>
@@ -348,7 +348,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
           <button
             onClick={() => setDisasterSubStep(5)}
             disabled={disasterData.urgentNeeds.length === 0 && !disasterData.otherNeeds.trim()}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-40"
+            className="w-full hmc-btn hmc-btn-primary justify-center disabled:opacity-40"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Continue
           </button>
@@ -469,7 +469,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
           <button
             onClick={submitDisasterRequest}
             disabled={!canSubmit || disasterSubmitting}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-40"
+            className="w-full hmc-btn hmc-btn-primary justify-center disabled:opacity-40"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>
             {disasterSubmitting ? 'Submitting...' : 'Submit Relief Request'}
@@ -501,7 +501,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
           </div>
           <button
             onClick={() => setStep(1)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+            className="w-full hmc-btn hmc-btn-primary justify-center"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Let's Get Started
           </button>
@@ -681,7 +681,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
             <p className="text-gray-600 mb-6 max-w-md mx-auto">It looks like your basic needs are covered right now, which is great! If you'd like to explore wellness activities or community connections, Sunny can help with that too.</p>
             <button
                 onClick={() => handleChatHandoff(['general wellness'], ['hmc-live-unstoppable', 'onegeneration-intergen-care'])}
-                className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                className="w-full hmc-btn hmc-btn-primary justify-center"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>
                 Chat with Sunny about wellness
@@ -713,7 +713,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
 
           <button
             onClick={() => handleChatHandoff(identifiedNeeds, recommendedResourceIds)}
-            className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#233dff] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+            className="w-full hmc-btn hmc-btn-primary justify-center"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>
             Chat with Sunny about these results

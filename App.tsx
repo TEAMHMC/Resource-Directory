@@ -547,7 +547,7 @@ const App: React.FC = () => {
       <div role="banner" className="bg-[#e63946] text-white px-4 py-2.5 flex flex-wrap items-center justify-center gap-3 text-sm font-bold z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" aria-hidden="true" />
         <span>Crisis? Call or Text 988 (24/7 Suicide &amp; Crisis Lifeline)</span>
-        <a href="tel:988" aria-label="Call 988 Suicide and Crisis Lifeline" className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 min-h-[44px]"><span className="w-2 h-2 rounded-full bg-white" aria-hidden="true"></span>Call Now</a>
+        <a href="tel:988" aria-label="Call 988 Suicide and Crisis Lifeline" className="hmc-btn hmc-btn-primary min-h-[44px]"><span className="w-2 h-2 rounded-full bg-white" aria-hidden="true"></span>Call Now</a>
       </div>
 
       <header className="container mx-auto max-w-7xl px-4 pt-6 pb-4">
@@ -583,7 +583,7 @@ const App: React.FC = () => {
             <p className="text-gray-600 text-sm mb-3">Sunny can help you navigate to the right support.</p>
             <button
                 onClick={() => setShowCompass(true)}
-                className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                className="hmc-btn hmc-btn-primary"
             >
                 <span className="w-2 h-2 rounded-full bg-white"></span>Ask Sunny
             </button>
@@ -663,10 +663,6 @@ const App: React.FC = () => {
 
           <div className="mt-6 pt-6 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span>Showing <b>{filteredResources.length}</b> unique resources</span>
-              </div>
               <button 
                 onClick={() => setShowAdvanced(!showAdvanced)}
                 className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-[#233dff] hover:text-[#233dff]/80 transition-colors"
@@ -693,7 +689,7 @@ const App: React.FC = () => {
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"
-            className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 whitespace-nowrap flex-shrink-0"
+            className="hmc-btn hmc-btn-primary whitespace-nowrap flex-shrink-0"
           >
             <span className="w-2 h-2 rounded-full bg-white"></span>Suggest an Edit
           </a>
@@ -702,7 +698,7 @@ const App: React.FC = () => {
         {(filters.category === 'All' && filters.q === '' && filters.service === 'All' && filters.population === 'All' && filters.community === 'All' && filters.geo === 'All' && filters.spa === 'All') && (
           <div className="space-y-8 mb-8">
             <section>
-              <SectionHeader title="HMC Programs" count={HMC_PROGRAMS.length} />
+              <SectionHeader title="HMC Programs" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {HMC_PROGRAMS.map(r => (
                   <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} isPinned />
@@ -711,7 +707,7 @@ const App: React.FC = () => {
             </section>
 
             <section>
-              <SectionHeader title="Featured Partners" count={FEATURED_PARTNERS.length} />
+              <SectionHeader title="Featured Partners" />
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {FEATURED_PARTNERS.map(r => (
                   <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} isPartner={isOfficialPartner(r)} />
@@ -722,7 +718,7 @@ const App: React.FC = () => {
         )}
 
         <section>
-          <SectionHeader title="Community Directory" count={filteredResources.length} />
+          <SectionHeader title="Community Directory" />
           {filteredResources.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredResources.map(r => (
@@ -813,10 +809,9 @@ const FilterSelect: React.FC<{label: string, icon: React.ReactNode, value: strin
   );
 };
 
-const SectionHeader: React.FC<{title: string, count: number}> = ({ title, count }) => (
+const SectionHeader: React.FC<{title: string}> = ({ title }) => (
   <div className="flex items-end justify-between mb-6 border-b-2 border-gray-100 pb-3">
     <h2 className="font-display text-3xl font-medium text-gray-800 tracking-normal">{title}</h2>
-    <span className="text-sm font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{count}</span>
   </div>
 );
 

@@ -192,7 +192,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
               <div className="md:col-span-2">
                 <button
                   onClick={() => setShowReferralForm(true)}
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-base border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95"
+                  className="w-full hmc-btn hmc-btn-primary justify-center"
                 >
                   <span className="w-2 h-2 rounded-full bg-white"></span>Request a Referral
                 </button>
@@ -292,7 +292,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
                   </div>
                 </div>
                 <div className="flex-shrink-0 flex flex-col gap-2 px-6 py-4 border-t border-gray-100 bg-white rounded-b-3xl">
-                  <button type="button" onClick={closeReferralForm} className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
+                  <button type="button" onClick={closeReferralForm} className="w-full hmc-btn hmc-btn-primary justify-center">
                     <span className="w-2 h-2 rounded-full bg-white"></span>Close
                   </button>
                   <a href="https://volunteer.healthmatters.clinic" target="_blank" rel="noopener noreferrer" className="text-[10px] text-center text-gray-400 hover:text-[#233dff] transition-colors">
@@ -316,7 +316,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
                     <button type="button" onClick={closeReferralForm} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95">
                       <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
                     </button>
-                    <button type="button" onClick={() => { setSubmitState({ kind: 'idle' }); }} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95">
+                    <button type="button" onClick={() => { setSubmitState({ kind: 'idle' }); }} className="hmc-btn hmc-btn-primary">
                       <span className="w-2 h-2 rounded-full bg-white"></span>Try again
                     </button>
                   </div>
@@ -421,7 +421,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
                     <button type="button" onClick={closeReferralForm} disabled={submitState.kind === 'submitting'} className="inline-flex items-center gap-2.5 px-5 py-3 rounded-full font-normal text-sm border border-[#0f0f0f] bg-white text-[#1a1a1a] hover:bg-gray-50 transition-all active:scale-95 disabled:opacity-50">
                       <span className="w-2 h-2 rounded-full bg-[#0f0f0f]"></span>Cancel
                     </button>
-                    <button type="submit" disabled={submitState.kind === 'submitting'} className="inline-flex items-center gap-2.5 px-6 py-3 rounded-full font-normal text-sm border-2 border-[#0f0f0f] bg-[#233dff] text-white hover:bg-[#1a2b99] transition-all active:scale-95 disabled:opacity-60">
+                    <button type="submit" disabled={submitState.kind === 'submitting'} className="hmc-btn hmc-btn-primary disabled:opacity-60">
                       <span className="w-2 h-2 rounded-full bg-white"></span>
                       {submitState.kind === 'submitting' ? 'Submitting...' : 'Submit Referral'}
                     </button>
