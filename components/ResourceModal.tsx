@@ -233,7 +233,11 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
 
         <div className="flex-shrink-0 px-8 py-3 border-t border-gray-100 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
           <div className="text-[10px] font-bold uppercase tracking-wide text-gray-400">
-            <span>Source: {resource.source || 'Verified Partner'}</span>
+            {/* Only claim a listing is partner-verified when it actually says so.
+                Defaulting to "Verified Partner" labelled every researched listing
+                as verified, which is a claim HMC cannot stand behind until the
+                organization completes the partner flow. */}
+            <span>Source: {resource.source || 'Community Listing'}</span>
             <span className="ml-4">Last Updated: {resource.lastUpdated || 'Recently'}</span>
           </div>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
@@ -245,8 +249,11 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
                 See incorrect info? Suggest an edit →
               </button>
             )}
+            {/* Carries the listing through to the Partner Portal so the org lands
+                on its own record instead of a generic signup and having to find
+                itself again. The portal reads these to prefill the claim. */}
             <a
-              href="https://partner.healthmatters.clinic"
+              href={`https://partner.healthmatters.clinic/?claim=${encodeURIComponent(resource.id)}&name=${encodeURIComponent(resource.name)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs font-semibold text-[#233dff] hover:text-[#1a2b99] transition-colors underline underline-offset-2"
