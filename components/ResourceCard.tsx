@@ -83,7 +83,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
           <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">Phone</span>
           <div className="flex items-center gap-1.5 text-xs font-bold text-gray-700">
             <Phone className="w-3 h-3 text-[#233dff]" />
-            {resource.phone || '—'}
+            {resource.phone || 'Not listed'}
           </div>
         </div>
         <div className="flex flex-col gap-0.5">
@@ -101,7 +101,7 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
                 {resource.website.replace(/^https?:\/\//, '')}
               </a>
             ) : (
-              <span className="truncate text-gray-400">—</span>
+              <span className="truncate text-gray-400">Not listed</span>
             )}
           </div>
         </div>

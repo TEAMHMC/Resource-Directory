@@ -18,7 +18,7 @@ import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
  *
  * Two-mode strategy:
  *
- *   MODE A — parent listener present (preferred). The hook talks to the
+ *   MODE A, parent listener present (preferred). The hook talks to the
  *   parent window with a small postMessage protocol:
  *     child  -> parent : { type: 'requestParentViewport' }
  *     parent -> child  : { type: 'parentViewport', scrollY, innerHeight, iframeTop }
@@ -26,7 +26,7 @@ import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
  *   lands inside the iframe's coordinate space and absolute-position the
  *   modal there so it always shows up in the user's currently-visible window.
  *
- *   MODE B — self-contained fallback (no parent code required). If the
+ *   MODE B, self-contained fallback (no parent code required). If the
  *   parent does not respond within ~600ms, the hook returns fallback styles
  *   that:
  *     1. Cap the modal card height to a sensible pixel value (not vh/dvh,
@@ -188,7 +188,7 @@ export function useEmbedViewport(active: boolean): EmbedViewportResult {
       };
     }
 
-    // MODE A — parent responded with real viewport data.
+    // MODE A, parent responded with real viewport data.
     if (viewport) {
       // Translate the parent's visible band into iframe-document coordinates.
       // `iframeTop` is the iframe's top in the parent's document coordinate
@@ -221,7 +221,7 @@ export function useEmbedViewport(active: boolean): EmbedViewportResult {
       return { isEmbedded, overlayStyle, cardMaxHeight, attachCardRef };
     }
 
-    // MODE B — fallback: parent listener not installed (or has not responded
+    // MODE B fallback, parent listener not installed (or has not responded
     // yet). The modal will scrollIntoView on mount via attachCardRef, which
     // propagates across the iframe boundary and brings the modal into the
     // user's actual viewport. We still need to cap the card height in pixels
@@ -229,7 +229,7 @@ export function useEmbedViewport(active: boolean): EmbedViewportResult {
     if (parentTimedOut) {
       // Use the iframe's own scroll position as a hint for where to anchor
       // the overlay. In most embed scenarios the iframe itself does not
-      // scroll (the parent does), so this is typically 0 — but if the
+      // scroll (the parent does), so this is typically 0, but if the
       // iframe ever does scroll internally we want to track that.
       const iframeScrollY =
         typeof window !== 'undefined' ? window.scrollY || 0 : 0;
@@ -263,7 +263,7 @@ export function useEmbedViewport(active: boolean): EmbedViewportResult {
       return { isEmbedded, overlayStyle, cardMaxHeight, attachCardRef };
     }
 
-    // Embedded but parent has not timed out yet and has not responded —
+    // Embedded but parent has not timed out yet and has not responded,
     // pre-emptively apply the fallback overlay so the modal never lands
     // off-screen even for the first 600ms. (Without this, the modal would
     // flash at the geometric center of the iframe before the fallback

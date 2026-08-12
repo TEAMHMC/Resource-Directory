@@ -5,12 +5,12 @@ export const HMC_PROGRAMS: Resource[] = [
   { id: "hmc-mobile-health", name: "Mobile Health Outreach", category: "Health Care", description: "Mobile health outreach bringing screenings, education, and referrals directly to communities across Los Angeles.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Los Angeles County", spa: "All SPAs" },
   { id: "hmc-pop-up-clinic", name: "Pop-Up Clinic Events", category: "Health Care", description: "Free community pop-up clinics offering screenings, health education, and resource navigation.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Los Angeles County", spa: "All SPAs" },
   { id: "hmc-street-medicine", name: "Street Medicine Outreach", category: "Health Care", description: "On-the-street outreach providing compassionate care and linkage to services for people experiencing homelessness.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "Unhoused", geographicArea: "Los Angeles County", spa: "All SPAs" },
-  { id: "hmc-live-unstoppable", name: "Live Unstoppable Wellness Events", category: "Mental & Behavioral Health", description: "Monthly wellness experience blending movement, reflection, and community connection — movement as medicine.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "BIPOC", geographicArea: "Los Angeles County", spa: "All SPAs" },
-  { id: "hmc-unboxed-podcast", name: "Unboxed (Podcast)", category: "Mental & Behavioral Health", description: "Real conversations and tools for mental wellness — episodes, community stories, and resources.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/podcast", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Online", spa: "All SPAs" },
+  { id: "hmc-live-unstoppable", name: "Live Unstoppable Wellness Events", category: "Mental & Behavioral Health", description: "Monthly wellness experience blending movement, reflection, and community connection. Movement as medicine.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "BIPOC", geographicArea: "Los Angeles County", spa: "All SPAs" },
+  { id: "hmc-unboxed-podcast", name: "Unboxed (Podcast)", category: "Mental & Behavioral Health", description: "Real conversations and tools for mental wellness. Episodes, community stories, and resources.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/podcast", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Online", spa: "All SPAs" },
   { id: "hmc-digital-companion", name: "Unstoppable Digital Companion Guide", category: "Mental & Behavioral Health", description: "Interactive guide packed with mental health tools, check-ins, and resources for ongoing support.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Online", spa: "All SPAs" },
   { id: "hmc-unstoppable-workshops", name: "Unstoppable: Power of Healing & Growth Workshops", category: "Mental & Behavioral Health", description: "A five-module, healing-centered workshop rooted in the lived experiences of Black communities impacted by disability. Reduces stigma, increases awareness, and empowers participants to explore the intersections of mental health, race, and disability in a culturally affirming space.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/unstoppable", resourceType: "HMC Program", communityFocus: "BIPOC", geographicArea: "Los Angeles County", spa: "All SPAs" },
   { id: "hmc-unstoppable-meetups", name: "Unstoppable Wellness Meetups", category: "Mental & Behavioral Health", description: "This monthly wellness meetup creates a safe space for authentic conversation about mental health, self-care, and community support. No judgment. Just healing.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/unstoppable", resourceType: "HMC Program", communityFocus: "BIPOC", geographicArea: "Los Angeles County", spa: "All SPAs" },
-  { id: "hmc-unstoppable-virtual", name: "Unstoppable Experience (Virtual)", category: "Mental & Behavioral Health", description: "A live, interactive session designed to help you refocus and strengthen your mindset from anywhere. Guided conversation, structured reflection, and practical strategies you can apply immediately — clarity and connection without leaving your space.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/unstoppable", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Online", spa: "All SPAs" }
+  { id: "hmc-unstoppable-virtual", name: "Unstoppable Experience (Virtual)", category: "Mental & Behavioral Health", description: "A live, interactive session designed to help you refocus and strengthen your mindset from anywhere. Guided conversation, structured reflection, and practical strategies you can apply immediately. Clarity and connection without leaving your space.", phone: "(323) 990-4325", website: "https://www.healthmatters.clinic/unstoppable", resourceType: "HMC Program", communityFocus: "General", geographicArea: "Online", spa: "All SPAs" }
 ];
 
 export const FEATURED_PARTNERS: Resource[] = [
@@ -2965,7 +2965,7 @@ export const ALL_RESOURCES: Resource[] = [
     website: "https://www.namica.org/",
     targetPopulation: "Adults with SMI, Families, Caregivers",
     serviceCategories: ["Peer Support", "Family Support Groups", "Education & Training", "Advocacy"],
-    description: "NAMI Los Angeles — local affiliate of the National Alliance on Mental Illness — providing free peer support programs, Family Support Groups, Family-to-Family education, and Peer-to-Peer recovery education across Los Angeles County. Primary resource for families supporting a loved one with serious mental illness (SMI), including schizophrenia, schizoaffective disorder, and bipolar disorder."
+    description: "NAMI Los Angeles, the local affiliate of the National Alliance on Mental Illness, provides free peer support programs, Family Support Groups, Family-to-Family education, and Peer-to-Peer recovery education across Los Angeles County. Primary resource for families supporting a loved one with serious mental illness (SMI), including schizophrenia, schizoaffective disorder, and bipolar disorder."
   },
   {
     id: "nami-family-to-family",
@@ -3013,7 +3013,7 @@ export const ALL_RESOURCES: Resource[] = [
     eligibility: "Free. Open to all family members and caregivers.",
     targetPopulation: "Families, Caregivers",
     serviceCategories: ["Family Support Groups", "Peer Support"],
-    description: "Free, peer-led Family Support Groups for family members and caregivers of people living with mental illness. Chapters in Inglewood, Compton, Palmdale, and additional LA County locations. Facilitated by trained NAMI volunteers who are themselves family members. No registration required — find your nearest group at namica.org."
+    description: "Free, peer-led Family Support Groups for family members and caregivers of people living with mental illness. Chapters in Inglewood, Compton, Palmdale, and additional LA County locations. Facilitated by trained NAMI volunteers who are themselves family members. No registration required. Find your nearest group at namica.org."
   },
   {
     id: "mental-health-america-la",
@@ -3062,7 +3062,7 @@ export const ALL_RESOURCES: Resource[] = [
   },
   {
     id: "lacdmh-full-service-partnership",
-    name: "Full Service Partnership (FSP) — LA County",
+    name: "Full Service Partnership (FSP), LA County",
     category: "Mental & Behavioral Health",
     resourceType: "Community Resource",
     communityFocus: "General",
@@ -3073,7 +3073,7 @@ export const ALL_RESOURCES: Resource[] = [
     eligibility: "For adults and transition-age youth with serious mental illness (SMI) who are homeless or at risk. Referral via LACDMH ACCESS line or outpatient clinic.",
     targetPopulation: "Adults with SMI, Transition-Age Youth",
     serviceCategories: ["Case Management", "Housing", "Outpatient Mental Health", "Peer Support", "Benefits Navigation"],
-    description: "Full Service Partnership (FSP) is LA County's most intensive 'whatever it takes' wraparound program for adults with serious mental illness (SMI) — including schizophrenia, schizoaffective disorder, and bipolar disorder — who are homeless or at high risk. FSP provides 24/7 case management, housing assistance, psychiatric care, peer support, and benefits navigation. Access through the LACDMH ACCESS line: 1-800-854-7771."
+    description: "Full Service Partnership (FSP) is LA County's most intensive 'whatever it takes' wraparound program for adults with serious mental illness (SMI), including schizophrenia, schizoaffective disorder, and bipolar disorder, who are homeless or at high risk. FSP provides 24/7 case management, housing assistance, psychiatric care, peer support, and benefits navigation. Access through the LACDMH ACCESS line: 1-800-854-7771."
   },
   {
     id: "lacdmh-family-resource-centers",
@@ -3099,10 +3099,10 @@ export const ALL_RESOURCES: Resource[] = [
     spa: "All SPAs",
     phone: "(855) 845-7415",
     website: "https://www.calwarmline.org/",
-    hours: "7 days a week, 7am–11pm Pacific",
+    hours: "7 days a week, 7am to 11pm Pacific",
     targetPopulation: "Adults with Mental Health Challenges",
     serviceCategories: ["Peer Support", "Crisis Intervention"],
-    description: "The California Peer-Run Warm Line is a non-crisis emotional support line staffed entirely by peers — people in their own mental health recovery. Call (855) 845-7415 when you need someone to talk to who truly understands. Not a crisis line; for emergencies call 988 or 1-800-854-7771. Available statewide including all of Los Angeles County."
+    description: "The California Peer-Run Warm Line is a non-crisis emotional support line staffed entirely by peers, people in their own mental health recovery. Call (855) 845-7415 when you need someone to talk to who truly understands. Not a crisis line; for emergencies call 988 or 1-800-854-7771. Available statewide including all of Los Angeles County."
   },
   {
     id: "wellness-together-peer-centers",
@@ -4028,7 +4028,7 @@ export const ALL_RESOURCES: Resource[] = [
     address: "808 W. 58th St., Los Angeles, CA 90037",
     hours: "Monday - Friday 8:30am - 5:00pm; Saturday 7:00am - 3:30pm",
     eligibility: "Medi-Cal accepted; low-income, uninsured accepted",
-    description: "Federally Qualified Health Center providing primary care, behavioral health, and CalAIM Enhanced Care Management and Community Supports — including housing navigation, deposits, tenancy sustaining, and asthma remediation — exclusively in SPA 6 (South LA). Serves children, youth, maternal health, and justice-involved populations in Compton and Watts.",
+    description: "Federally Qualified Health Center providing primary care, behavioral health, and CalAIM Enhanced Care Management and Community Supports, including housing navigation, deposits, tenancy sustaining, and asthma remediation, exclusively in SPA 6 (South LA). Serves children, youth, maternal health, and justice-involved populations in Compton and Watts.",
     referralNotes: "Online referral form: https://sjch.org/calaim-care-management/#calaimform",
     source: "CalAIM Directory December 2025",
     lastUpdated: "2025-12",
@@ -4068,7 +4068,7 @@ export const ALL_RESOURCES: Resource[] = [
     address: "2594 Industry Way, Lynwood, CA 90262",
     hours: "Monday - Friday 8am - 5pm",
     eligibility: "Medi-Cal members eligible for ECM",
-    description: "ECM and mental health services provider exclusively in SPA 6 (South LA, Compton, Inglewood, Watts). Serves children and youth, maternal health, justice-involved, and housing-unstable Medi-Cal members. Located in Lynwood — a key provider for the Compton/Watts corridor.",
+    description: "ECM and mental health services provider exclusively in SPA 6 (South LA, Compton, Inglewood, Watts). Serves children and youth, maternal health, justice-involved, and housing-unstable Medi-Cal members. Located in Lynwood, a key provider for the Compton and Watts corridor.",
     referralNotes: "Email ECM referrals to: ecm_referrals@scharpca.org",
     source: "CalAIM Directory December 2025",
     lastUpdated: "2025-12",
@@ -4128,7 +4128,7 @@ export const ALL_RESOURCES: Resource[] = [
     address: "1401 E 4th Street, Suite B, Long Beach, CA 90802",
     hours: "Monday - Friday 10:00am - 6:00pm; Saturday - Sunday 10:00am - 2:00pm",
     eligibility: "Medi-Cal; open to all, peer-led",
-    description: "Peer-run ECM and Community Supports provider offering clinical mental health, IOP for co-occurring disorders, equine therapy, free CalGETS gambling addiction counseling, and housing navigation. Specializes in justice-involved and military re-entry populations. Staffed by people in their own recovery — available countywide including SPA 6.",
+    description: "Peer-run ECM and Community Supports provider offering clinical mental health, IOP for co-occurring disorders, equine therapy, free CalGETS gambling addiction counseling, and housing navigation. Specializes in justice-involved and military re-entry populations. Staffed by people in their own recovery. Available countywide including SPA 6.",
     referralNotes: "Register via website or Psychology Today profile: https://www.psychologytoday.com/profile/1392681",
     source: "CalAIM Directory December 2025",
     lastUpdated: "2025-12",
@@ -4148,7 +4148,7 @@ export const ALL_RESOURCES: Resource[] = [
     address: "1680 E 120th St, Los Angeles, CA 90059",
     hours: "24 hours",
     eligibility: "Medi-Cal; referral via LA Care (health plan assignment required)",
-    description: "The only full-service hospital in the Watts/Willowbrook area providing ECM and Community Supports including housing transition and tenancy sustaining services. A critical safety-net resource for South LA's most vulnerable — unhoused, justice-involved, and medically complex patients. Hospital-based ECM in the heart of Watts.",
+    description: "The only full-service hospital in the Watts/Willowbrook area providing ECM and Community Supports including housing transition and tenancy sustaining services. A critical safety-net resource for South LA residents who are unhoused, justice-involved, or medically complex. Hospital-based ECM in the heart of Watts.",
     referralNotes: "Refer patient to LA Care; health plan assigns members when openings are available.",
     source: "CalAIM Directory December 2025",
     lastUpdated: "2025-12",
@@ -4216,7 +4216,7 @@ export const ALL_RESOURCES: Resource[] = [
   },
   {
     id: "horizon-recuperative-care-south-la",
-    name: "Horizon Recuperative Care (South LA — Vermont Ave)",
+    name: "Horizon Recuperative Care (South LA, Vermont Ave)",
     category: "Housing & Shelter",
     resourceType: "Community Resource",
     communityFocus: "Unhoused, Justice-involved",
@@ -4236,7 +4236,7 @@ export const ALL_RESOURCES: Resource[] = [
   },
   {
     id: "illumination-foundation-calaim",
-    name: "Illumination Foundation (CalAIM — SPA 6)",
+    name: "Illumination Foundation (CalAIM, SPA 6)",
     category: "Housing & Shelter",
     resourceType: "Community Resource",
     communityFocus: "Unhoused, Justice-involved",
@@ -4293,7 +4293,7 @@ export const ALL_RESOURCES: Resource[] = [
     lastUpdated: "2025-12",
     serviceCategories: ["Enhanced Care Management", "Community Supports", "Housing", "Food Assistance", "Health Care"],
   },
-  // ─── NEW ENTRIES: HMC Master CSV — Mental Health, Housing, SPA 6 ───
+  // NEW ENTRIES from HMC Master CSV: Mental Health, Housing, SPA 6
   {
     id: "black-men-heal",
     name: "Black Men Heal",
@@ -4304,7 +4304,7 @@ export const ALL_RESOURCES: Resource[] = [
     spa: "All SPAs",
     email: "info@blackmenheal.org",
     website: "https://blackmenheal.org/",
-    description: "Nonprofit providing free mental health services, therapy, and wellness resources specifically for Black men to address mental health disparities. Offers therapist matching, community healing circles, and mental health awareness programs. Note: Individual in-person therapy not currently available to CA residents — check website for updates on virtual or new CA services.",
+    description: "Nonprofit providing free mental health services, therapy, and wellness resources specifically for Black men to address mental health disparities. Offers therapist matching, community healing circles, and mental health awareness programs. Note: Individual in-person therapy not currently available to CA residents. Check the website for updates on virtual or new CA services.",
     source: "HMC Master Resource Directory",
     lastUpdated: "2025-12",
     serviceCategories: ["Mental & Behavioral Health", "Peer Support"],
@@ -4395,7 +4395,7 @@ export const ALL_RESOURCES: Resource[] = [
     hours: "Office 8am-5:30pm; 24/7 after-hours coverage",
     languages: "English, Spanish, Mandarin, Tagalog, Vietnamese, Farsi",
     eligibility: "LA Care, Health Net, Kaiser, Anthem, Molina, Blue Shield",
-    description: "In-home personal care and companion care services for seniors and individuals recovering from illness or surgery. Allows family members or trusted community caregivers to be screened, trained, and employed as the member's official caregiver — maximizing culturally familiar care. Serves Los Angeles County.",
+    description: "In-home personal care and companion care services for seniors and individuals recovering from illness or surgery. Allows family members or trusted community caregivers to be screened, trained, and employed as the member's official caregiver, which keeps care culturally familiar. Serves Los Angeles County.",
     referralNotes: "Online portal: https://input.sterlingadministration.com/232846575465064 | CS email: communitysupports@carepartners.us | Fax: 949-771-0200",
     source: "HMC Master Resource Directory",
     lastUpdated: "2025-12",

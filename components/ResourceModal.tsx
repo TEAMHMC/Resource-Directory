@@ -46,14 +46,14 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
   const handleShare = async () => {
     if (!resource) return;
     const shareUrl = window.location.href;
-    const shareText = `${resource.name} — ${resource.description?.slice(0, 100) || ''}`;
+    const shareText = `${resource.name}. ${resource.description?.slice(0, 100) || ''}`;
 
     if (navigator.share) {
       try {
         await navigator.share({ title: resource.name, text: shareText, url: shareUrl });
         return;
       } catch {
-        // user cancelled or not supported — fall through
+        // user cancelled or not supported, fall through
       }
     }
 
@@ -134,7 +134,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
         onClick={(e) => e.stopPropagation()}
         style={mainCardMaxHeight ? { maxHeight: mainCardMaxHeight } : undefined}
       >
-        {/* Drag handle — mobile only */}
+        {/* Drag handle, mobile only */}
         <div className="md:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
           <div className="w-10 h-1 bg-gray-300 rounded-full" />
         </div>
@@ -447,7 +447,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
 };
 
 const DetailItem: React.FC<{ icon: React.ReactNode, label: string, value?: string, isLink?: string }> = ({ icon, label, value, isLink }) => {
-  if (!value || value === "—") return null;
+  if (!value || value === "Not listed") return null;
   return (
     <div className="bg-gray-50 p-4 rounded-2xl border border-gray-100">
       <div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-wide text-gray-400 mb-1">

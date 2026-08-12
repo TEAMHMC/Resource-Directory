@@ -23,6 +23,57 @@ const normalizeValue = (value: string): string => {
 };
 
 const PORTAL_URL = 'https://volunteer.healthmatters.clinic';
+const HMC_SITE_URL = 'https://www.healthmatters.clinic';
+
+/**
+ * Site bar shared by every standalone HMC tool.
+ *
+ * Each tool lives on its own subdomain, so someone who lands here has no route
+ * back to healthmatters.clinic. This bar is that route. Both the logo and the
+ * labelled link go home, and the bar sits at the very top so it is reachable on
+ * mobile without scrolling. target="_top" keeps it correct when the tool is
+ * embedded in the Webflow page inside an iframe.
+ */
+const SiteBar: React.FC<{ toolName?: string }> = ({ toolName }) => (
+  <nav aria-label="Site" className="sticky top-0 z-[80] bg-white border-b border-gray-200 shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
+    <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2 sm:px-6">
+      <div className="flex min-w-0 items-center gap-3">
+        <a
+          href={HMC_SITE_URL}
+          target="_top"
+          className="group flex items-center gap-2.5 rounded-xl px-1 py-1 outline-none focus-visible:ring-2 focus-visible:ring-[#233dff] focus-visible:ring-offset-2"
+        >
+          <img
+            src="/hmc-logo.png"
+            alt="Health Matters Clinic"
+            width={32}
+            height={32}
+            className="h-8 w-8 flex-shrink-0 rounded-lg object-contain transition-transform duration-200 group-hover:scale-105"
+          />
+          <span aria-hidden="true" className="hidden text-sm font-medium leading-none text-[#1a1a1a] sm:inline">
+            Health Matters Clinic
+          </span>
+        </a>
+        {toolName && (
+          <span className="hidden border-l border-gray-200 pl-3 text-xs font-semibold uppercase tracking-widest text-gray-400 md:inline">
+            {toolName}
+          </span>
+        )}
+      </div>
+      <a
+        href={HMC_SITE_URL}
+        target="_top"
+        className="inline-flex min-h-[40px] flex-shrink-0 items-center gap-1.5 rounded-full border border-[#233dff] px-4 py-2 text-[11px] font-semibold uppercase tracking-wide text-[#233dff] outline-none transition-colors hover:bg-[#233dff] hover:text-white focus-visible:ring-2 focus-visible:ring-[#233dff] focus-visible:ring-offset-2"
+      >
+        <svg aria-hidden="true" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5" />
+          <path d="m12 19-7-7 7-7" />
+        </svg>
+        Back to Main Site
+      </a>
+    </div>
+  </nav>
+);
 
 const SUGGEST_CATEGORIES = [
   "Basic Needs", "Mental & Behavioral Health", "HIV / Sexual Health",
@@ -154,8 +205,8 @@ const SuggestResourceModal: React.FC<{
             <h3 className="font-display text-2xl font-medium text-gray-900">Thank you!</h3>
             <p className="text-gray-600 text-sm leading-relaxed max-w-sm">
               {isEditMode
-                ? 'Your edit suggestion has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.'
-                : 'Your submission has been received and will be reviewed by our team. We will notify you at the email you provided once a decision is made.'}
+                ? 'We got your edit suggestion. Our team will review it and email you once we decide.'
+                : 'We got your submission. Our team will review it and email you once we decide.'}
             </p>
             <button onClick={onClose} className="mt-2 px-6 py-3 bg-[#233dff] text-white rounded-full text-sm font-medium hover:bg-[#1a2b99] transition-colors">Close</button>
 
@@ -165,7 +216,7 @@ const SuggestResourceModal: React.FC<{
                 <p className="text-sm font-semibold text-gray-700 mt-2">Want to do more with HMC?</p>
                 <div className="w-full max-w-md text-left border-l-4 border-amber-400 bg-amber-50 rounded-2xl px-5 py-4">
                   <p className="text-sm text-gray-700 leading-relaxed">
-                    Your organization can join the HMC Partner Network — post events to the Event Finder, manage referrals from HMC clients, collaborate with other LA community organizations, and sign partnership agreements directly online.
+                    Your organization can join the HMC Partner Network. Post events to the Event Finder, manage referrals from HMC clients, work with other community organizations, and sign partnership agreements online.
                   </p>
                 </div>
                 <div className="flex flex-wrap items-center justify-center gap-3 mt-1">
@@ -452,7 +503,7 @@ const App: React.FC = () => {
           setOfficialPartnerNames(names);
         }
       })
-      .catch(() => {}); // fail silently — badge is enhancement only
+      .catch(() => {}); // fail silently, badge is enhancement only
   }, []);
 
   // When embedded in an iframe (e.g. inside the Webflow page), post our document
@@ -525,25 +576,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Top nav bar with HMC logo */}
-      <nav className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sticky top-0 z-[70] flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.05)]">
-        <a
-          href="https://www.healthmatters.clinic"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center gap-3 transition-transform duration-300 hover:scale-105"
-          title="Health Matters Clinic"
-        >
-          <img
-            src="https://cdn.prod.website-files.com/67359e6040140078962e8a54/6912e29e5710650a4f45f53f_Untitled%20(256%20x%20256%20px).png"
-            alt="Health Matters Clinic"
-            className="h-9 w-9 object-contain transition-all duration-300 group-hover:drop-shadow-[0_4px_8px_rgba(35,61,255,0.3)]"
-          />
-          <span className="font-medium text-[#1a1a1a] text-sm sm:text-base leading-none">Health Matters Clinic</span>
-        </a>
-        <span className="text-xs font-semibold uppercase tracking-widest text-gray-400">Resource Directory</span>
-      </nav>
-
+      <SiteBar toolName="Resource Directory" />
       <div role="banner" className="bg-[#e63946] text-white px-4 py-2.5 flex flex-wrap items-center justify-center gap-3 text-sm font-bold z-[60] shadow-md">
         <ShieldAlert className="w-5 h-5 animate-pulse" aria-hidden="true" />
         <span>Crisis? Call or Text 988 (24/7 Suicide &amp; Crisis Lifeline)</span>
@@ -557,7 +590,7 @@ const App: React.FC = () => {
               Resource <br /><span className="text-[#233dff]">Directory.</span>
             </h1>
             <p className="text-base text-gray-600 font-medium leading-relaxed">
-              Consolidated access to health, housing, and mental health support for the community.
+              Health, housing, and mental health support for our community, in one place.
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -685,7 +718,7 @@ const App: React.FC = () => {
         <div className="bg-blue-50/50 border border-blue-200/50 text-gray-700 rounded-2xl p-3 flex flex-col sm:flex-row items-center gap-3 text-sm mb-6">
           <Info className="w-8 h-8 text-[#233dff] flex-shrink-0" />
           <p className="flex-grow text-center sm:text-left font-medium">
-            This directory is a living resource and is frequently updated. If you represent an organization and notice any inaccuracies, please help us keep it current.
+            We update this directory often. If you represent an organization and see something out of date, tell us.
           </p>
           <a 
             href="mailto:partner@healthmatters.clinic?subject=Directory Update Request"

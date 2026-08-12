@@ -187,7 +187,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
   };
 
   const renderDisasterSubFlow = () => {
-    // Always check submitted first — disasterSubStep stays at 5 after submit
+    // Always check submitted first, disasterSubStep stays at 5 after submit
     if (disasterSubmitted) {
       return (
         <div className="text-center p-8">
@@ -389,7 +389,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
               </div>
             </div>
 
-            {/* Prior address — only if displaced */}
+            {/* Prior address, only if displaced */}
             {disasterData.isDisplaced === true && (
               <div>
                 <p className="text-sm font-semibold text-gray-700 mb-2">Address before the disaster <span className="text-rose-500">*</span></p>
