@@ -253,7 +253,7 @@ const ResourceModal: React.FC<ResourceModalProps> = ({ resource, onClose, onShar
                 on its own record instead of a generic signup and having to find
                 itself again. The portal reads these to prefill the claim. */}
             <a
-              href={`https://partner.healthmatters.clinic/?claim=${encodeURIComponent(resource.id)}&name=${encodeURIComponent(resource.name)}`}
+              href={`https://partner.healthmatters.clinic/?claim=${encodeURIComponent(resource.id)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs font-semibold text-[#233dff] hover:text-[#1a2b99] transition-colors underline underline-offset-2"
