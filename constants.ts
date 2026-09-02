@@ -22,6 +22,43 @@ export const FEATURED_PARTNERS: Resource[] = [
 
 export const ALL_RESOURCES: Resource[] = [
   {
+    // Added for National Recovery Month (September). Contact details taken from
+    // clarematrix.org rather than a directory aggregator, because the audit found
+    // eighteen entries nobody can actually reach; a new one is not worth adding
+    // unless the phone number is one somebody answers.
+    id: "clare-matrix",
+    name: "CLARE|MATRIX",
+    category: "Mental & Behavioral Health",
+    serviceCategories: ["Substance Use Treatment", "Detox", "Outpatient", "Residential"],
+    resourceType: "Community Resource",
+    communityFocus: "Adults, Women, People Experiencing Homelessness",
+    geographicArea: "Los Angeles County",
+    spa: "SPA 5",
+    phone: "866-452-5273",
+    website: "https://clarematrix.org",
+    address: "1865 9th Street, Santa Monica, CA 90404",
+    hours: "Mon 8:00am-9:00pm; Tue-Thu 8:00am-6:00pm; Fri 8:00am-9:00pm; Sat 8:00am-4:30pm; Sun closed",
+    description: "Substance use disorder treatment and recovery services: withdrawal management (detox), women's residential, Santa Monica outpatient, and an opioid treatment program. Works alongside hospitals, healthcare providers, outreach teams, case managers, and community organizations.",
+    referralNotes: "Call admissions at 866-452-5273. As of September 2026 CLARE|MATRIX reported open availability across detox, women's residential, Santa Monica outpatient, and the opioid treatment program. Confirm current availability when referring.",
+    source: "clarematrix.org",
+    lastUpdated: "2026-09"
+  },
+  {
+    id: "national-council-substance-use-hub",
+    name: "National Council for Mental Wellbeing: Substance Use Hub",
+    category: "Mental & Behavioral Health",
+    serviceCategories: ["Substance Use Treatment", "Education"],
+    resourceType: "Information & Referral",
+    communityFocus: "Adults, Families, Providers",
+    geographicArea: "National",
+    spa: "Countywide",
+    website: "https://www.thenationalcouncil.org/program/substance-use-hub/",
+    description: "National information hub on substance use, recovery, and treatment: guidance for people seeking help, for families supporting someone, and for providers building recovery services.",
+    referralNotes: "Online resource with no intake line. Use for education and orientation; pair with a local treatment provider such as CLARE|MATRIX for an actual referral.",
+    source: "thenationalcouncil.org",
+    lastUpdated: "2026-09"
+  },
+  {
     id: "24hr-homecare",
     name: "24Hr HomeCare, LLC",
     category: "Basic Needs",
