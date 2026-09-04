@@ -1,3 +1,75 @@
+/**
+ * Reentry, derived rather than hand-tagged.
+ *
+ * Sixty-six listings in this directory describe reentry work, and not one of them
+ * carries a Reentry service category, so the filter had no such option and somebody
+ * looking for reentry support had to already know which organisation to search for by
+ * name. Adding the tag to sixty-six records by hand would put a judgement about each
+ * organisation into the data on the strength of a keyword, and would go stale the next
+ * time a description is edited.
+ *
+ * This reads what the listing already says. An organisation that states it serves
+ * justice-involved people, or describes reentry work, is offered under Reentry.
+ */
+const REENTRY_TEXT = /re-?entry|justice[- ]?(involved|impacted)|formerly incarcerated|incarceration|probation|parole/i;
+
+export const serviceCategoriesFor = (r: {
+  serviceCategories?: string[] | null;
+  description?: string | null;
+  targetPopulation?: string | null;
+  services?: string | null;
+}): string[] => {
+  const base = r.serviceCategories || [];
+  const haystack = `${r.description || ''} ${r.targetPopulation || ''} ${r.services || ''}`;
+  return REENTRY_TEXT.test(haystack) && !base.includes('Reentry') ? [...base, 'Reentry'] : base;
+};
+
+/**
+ * The eight Service Planning Areas, and how to tell whether a listing covers one.
+ *
+ * `spa` is a single free-text field, and across the directory it holds twenty-nine
+ * distinct spellings of eight areas: "SPA 4", "SPA 2, SPA 4, SPA 6",
+ * "Multiple SPAs (SPA 3, SPA 4, SPA 6, SPA 7, SPA 8)", "All SPAs" and "Countywide".
+ * The filter compared that string to the selected value exactly, so choosing SPA 4
+ * matched only the organisations whose field was the literal string "SPA 4" and hid
+ * every organisation that serves SPA 4 alongside anywhere else. Those listings were
+ * not merely mislabelled, they were unfindable.
+ *
+ * Numbers are parsed out of whatever was typed, and a countywide listing covers all
+ * eight rather than being filed under a twenty-ninth pseudo-area of its own.
+ */
+export const SPA_NAMES = ['SPA 1', 'SPA 2', 'SPA 3', 'SPA 4', 'SPA 5', 'SPA 6', 'SPA 7', 'SPA 8'] as const;
+
+export const spaNumbersFor = (raw?: string | null): number[] => {
+  const text = String(raw || '').trim();
+  if (!text || text === 'N/A') return [];
+  if (/all spas|countywide|county-?wide/i.test(text)) return [1, 2, 3, 4, 5, 6, 7, 8];
+  const found = text.match(/\d+/g) || [];
+  return [...new Set(found.map(Number).filter((n) => n >= 1 && n <= 8))].sort((a, b) => a - b);
+};
+
+/** Whether a listing covers the SPA the reader picked. */
+export const spaCovers = (raw: string | null | undefined, selected: string): boolean => {
+  if (selected === 'All') return true;
+  const want = Number((selected.match(/\d+/) || [])[0]);
+  return Number.isFinite(want) && spaNumbersFor(raw).includes(want);
+};
+
+/**
+ * How a listing states its coverage in one short chip.
+ *
+ * "Multiple SPAs (SPA 2, SPA 3, SPA 4, SPA 5, SPA 6)" is thirty-nine characters of
+ * mostly the word SPA, on a card with room for about fifteen.
+ */
+export const spaLabel = (raw?: string | null): string => {
+  const nums = spaNumbersFor(raw);
+  if (!nums.length) return '';
+  if (nums.length === 8) return 'All SPAs';
+  if (nums.length === 1) return `SPA ${nums[0]}`;
+  if (nums.length > 3) return `${nums.length} SPAs`;
+  return `SPA ${nums.join(', ')}`;
+};
+
 
 import { Resource } from "./types";
 
