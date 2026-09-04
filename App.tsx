@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layers, Info, Users, CheckCircle2, ChevronDown, ChevronUp, Compass, Plus, X, Loader2, CheckCircle } from 'lucide-react';
 import { Resource, FilterState, CATEGORIES, ChatContext } from './types';
-import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS } from './constants';
+import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS, SPA_NAMES, spaCovers, serviceCategoriesFor } from './constants';
 import ResourceCard from './components/ResourceCard';
 import { useEmbedViewport } from './hooks/useEmbedViewport';
 const ResourceModal = lazy(() => import('./components/ResourceModal'));
@@ -370,25 +370,47 @@ const App: React.FC = () => {
 
   const pinnedIds = useMemo(() => new Set([...HMC_PROGRAMS.map(r => r.id), ...FEATURED_PARTNERS.map(r => r.id)]), []);
 
-  const communityFocusOptions = useMemo(() => {
-    const allFocuses = ALL_RESOURCES.flatMap(r =>
+  /**
+   * "All" first, then everything else alphabetically.
+   *
+   * Every one of these lists was built as ["All", ...values].sort(), which sorts "All"
+   * along with the values. So the reset option was filed under A, between Advocacy and
+   * Basic Needs in one list and after "Adults with SMI" in another, and the way to clear
+   * a filter was hidden in the middle of the thing it clears.
+   */
+  const withAllFirst = (values: string[]): string[] =>
+    ["All", ...[...new Set(values)].filter((v) => v && v !== 'All').sort((a, b) => a.localeCompare(b))];
+
+  const communityFocusOptions = useMemo(() => withAllFirst(
+    ALL_RESOURCES.flatMap(r =>
       (r.communityFocus || "").split(',').map(s => normalizeValue(s.trim())).filter(Boolean)
-    );
-    return ["All", ...new Set(allFocuses)].sort();
-  }, []);
-  
-  const geoAreaOptions = useMemo(() => ["All", ...new Set(ALL_RESOURCES.map(r => r.geographicArea).filter(Boolean))].sort(), []);
-  
-  const spaOptions = useMemo(() => ["All", ...new Set(ALL_RESOURCES.map(r => r.spa).filter(r => r && r !== 'N/A'))].sort(), []);
+    )
+  ), []);
 
-  const serviceOptions = useMemo(() => ["All", ...new Set(ALL_RESOURCES.flatMap(r => r.serviceCategories || []))].sort(), []);
+  const geoAreaOptions = useMemo(() => withAllFirst(
+    ALL_RESOURCES.map(r => r.geographicArea).filter(Boolean) as string[]
+  ), []);
 
-  const populationOptions = useMemo(() => {
-    const allPops = ALL_RESOURCES.flatMap(r => 
+  /**
+   * One row per SPA, even for an organisation that covers several.
+   *
+   * `spa` is a single free-text field that in practice holds "SPA 4", "SPA 4, SPA 6" and
+   * "All SPAs". Feeding it straight into a filter produced a dropdown listing every
+   * combination anybody had typed as though each were its own area, so an organisation
+   * serving two SPAs was findable under neither of them. The eight real areas are listed
+   * once each, and the matcher below decides whether a row covers the one selected.
+   */
+  const spaOptions = useMemo(() => ['All', ...SPA_NAMES], []);
+
+  const serviceOptions = useMemo(() => withAllFirst(
+    ALL_RESOURCES.flatMap(r => serviceCategoriesFor(r))
+  ), []);
+
+  const populationOptions = useMemo(() => withAllFirst(
+    ALL_RESOURCES.flatMap(r =>
       (r.targetPopulation || "").split(',').map(s => normalizeValue(s.trim())).filter(Boolean)
-    );
-    return ["All", ...new Set(allPops)].sort();
-  }, []);
+    )
+  ), []);
 
   const filteredResources = useMemo(() => {
     return ALL_RESOURCES.filter(r => {
@@ -402,9 +424,9 @@ const App: React.FC = () => {
         if (!communityFocuses.includes(filters.community)) return false;
       }
       if (filters.geo !== "All" && r.geographicArea !== filters.geo) return false;
-      if (filters.spa !== "All" && r.spa !== filters.spa) return false;
+      if (!spaCovers(r.spa, filters.spa)) return false;
       
-      if (filters.service !== "All" && !(r.serviceCategories || []).includes(filters.service)) return false;
+      if (filters.service !== "All" && !serviceCategoriesFor(r).includes(filters.service)) return false;
       if (filters.population !== "All") {
         const pops = (r.targetPopulation || "").split(',').map(s => normalizeValue(s.trim()));
         if (!pops.includes(filters.population)) return false;
