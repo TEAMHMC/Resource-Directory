@@ -1,4 +1,5 @@
 
+import { spaLabel } from '../constants';
 import React from 'react';
 import { Resource } from '../types';
 import { Share2, Phone, ExternalLink } from 'lucide-react';
@@ -67,9 +68,16 @@ const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onOpen, onShare, 
              {resource.communityFocus}
            </span>
         )}
-        {resource.spa && resource.spa !== 'N/A' && (
-           <span className="px-2 py-0.5 text-xs font-semibold text-orange-600 bg-[#ff6e40]/10 rounded-lg">
-             {resource.spa}
+        {spaLabel(resource.spa) && (
+           /* The short form, with the full list on hover. A card printed the raw field,
+              which for a multi-area organisation reads "Multiple SPAs (SPA 2, SPA 3,
+              SPA 4, SPA 5, SPA 6)": thirty-nine characters of mostly the word SPA, in a
+              chip with room for about fifteen. */
+           <span
+             title={resource.spa || undefined}
+             className="px-2 py-0.5 text-xs font-semibold text-orange-600 bg-[#ff6e40]/10 rounded-lg whitespace-nowrap"
+           >
+             {spaLabel(resource.spa)}
            </span>
         )}
       </div>
