@@ -348,15 +348,37 @@ const SuggestResourceModal: React.FC<{
 };
 
 const App: React.FC = () => {
-  const [filters, setFilters] = useState<FilterState>({
-    q: "",
-    category: "All",
-    community: "All",
-    geo: "All",
-    spa: "All",
-    service: "All",
-    population: "All"
-  });
+  /**
+   * A search that arrives in the link.
+   *
+   * The Member Hub's search bar, the Playbook's resource links and Sunny all send people
+   * here as directory.healthmatters.clinic/?q=<what they typed>. Nothing read that
+   * parameter, so every one of those arrived at an unfiltered directory with their words
+   * thrown away, and the search looked broken from the outside while working fine from
+   * the inside. Read once, at first render, so typing afterwards is never overwritten.
+   */
+  const initialFilters = (): FilterState => {
+    const base: FilterState = {
+      q: "", category: "All", community: "All", geo: "All",
+      spa: "All", service: "All", population: "All",
+    };
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      if (q) base.q = q.slice(0, 120);
+      const category = params.get('category');
+      if (category) base.category = category;
+      const spa = params.get('spa');
+      if (spa) base.spa = /^\d$/.test(spa) ? `SPA ${spa}` : spa;
+      const service = params.get('service');
+      if (service) base.service = service;
+    } catch {
+      /* no URL to read, e.g. a non-browser render. The empty filters below are correct. */
+    }
+    return base;
+  };
+
+  const [filters, setFilters] = useState<FilterState>(() => initialFilters());
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [activeResource, setActiveResource] = useState<Resource | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -424,9 +446,34 @@ const App: React.FC = () => {
     return filters.q.toLowerCase().split(/[^a-z0-9+]+/).filter(t => t.length > 1 && !STOP.has(t));
   }, [filters.q]);
 
+  /** Whether anybody has actually narrowed anything. */
+  const isFiltering = useMemo(() => (
+    filters.q.trim() !== '' || filters.category !== 'All' || filters.service !== 'All' ||
+    filters.population !== 'All' || filters.community !== 'All' || filters.geo !== 'All' ||
+    filters.spa !== 'All'
+  ), [filters]);
+
   const filteredResources = useMemo(() => {
-    return ALL_RESOURCES.filter(r => {
-      if (pinnedIds.has(r.id)) return false;
+    /**
+     * What gets searched, and why HMC's own work is in it.
+     *
+     * HMC Programs and Featured Partners were rendered in their own sections above the
+     * directory and then excluded from the search by id, so the moment anybody typed
+     * anything, every HMC program and every featured partner disappeared. Searching
+     * "mental health" returned no Unstoppable, no Unboxed, no wellness meetups, and no
+     * LACDMH help line: a directory run by HMC that could not find HMC.
+     *
+     * With nothing typed the two pinned sections still render above and are left out
+     * here, so the page is not the same cards twice. Once somebody searches, they are
+     * searched with everything else and sorted first, because a person looking for mental
+     * health support in our own directory should be shown what we ourselves run.
+     */
+    const pool = isFiltering
+      ? [...HMC_PROGRAMS, ...FEATURED_PARTNERS, ...ALL_RESOURCES]
+      : ALL_RESOURCES;
+
+    return pool.filter(r => {
+      if (!isFiltering && pinnedIds.has(r.id)) return false;
 
       // Every word has to appear somewhere, rather than the whole phrase appearing
       // verbatim. The old check asked whether the record contained the literal string
@@ -457,7 +504,7 @@ const App: React.FC = () => {
 
       return true;
     });
-  }, [filters, pinnedIds, searchTokens]);
+  }, [filters, pinnedIds, searchTokens, isFiltering]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -721,7 +768,7 @@ const App: React.FC = () => {
           </a>
         </div>
 
-        {(filters.category === 'All' && filters.q === '' && filters.service === 'All' && filters.population === 'All' && filters.community === 'All' && filters.geo === 'All' && filters.spa === 'All') && (
+        {!isFiltering && (
           <div className="space-y-8 mb-8">
             <section>
               <SectionHeader title="HMC Programs" />
@@ -744,11 +791,21 @@ const App: React.FC = () => {
         )}
 
         <section>
-          <SectionHeader title="Community Directory" />
+          {/* Named for what it is holding. Once somebody searches, this list also carries
+              HMC's own programs and the featured partners, so calling it the Community
+              Directory would be describing only part of it. */}
+          <SectionHeader title={isFiltering ? `${filteredResources.length} ${filteredResources.length === 1 ? 'result' : 'results'}` : 'Community Directory'} />
           {filteredResources.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredResources.map(r => (
-                <ResourceCard key={r.id} resource={r} onOpen={setActiveResource} onShare={handleShare} isPartner={isOfficialPartner(r)} />
+                <ResourceCard
+                  key={r.id}
+                  resource={r}
+                  onOpen={setActiveResource}
+                  onShare={handleShare}
+                  isPinned={pinnedIds.has(r.id)}
+                  isPartner={isOfficialPartner(r)}
+                />
               ))}
             </div>
           ) : (
