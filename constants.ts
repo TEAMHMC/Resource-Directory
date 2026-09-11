@@ -61,6 +61,71 @@ export const spaCovers = (raw: string | null | undefined, selected: string): boo
  * "Multiple SPAs (SPA 2, SPA 3, SPA 4, SPA 5, SPA 6)" is thirty-nine characters of
  * mostly the word SPA, on a card with room for about fifteen.
  */
+/**
+ * The text of a listing that a reader can meaningfully search.
+ *
+ * This was `JSON.stringify(r)`, which puts the field NAMES into the text being
+ * searched alongside the values. Every record therefore contained the words spa,
+ * name, category, description, phone and website, so those queries matched all 323
+ * listings and returned the whole directory as though it were a result set. "spa"
+ * is not a hypothetical: reading a SPA off a card and typing it back in is one of
+ * the more likely things anybody does here, and it was the one query guaranteed to
+ * tell them nothing.
+ *
+ * Values only, and only the fields a person is actually describing when they search.
+ * `source` is left out because it is provenance, not service: 18 listings cite the
+ * "LA County SAPC Resource Guide (Substance Use Treatment Services)", which made the
+ * immigration office and the homeless shelter finder both answer "substance use".
+ * `website` is left out because http, www and com are in nearly every one of them.
+ * `id` is kept, with its hyphens opened up, because the slugs carry real detail that
+ * is nowhere else on the record: richstone-family-center-domestic is how the search
+ * for domestic violence finds Richstone, and homeboy-industries-reentry is how
+ * reentry finds Homeboy.
+ */
+export const SEARCH_FIELDS = ['name', 'description', 'category', 'resourceType', 'communityFocus',
+  'geographicArea', 'address', 'hours', 'referralNotes', 'eligibility', 'languages',
+  'targetPopulation'] as const;
+
+export const searchHaystack = (r: Resource): string => {
+  const row = r as unknown as Record<string, unknown>;
+  return [
+    String(row.id || '').replace(/-/g, ' '),
+    ...SEARCH_FIELDS.map(f => row[f]).filter(Boolean),
+    ...(Array.isArray(r.serviceCategories) ? r.serviceCategories : []),
+    ...serviceCategoriesFor(r),
+  ].join(' ').toLowerCase();
+};
+
+/**
+ * What the reader typed, split into a SPA and the words worth matching on.
+ *
+ * People type how they speak: "reentry in compton", "food near me", "housing in
+ * spa 1". The joining words carry no meaning here and would exclude every record
+ * if required, so they are dropped rather than searched for.
+ *
+ * A SPA is pulled out of the query before the words are, for two reasons. Single
+ * characters used to be discarded along with the noise, so "housing in spa 1" lost
+ * the "1" and quietly answered a different question, the one without the area. And
+ * a SPA is not a word to look for in the text anyway: coverage is stored as free
+ * text holding "SPA 4", "SPA 2, SPA 4, SPA 6" and "All SPAs", so it has to be read
+ * through spaCovers the same way the dropdown reads it. A listing covering all
+ * eight areas is a correct answer for "spa 1" and matching on the raw string would
+ * never find it.
+ */
+export const SEARCH_STOP_WORDS = new Set(['in','near','at','for','the','a','an','of','and','or','to','me','my','with','around','close','by','on','from']);
+
+export const parseSearchQuery = (q: string): { spas: number[]; tokens: string[] } => {
+  const spas: number[] = [];
+  const rest = q.toLowerCase().replace(/\bspas?\s*#?\s*(\d)\b/g, (_m, digit) => {
+    const n = Number(digit);
+    if (n >= 1 && n <= 8) spas.push(n);
+    return ' ';
+  });
+  // Single characters are kept now that a SPA is no longer one of them.
+  const tokens = rest.split(/[^a-z0-9+]+/).filter(t => t.length > 0 && !SEARCH_STOP_WORDS.has(t));
+  return { spas, tokens };
+};
+
 export const spaLabel = (raw?: string | null): string => {
   const nums = spaNumbersFor(raw);
   if (!nums.length) return '';

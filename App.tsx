@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import { Search, RotateCcw, ShieldAlert, Heart, Building2, Map as MapIcon, Layers, Info, Users, CheckCircle2, ChevronDown, ChevronUp, Compass, Plus, X, Loader2, CheckCircle } from 'lucide-react';
 import { Resource, FilterState, CATEGORIES, ChatContext } from './types';
-import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS, SPA_NAMES, spaCovers, serviceCategoriesFor } from './constants';
+import { ALL_RESOURCES, HMC_PROGRAMS, FEATURED_PARTNERS, SPA_NAMES, spaCovers, serviceCategoriesFor, searchHaystack, parseSearchQuery } from './constants';
 import ResourceCard from './components/ResourceCard';
 import { useEmbedViewport } from './hooks/useEmbedViewport';
 const ResourceModal = lazy(() => import('./components/ResourceModal'));
@@ -434,17 +434,7 @@ const App: React.FC = () => {
     )
   ), []);
 
-  /**
-   * The words worth matching on.
-   *
-   * People type how they speak: "reentry in compton", "food near me". The joining
-   * words carry no meaning here and would exclude every record if required, so they
-   * are dropped rather than searched for.
-   */
-  const searchTokens = useMemo(() => {
-    const STOP = new Set(['in','near','at','for','the','a','an','of','and','or','to','me','my','with','around','close','by','on','from']);
-    return filters.q.toLowerCase().split(/[^a-z0-9+]+/).filter(t => t.length > 1 && !STOP.has(t));
-  }, [filters.q]);
+  const searchQuery = useMemo(() => parseSearchQuery(filters.q), [filters.q]);
 
   /** Whether anybody has actually narrowed anything. */
   const isFiltering = useMemo(() => (
@@ -475,6 +465,11 @@ const App: React.FC = () => {
     return pool.filter(r => {
       if (!isFiltering && pinnedIds.has(r.id)) return false;
 
+      // A SPA typed into the search box narrows exactly as the dropdown does, so
+      // "housing in spa 1" answers the question that was asked rather than the
+      // question without the area.
+      if (searchQuery.spas.length && !searchQuery.spas.every(n => spaCovers(r.spa, `SPA ${n}`))) return false;
+
       // Every word has to appear somewhere, rather than the whole phrase appearing
       // verbatim. The old check asked whether the record contained the literal string
       // "reentry in compton", which no record ever will, so any search of more than one
@@ -484,9 +479,9 @@ const App: React.FC = () => {
       // fields. Reentry is derived from phrases like justice-involved and formerly
       // incarcerated: only 9 of 322 listings say "reentry", while 64 are reentry
       // providers. Searching the raw record found the 9 and hid the other 55.
-      if (searchTokens.length) {
-        const hay = `${JSON.stringify(r)} ${serviceCategoriesFor(r).join(' ')}`.toLowerCase();
-        if (!searchTokens.every(t => hay.includes(t))) return false;
+      if (searchQuery.tokens.length) {
+        const hay = searchHaystack(r);
+        if (!searchQuery.tokens.every(t => hay.includes(t))) return false;
       }
       if (filters.category !== "All" && r.category !== filters.category) return false;
       if (filters.community !== "All") {
@@ -504,7 +499,7 @@ const App: React.FC = () => {
 
       return true;
     });
-  }, [filters, pinnedIds, searchTokens, isFiltering]);
+  }, [filters, pinnedIds, searchQuery, isFiltering]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
