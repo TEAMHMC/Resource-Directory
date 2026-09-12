@@ -26,6 +26,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Typecheck before building, and fail the deploy if it does not pass.
+      #
+      # vite build strips types without checking them, so this repo has been shipping
+      # whatever compiled. SEARCH_FIELDS in constants.ts is a list of field-name strings
+      # indexed dynamically, and the directory's records are about to be renamed, so a
+      # mistake here is silent: search simply stops matching on a field and nobody is told.
+      # This is the only guard this repo has.
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.json
+
       - name: Build
         run: npm run build
 
