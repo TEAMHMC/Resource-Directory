@@ -126,11 +126,17 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
                     </button>
                 );
             } else if (match[4]) { // HTTP link
-                const url = match[4];
+                // A URL at the end of a sentence or inside parentheses: the
+                // closing punctuation belongs to the sentence, not the link.
+                const url = match[4].replace(/[).,;:!?]+$/, '');
+                const trailing = match[4].slice(url.length);
                 parts.push(<a href={url} key={key} target="_blank" rel="noopener noreferrer" className="underline font-semibold break-all">{url}</a>);
+                if (trailing) parts.push(trailing);
             } else if (match[5]) { // Bold text
-                const boldText = match[7];
-                parts.push(<strong key={key}>{boldText}</strong>);
+                // Group 6 is the text between the asterisks. Parse it again so a
+                // bolded resource link, **[Name](resource://id)**, stays a link.
+                const boldText = match[6];
+                parts.push(<strong key={key}>{parseInlineFormatting(boldText)}</strong>);
             }
             lastIndex = regex.lastIndex;
         }
@@ -212,7 +218,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
               <div key={msg.id} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain flex-shrink-0" />}
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-2xl ${
+                  className={`max-w-[85%] px-4 py-3 rounded-2xl break-words ${
                     msg.sender === 'user'
                       ? 'bg-[#233dff] text-white rounded-br-none'
                       : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm prose prose-sm'
