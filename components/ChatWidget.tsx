@@ -190,7 +190,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       {!isOpen && (
         <button
           onClick={handleToggle}
-          className="fixed bottom-6 right-6 z-[80] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border-2 border-black"
+          className="fixed bottom-6 right-6 z-[80] w-16 h-16 rounded-full bg-[#233dff] text-white shadow-lg flex items-center justify-center transition-transform hover:scale-110 border border-[#0f0f0f]"
           aria-label="Open chat"
         >
           <MessageSquare size={28} />
@@ -198,7 +198,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
       )}
 
       {isOpen && (
-        <div className="fixed z-[80] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#e8e6e3] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="fixed z-[80] inset-3 bottom-20 md:inset-auto md:bottom-24 md:right-6 md:w-[380px] md:h-[600px] bg-white rounded-2xl border border-[#0f0f0f] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
           <header className="p-4 bg-[#233dff] text-white flex items-center gap-3">
             <div className="relative">
               <img src={hmcLogoUrl} alt="HMC Logo" className="w-12 h-12 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain" />
@@ -213,15 +213,15 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
             </button>
           </header>
 
-          <main className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <main className="flex-1 overflow-y-auto p-4 space-y-4 bg-white">
             {messages.map(msg => (
               <div key={msg.id} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain flex-shrink-0" />}
+                {msg.sender === 'bot' && <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border border-[#0f0f0f] bg-white object-contain flex-shrink-0" />}
                 <div
-                  className={`max-w-[85%] px-4 py-3 rounded-2xl break-words ${
+                  className={`max-w-[85%] px-4 py-2.5 text-sm leading-relaxed font-normal rounded-[16px] break-words ${
                     msg.sender === 'user'
-                      ? 'bg-[#233dff] text-white rounded-br-none'
-                      : 'bg-white border border-gray-200 text-gray-800 rounded-bl-none shadow-sm prose prose-sm'
+                      ? 'bg-[#233dff] text-white rounded-br-[4px]'
+                      : 'bg-zinc-100 text-zinc-800 rounded-bl-[4px] prose prose-sm'
                   }`}
                 >
                   {renderMessageContent(msg.content)}
@@ -230,8 +230,8 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
             ))}
             {isLoading && (
               <div className="flex items-end gap-2 justify-start">
-                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border-2 border-white ring-2 ring-black bg-white object-contain flex-shrink-0" />
-                <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-none px-4 py-3 shadow-sm">
+                 <img src={hmcLogoUrl} alt="Sunny avatar" className="w-8 h-8 rounded-full border border-[#0f0f0f] bg-white object-contain flex-shrink-0" />
+                <div className="bg-zinc-100 rounded-[16px] rounded-bl-[4px] px-4 py-3">
                   <div className="flex items-center gap-1">
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></span>
                     <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -252,9 +252,9 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({ onResourceClick, initialContext
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 placeholder="Ask for help..."
-                className="flex-1 bg-gray-100 border border-gray-300 rounded-full px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/50 transition-all"
+                className="flex-1 h-11 bg-white border border-[#0f0f0f] rounded-2xl px-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#233dff]/50 transition-all"
               />
-              <button type="submit" aria-label="Send message" disabled={!inputValue.trim() || isLoading} className="w-10 h-10 rounded-full bg-[#233dff] text-white border border-[#233dff] flex items-center justify-center disabled:opacity-50 transition-all">
+              <button type="submit" aria-label="Send message" disabled={!inputValue.trim() || isLoading} className="w-11 h-11 rounded-2xl bg-[#233dff] text-white border border-[#0f0f0f] flex items-center justify-center disabled:opacity-50 transition-all">
                 <Send size={20} aria-hidden="true" />
               </button>
             </form>
