@@ -580,7 +580,7 @@ const VibeCheckModal: React.FC<VibeCheckModalProps> = ({ onClose, onComplete, au
             icon: <Brain className="w-5 h-5 text-purple-600" />,
             title: "Mental Health & Wellness",
             resources: [
-                {id: 'hmc-live-unstoppable', name: 'Live Unstoppable Wellness', desc: 'Movement-as-medicine community events.'},
+                {id: 'hmc-live-unstoppable', name: 'Unstoppable Wellness Events', desc: 'Movement-as-medicine community events.'},
                 {id: '988-suicide-crisis-lifeline', name: '988 Crisis Lifeline', desc: '24/7 free emotional support.'},
                 {id: 'pacific-clinics-behavioral', name: 'Pacific Clinics', desc: 'Behavioral health counseling.'},
                 {id: 'exodus-recovery-crisis', name: 'Exodus Recovery', desc: 'Crisis stabilization programs.'},
